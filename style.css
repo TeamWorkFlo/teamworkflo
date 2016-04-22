@@ -12,12 +12,20 @@
     color: #FCF9FF;
 }
 
-.panel {
-    height: 150px;
+.panel-body {
+    height: 120px;
 }
 
-#vis1 .panel {
-    height: 500px;
+#vis1 .panel-body {
+    height: 470px;
+    position: relative;
+}
+
+#vis1-filter {
+    position:absolute;
+    right: 15px;
+    clear: right;
+    top: 15px;
 }
 
 body {
