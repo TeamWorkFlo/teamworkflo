@@ -6,15 +6,17 @@
     color: #FEFFFF;
 }
 
-vis {
+.vis .panel-heading {
+    padding-left: 10px;
     background-color: #6600BA;
-    color: #FFFEFF;
-    height: 100px;
+    color: #FCF9FF;
 }
 
-#v1 {
-    background-color: #6600BA;
-    color: #FFFEFF;
+.panel {
+    height: 150px;
+}
+
+#vis1 .panel {
     height: 500px;
 }
 
