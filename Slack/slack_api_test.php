@@ -9,6 +9,7 @@
 		-Multiple requests (while resulting JSON's "has more" value is still true)
 		-Determine starting timestamps
 		-Determine multiple channel id's (we have mostly used the general channel, so this may be negligible)
+		-Collect all changes here as part of Slack Connector
 */
 
 /*
