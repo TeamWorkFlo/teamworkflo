@@ -22,7 +22,8 @@
 }
 
 #vis1-filter {
-    position:absolute;
+    position: absolute;
+    margin: 0px;
     right: 15px;
     clear: right;
     top: 15px;
