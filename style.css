@@ -1,0 +1,23 @@
+.navbar {
+    background-color: #0066FF; 
+}
+
+.navbar-default .navbar-brand {
+    color: #FEFFFF;
+}
+
+vis {
+    background-color: #6600BA;
+    color: #FFFEFF;
+    height: 100px;
+}
+
+#v1 {
+    background-color: #6600BA;
+    color: #FFFEFF;
+    height: 500px;
+}
+
+body {
+    background-color: #EEEEEE;
+}
