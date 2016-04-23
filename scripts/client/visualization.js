@@ -7,5 +7,5 @@ else where, so this class responds to those changes. */
 
 function Visualization(configuration) {
   this.name = configuration.name;
-  this.renderVisualization = configuration.renderer;
+  this.render = configuration.renderer;
 }
