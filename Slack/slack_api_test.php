@@ -28,6 +28,19 @@ $msgCount = "1000"; //a single pull can get 1 to 1000 messages; handle according
 $unreadMessages = "0"; //if 1 lists how many messages in this frame are unread; not something I think we need
 $prettyFormatting = "1"; //determines how output is returned; if 1, shows more of json hierarchy, if 0, dumps result in kinda messily
 
+$messageHistory = array();
+
+/*
+
+*/
+function addMessagesToArray($messageObjects, &$destinationArray){
+	$numMessages = count($messageObjects);
+	for ($j = 0; $j < $numMessages; $j++){
+		array_push($destinationArray, $messageObjects[$j]);
+	}
+	//var_dump($destinationArray);
+}
+
 function getChatlog ($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty){
 
 	/*
@@ -73,7 +86,8 @@ $i = 0;
 //while($i < 5){
 //while (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
 while($firstResult['has_more'] == 1){
-	var_dump($firstResult["messages"]);
+	addMessagesToArray($firstResult["messages"], $messageHistory);
+	//var_dump($firstResult["messages"]);
 	//echo "just dumped\n";
 		$lastMessageIndex = count($firstResult["messages"])-1;
 	//echo "updated index\n";
@@ -93,7 +107,11 @@ while($firstResult['has_more'] == 1){
 		//echo $lastMessageIndex;
 		//$earliestTimestamp = $firstResult["messages"][(count($firstResult["messages"])-1)]["ts"];
 }
-var_dump($firstResult["messages"]);
+addMessagesToArray($firstResult["messages"], $messageHistory);
+
+//var_dump($messageHistory);
+var_dump(json_encode($messageHistory));
+//var_dump($firstResult["messages"]);
 	//echo count($firstResult);
 	//echo count($firstResult[1]);
 	//var_dump($firstResult[$lastValue - 2]['']);
