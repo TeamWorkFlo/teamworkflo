@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./css/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="d3/d3.min.js"></script>
@@ -20,14 +20,16 @@
   <nav class="navbar navbar-default">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">TeamWorkFlo</a>
+      <button id="call_api_activities">Call Activities</button>
+      <button id="call_api_tasks">Call Tasks</button>
     </div>
   </nav>
   <div class="container">
     <div class="row content">
       <div id="vis1" class="vis col-sm-12">
         <div class="panel panel-card">
-          <div class="panel-heading">
-          <h5 class="panel-title">[Main visualization]</h5>
+          <div class="panel-heading" style="width:200px;">
+          <h5 class="panel-title"  >[Main visualization]</h5>
           </div>
           <div class="panel-body">
             <div id="vis1-body" class="fill">
@@ -51,8 +53,9 @@
     <div class="row">
       <div id="vis2" class="vis col-sm-6">
         <div class="panel panel-default">
-          <div class="panel-heading">
+          <div class="panel-heading" style="width:220px;">
             <h5 class="panel-title">[Secondary visualization]</h5>
+
           </div>
           <div class="panel-body">
           </div>
@@ -60,7 +63,7 @@
       </div>
       <div id="vis3" class="vis col-sm-6">
         <div class="panel panel-card">
-          <div class="panel-heading">
+          <div class="panel-heading" style="width:200px;">
             <h5 class="panel-title">[Tertiary visualization]</h5>
           </div>
           <div class="panel-body">
@@ -72,6 +75,26 @@
 <footer>
   Copyright 2016 Team Drowning Man. Data is sourced from Slack, Google Drive, and GitHub.
 </footer>
+
   <script src="scripts/client/taskload.js"></script>
+
+
+<script>
+
+//JQuery Methods for API Call Example
+$( "#call_api_activities" ).click(function() {
+  $.get("./twfapi/index.php?method=activities", function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+
+$( "#call_api_tasks" ).click(function() {
+  $.get("./twfapi/index.php?method=tasks", function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+
+});
+
+</script>
 </body>
 </html>
