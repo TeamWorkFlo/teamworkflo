@@ -12,12 +12,19 @@ function TaskFilter(operation) {
 for tasks. It maintains the list of tasks and
 allows for filtering to retrieve them.*/
 // Task Manager
-function TaskManager () {
+var taskManager = function TaskManager () {
   
   this.tasks = [];
   
   this.loadTasks = function () {
     // TODO load tasks from task aggregator
+    this.tasks.push({id:40,
+      assignee:"Eric",
+      name:"Test",
+      importance:"High",
+      startDate:new Date(),
+      estimatedTime: "2 hr"
+      });
   }
   
   /* getTasks returns all tasks available that
