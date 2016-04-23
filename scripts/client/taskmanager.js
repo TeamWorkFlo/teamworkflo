@@ -18,6 +18,13 @@ function TaskManager () {
   
   this.loadTasks = function () {
     // TODO load tasks from task aggregator
+    this.tasks.push({id:40,
+      assignee:"Eric",
+      name:"Test",
+      importance:"High",
+      startDate:new Date(),
+      estimatedTime: "2 hr"
+      });
   }
   
   /* getTasks returns all tasks available that
@@ -25,11 +32,14 @@ function TaskManager () {
   should be of type TaskFilter to behave correctly. */
    this.getTasks = function (filter) {
      var filteredTasks = [];
-     var taskCount = tasks.length;
-     for (task in tasks) {
-       if (filter.passes(task))
+     var taskCount = this.tasks.length;
+     for (task in this.tasks) {
+       if (filter(task))
          filteredTasks.push(task);
      }
      return filteredTasks;
    }
 }
+
+taskManager = new TaskManager();
+taskManager.loadTasks();
