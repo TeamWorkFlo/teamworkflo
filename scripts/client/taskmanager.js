@@ -12,7 +12,7 @@ function TaskFilter(operation) {
 for tasks. It maintains the list of tasks and
 allows for filtering to retrieve them.*/
 // Task Manager
-var taskManager = function TaskManager () {
+function TaskManager () {
   
   this.tasks = [];
   
@@ -32,11 +32,14 @@ var taskManager = function TaskManager () {
   should be of type TaskFilter to behave correctly. */
    this.getTasks = function (filter) {
      var filteredTasks = [];
-     var taskCount = tasks.length;
-     for (task in tasks) {
-       if (filter.passes(task))
+     var taskCount = this.tasks.length;
+     for (task in this.tasks) {
+       if (filter(task))
          filteredTasks.push(task);
      }
      return filteredTasks;
    }
 }
+
+taskManager = new TaskManager();
+taskManager.loadTasks();
