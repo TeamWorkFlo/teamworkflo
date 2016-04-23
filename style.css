@@ -1,0 +1,39 @@
+.navbar {
+    background-color: #0066FF; 
+}
+
+.navbar-default .navbar-brand {
+    color: #FEFFFF;
+}
+
+.vis .panel-heading {
+    padding-left: 10px;
+    background-color: #66368E;
+    color: #FCF9FF;
+}
+
+.panel-body {
+    height: 120px;
+}
+
+#vis1 .panel-body {
+    height: 470px;
+    position: relative;
+}
+
+#vis1-filter {
+    position: absolute;
+    margin: 0px;
+    right: 15px;
+    clear: right;
+    top: 15px;
+}
+
+body {
+    background-color: #EEEEEE;
+}
+
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
