@@ -12,9 +12,11 @@ $client = new \Github\Client();
 
 //Get all the different branches for a given repository
 $branches = $client->api('repo')->branches('TeamWorkFlo', 'teamworkflo');
-print_r($branches);
+//print_r($branches);
+echo json_encode($branches);
 
 //Get all commits from a particular branch in this case master.
 //$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => 'master'));
 //print_r($commits);
+//echo json_encode($commits);
 ?>
