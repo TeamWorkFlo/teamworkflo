@@ -6,9 +6,7 @@
 	
 	Our general chat has well over a thousand messages; we will need to do multiple requests and store results somehow
 	Things that need doing still
-		-Multiple requests (while resulting JSON's "has more" value is still true)
-		-Determine starting timestamps
-		-Determine multiple channel id's (we have mostly used the general channel, so this may be negligible)
+		-Store requested data in a JSON file
 		-Collect all changes here as part of Slack Connector
 */
 
