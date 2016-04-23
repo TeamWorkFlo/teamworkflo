@@ -26,7 +26,7 @@ $channelID = "C0V9109MZ"; //this is the id for our 'general' chat room; not sure
 $latestTimestamp = "1461331518.000134"; //last timestamp checked for messages; need to determine current timestamp somehow; will be needed for additional calls past the first
 $oldestTimestamp = "0"; //earliest timestamp checked for messages; can always be 0 (start of time)
 $inclusiveBounds = "1"; //a 1 means it will include messages at the latest timestamp, a 0 means it will not
-$msgCount = "1"; //a single pull can get 1 to 1000 messages; handle accordingly
+$msgCount = "5"; //a single pull can get 1 to 1000 messages; handle accordingly
 $unreadMessages = "0"; //if 1 lists how many messages in this frame are unread; not something I think we need
 $prettyFormatting = "1"; //determines how output is returned; if 1, shows more of json hierarchy, if 0, dumps result in kinda messily
 
@@ -35,7 +35,13 @@ function getChatlog ($base, $command, $token, $channel, $latest, $oldest, $inclu
 	/*
 	html POST request code (from here: http://stackoverflow.com/questions/5647461/how-do-i-send-a-post-request-with-php)
 	*/
-	$url = $base . $command . "?token=" . $token . "&channel=" . $channel . "&latest=" . $latest . "&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=" . $unread . "&pretty=" . $pretty;
+	$url = "";
+	if ($latest != "-1"){
+	$url .= $base . $command . "?token=" . $token . "&channel=" . $channel . "&latest=" . $latest . "&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=" . $unread . "&pretty=" . $pretty;
+	}
+	else{
+	$url .= $base . $command . "?token=" . $token . "&channel=" . $channel . "&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=" . $unread . "&pretty=" . $pretty;
+	}
 	//echo $url . "\n";
 	$data = array();
 
@@ -56,5 +62,35 @@ function getChatlog ($base, $command, $token, $channel, $latest, $oldest, $inclu
 	return $result;
 };
 
-var_dump(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $latestTimestamp, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting));
+$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, "-1", $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting),true);
+
+//var_dump($firstResult);
+
+//if (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
+	//$lastMessageIndex = count($firstResult["messages"])-1;
+	//echo $lastMessageIndex;
+	//$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
+	//print_r($earliestTimestamp);
+	while (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
+		var_dump($firstResult["messages"]);
+		echo "just dumped\n";
+		$lastMessageIndex = count($firstResult["messages"])-1;
+		echo "updated index\n";
+		$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
+		echo "updated Timestamp";
+		$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $earliestTimestamp, $oldestTimestamp, "0", $msgCount, $unreadMessages, $prettyFormatting));
+		echo "updated firstResult";
+		var_dump($firstResult);
+		//$lastMessageIndex = count($firstResult["messages"])-1;
+		//echo $lastMessageIndex;
+		//$earliestTimestamp = $firstResult["messages"][(count($firstResult["messages"])-1)]["ts"];
+	}
+	//echo count($firstResult);
+	//echo count($firstResult[1]);
+	//var_dump($firstResult[$lastValue - 2]['']);
+//}
+
+
+//var_dump(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $latestTimestamp, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting));
+
 ?>
