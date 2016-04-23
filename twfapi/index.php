@@ -3,6 +3,7 @@
 	//$path = $_SERVER['DOCUMENT_ROOT'];
 	//include($_SERVER['DOCUMENT_ROOT']."teamworkflo/twfapi/functions.php");
 	include_once 'functions.php';
+	include_once './activity_processors/github_activity_processor.php';
 
 
 	if (!empty($_GET['method'])) {
@@ -10,10 +11,10 @@
 		$method = $_GET['method'];
 
 		if ($method=='tasks') {
-			deliver_response(200, "Task found", get_tasks());
+			deliver_response(200, "Task found", "test");
 
 		}else if($method=='activities'){
-			deliver_response(200, "Activities found", get_activities());
+			deliver_response(200, "Activities found", getCommitsFromBranch("master"));
 
 		}else{
 			deliver_response(400, "invalid request", NULL);
