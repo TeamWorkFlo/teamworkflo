@@ -26,7 +26,7 @@ $channelID = "C0V9109MZ"; //this is the id for our 'general' chat room; not sure
 $latestTimestamp = "1461331518.000134"; //last timestamp checked for messages; need to determine current timestamp somehow; will be needed for additional calls past the first
 $oldestTimestamp = "0"; //earliest timestamp checked for messages; can always be 0 (start of time)
 $inclusiveBounds = "1"; //a 1 means it will include messages at the latest timestamp, a 0 means it will not
-$msgCount = "5"; //a single pull can get 1 to 1000 messages; handle accordingly
+$msgCount = "1000"; //a single pull can get 1 to 1000 messages; handle accordingly
 $unreadMessages = "0"; //if 1 lists how many messages in this frame are unread; not something I think we need
 $prettyFormatting = "1"; //determines how output is returned; if 1, shows more of json hierarchy, if 0, dumps result in kinda messily
 
@@ -71,20 +71,31 @@ $firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channe
 	//echo $lastMessageIndex;
 	//$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
 	//print_r($earliestTimestamp);
-	while (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
-		var_dump($firstResult["messages"]);
-		echo "just dumped\n";
+$i = 0;
+//while($i < 5){
+//while (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
+while($firstResult['has_more'] == 1){
+	var_dump($firstResult["messages"]);
+	//echo "just dumped\n";
 		$lastMessageIndex = count($firstResult["messages"])-1;
-		echo "updated index\n";
+	//echo "updated index\n";
 		$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
-		echo "updated Timestamp";
-		$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $earliestTimestamp, $oldestTimestamp, "0", $msgCount, $unreadMessages, $prettyFormatting));
-		echo "updated firstResult";
-		var_dump($firstResult);
+	//echo "updated Timestamp";
+		$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $earliestTimestamp, $oldestTimestamp, "0", $msgCount, $unreadMessages, $prettyFormatting),true);
+	//echo "updated firstResult";
+	//var_dump($firstResult);
+		$i++;
+	if ($firstResult['has_more'] == 1){
+		//echo ".";
+	}
+	else{
+		//echo "-";
+	}
 		//$lastMessageIndex = count($firstResult["messages"])-1;
 		//echo $lastMessageIndex;
 		//$earliestTimestamp = $firstResult["messages"][(count($firstResult["messages"])-1)]["ts"];
-	}
+}
+var_dump($firstResult["messages"]);
 	//echo count($firstResult);
 	//echo count($firstResult[1]);
 	//var_dump($firstResult[$lastValue - 2]['']);
