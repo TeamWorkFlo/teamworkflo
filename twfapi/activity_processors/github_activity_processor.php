@@ -10,9 +10,23 @@ require_once '../../vendor/autoload.php';
 //print_r($repositories);
 
 
+//$client = new \Github\Client();
+//$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => 'master'));
+
+
 $client = new \Github\Client();
-$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => 'master'));
-echo json_encode($commits);
+$branches = $client->api('repo')->branches('TeamWorkFlo', 'teamworkflo');
+$branches_array = array();
+
+foreach($branches as $branch){
+
+array_push($branches_array, $branch['name']);
+}
+
+print_r($branches_array);
+
+//echo json_encode($branches);
+
 
 function getBranches(){
 $client = new \Github\Client();
