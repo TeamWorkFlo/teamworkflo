@@ -6,7 +6,7 @@
 	
 	Our general chat has well over a thousand messages; we will need to do multiple requests and store results somehow
 	Things that need doing still
-		-Store requested data in a JSON file
+		-Strip message bodies for appropriate JSON
 		-Collect all changes here as part of Slack Connector
 */
 
@@ -27,8 +27,6 @@ $inclusiveBounds = "1"; //a 1 means it will include messages at the latest times
 $msgCount = "1000"; //a single pull can get 1 to 1000 messages; handle accordingly
 $unreadMessages = "0"; //if 1 lists how many messages in this frame are unread; not something I think we need
 $prettyFormatting = "1"; //determines how output is returned; if 1, shows more of json hierarchy, if 0, dumps result in kinda messily
-
-$messageHistory = array();
 
 /*
 
@@ -73,31 +71,25 @@ function getChatlog ($base, $command, $token, $channel, $latest, $oldest, $inclu
 	return $result;
 };
 
-$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, "-1", $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting),true);
+function getFullChatLog($base, $command, $token, $channel, $oldest, $inclusive, $count, $unread, $pretty, &$log){
+	
+$result = json_decode(getChatlog($base, $command, $token, $channel, "-1", $oldest, $inclusive, $count, $unread, $pretty),true);
 
-//var_dump($firstResult);
-
-//if (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
-	//$lastMessageIndex = count($firstResult["messages"])-1;
-	//echo $lastMessageIndex;
-	//$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
-	//print_r($earliestTimestamp);
 $i = 0;
-//while($i < 5){
-//while (in_array('has_more',$firstResult) && $firstResult['has_more'] == true){
-while($firstResult['has_more'] == 1){
-	addMessagesToArray($firstResult["messages"], $messageHistory);
+	//while($i < 5){
+while($result['has_more'] == 1){
+	addMessagesToArray($result["messages"], $log);
 	//var_dump($firstResult["messages"]);
 	//echo "just dumped\n";
-		$lastMessageIndex = count($firstResult["messages"])-1;
+		$lastMessageIndex = count($result["messages"])-1;
 	//echo "updated index\n";
-		$earliestTimestamp = $firstResult["messages"][$lastMessageIndex]["ts"];
+		$earliestTimestamp = $result["messages"][$lastMessageIndex]["ts"];
 	//echo "updated Timestamp";
-		$firstResult = json_decode(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $earliestTimestamp, $oldestTimestamp, "0", $msgCount, $unreadMessages, $prettyFormatting),true);
+		$result = json_decode(getChatlog($base, $command, $token, $channel, $earliestTimestamp, $oldest, "0", $count, $unread, $pretty),true);
 	//echo "updated firstResult";
 	//var_dump($firstResult);
 		$i++;
-	if ($firstResult['has_more'] == 1){
+	if ($result['has_more'] == 1){
 		//echo ".";
 	}
 	else{
@@ -107,17 +99,100 @@ while($firstResult['has_more'] == 1){
 		//echo $lastMessageIndex;
 		//$earliestTimestamp = $firstResult["messages"][(count($firstResult["messages"])-1)]["ts"];
 }
-addMessagesToArray($firstResult["messages"], $messageHistory);
+addMessagesToArray($result["messages"], $log);
 
 //var_dump($messageHistory);
-var_dump(json_encode($messageHistory));
-//var_dump($firstResult["messages"]);
-	//echo count($firstResult);
-	//echo count($firstResult[1]);
-	//var_dump($firstResult[$lastValue - 2]['']);
-//}
+	//var_dump(json_encode($log));
+}
+
+/*
+	Get chat log entries from within a certain time window. Will call until all messages from window have been pulled.
+*/
+
+function getChatLogInTimeWindow($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty, &$log){
+	
+	$result = json_decode(getChatlog($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty),true);
+
+	$lastMessageIndex = count($result["messages"])-1;
+	
+	if ((floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest)) && ($oldest != 0)){
+		
+	
+	
+	$i = 0;
+	//while($i < 5){
+		while(($lastMessageIndex != -1) && (floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest))){
+			//while(($lastMessageIndex != -1) && (floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest)){
+			addMessagesToArray($result["messages"], $log);
+			//var_dump($firstResult["messages"]);
+			//echo "just dumped\n";
+			//$lastMessageIndex = count($result["messages"])-1;
+			//echo $lastMessageIndex;
+			//echo "updated index\n";
+			$earliestTimestamp = $result["messages"][$lastMessageIndex]["ts"];
+			//echo " earliestTimestamp:";
+			//echo $earliestTimestamp;
+			//echo " ";
+			//echo "updated Timestamp";
+			$result = json_decode(getChatlog($base, $command, $token, $channel, $earliestTimestamp, $oldest, "1", $count, $unread, $pretty),true);
+			if (count($result["messages"]) != 0){
+				$lastMessageIndex = count($result["messages"])-1;
+				echo $lastMessageIndex;
+				echo " ";
+				//echo "updated firstResult";
+				//var_dump($firstResult);
+				$i++;
+				echo floatval($result["messages"][$lastMessageIndex]["ts"]);
+				echo " ";
+				echo floatval($oldest);
+				echo " * ";
+			
+				if(floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest)){
+				//if (($result["messages"][$lastMessageIndex]["ts"] != $oldest)){
+					echo ".";
+				}
+				else{
+					echo "-";
+				}
+			}
+			else{
+				$lastMessageIndex = -1;
+			}
+			
+			//$lastMessageIndex = count($firstResult["messages"])-1;
+			//echo $lastMessageIndex;
+			//$earliestTimestamp = $firstResult["messages"][(count($firstResult["messages"])-1)]["ts"];
+			
+			
+		}
+	}
+	addMessagesToArray($result["messages"], $log);
+
+	//var_dump($log);
+	//var_dump(json_encode($log));
+}
+
+function convertUserIDToName($userID){
+
+}
+
+function editDownMessages($startingLog){
+
+}
+
+$ts =  "1461465086.000825";
+
+$messageHistory = array();
+
+getFullChatLog($urlBase, $apiCommand, $userToken, $channelID, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting, $messageHistory);
+
+//getChatLogInTimeWindow($urlBase, $apiCommand, $userToken, $channelID, $ts, $latestTimestamp, $inclusiveBounds, "100", $unreadMessages, $prettyFormatting, $messageHistory);
+
+//$resultantJSON = json_encode($messageHistory);
+
+//var_dump($messageHistory);
+//var_dump($resultantJSON);
 
 
-//var_dump(getChatlog($urlBase, $apiCommand, $userToken, $channelID, $latestTimestamp, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting));
 
 ?>
