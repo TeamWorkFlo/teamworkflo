@@ -190,7 +190,18 @@ function convertUserIDToName($userID){
 }
 
 function editDownMessages($startingLog){
-
+	$numMessages = count($startingLog);
+	$editedMessages = array();
+	
+	for ($i = 0; $i < $numMessages; $i++){
+		$newMessage = array();
+		$newMessage["name"] = convertUserIDToName($startingLog[$i]["user"]);
+		$newMessage["source"] = "Slack";
+		$newMessage["timestamp"] = floatval($startingLog[$i]["ts"]);
+		array_push($editedMessages, $newMessage);
+		unset($newMessage);
+	}
+	return $editedMessages;
 }
 
 $ts =  "1461465086.000825";
@@ -205,7 +216,7 @@ getFullChatLog($urlBase, $apiCommand, $userToken, $channelID, $oldestTimestamp, 
 
 //var_dump($messageHistory);
 //var_dump($resultantJSON);
-
-
+//var_dump(editDownMessages($messageHistory));
+var_dump(json_encode(editDownMessages($messageHistory)));
 
 ?>
