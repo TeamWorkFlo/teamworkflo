@@ -66,7 +66,7 @@ function TaskManager () {
       this.processTasks(callback);
      }
      else {
-       queue.append(callback);
+       this.queue.push(callback);
      }
    }
    

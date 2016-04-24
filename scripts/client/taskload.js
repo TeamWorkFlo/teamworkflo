@@ -1,7 +1,7 @@
 
 var render = function(element) {
   var vwFilter = function(task) { return true; }
-  var callback = function (tasks) {
+  var results = function (tasks) {
     d3.select(element)
     .selectAll("svg")
     .data(tasks)
@@ -14,7 +14,6 @@ var render = function(element) {
     .attr("cy",25)
     .attr("r",25)
     .style("fill", "gold");
-    
     /*
     <svg width="50" height="50">
 2  <circle cx="25" cy="25" r="25" fill="purple" />
@@ -22,6 +21,7 @@ var render = function(element) {
 */
   };
     
+  taskManager.getTasks({filter:vwFilter,results:results}); 
 };
 
 var configuration = { name:"Taskload", renderer:render };
