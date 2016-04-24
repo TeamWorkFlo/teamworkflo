@@ -172,8 +172,21 @@ function getChatLogInTimeWindow($base, $command, $token, $channel, $latest, $old
 	//var_dump(json_encode($log));
 }
 
-function convertUserIDToName($userID){
+/*
+	Convert Slack UserIDs to Actual Names
+*/
 
+function convertUserIDToName($userID){
+	switch($userID){
+		case "U0VA9MRSA":
+			return "Cullen Brown";
+		case "U0VAJUU5R":
+			return "Eric Gonzales";
+		case "U0V94P2DR":
+			return "Jorge Herrera";
+		case "U0VBU9NN9":
+			return "Aqib Bhat";
+	}
 }
 
 function editDownMessages($startingLog){
