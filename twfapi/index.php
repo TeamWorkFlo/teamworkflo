@@ -14,7 +14,7 @@
 			deliver_response(200, "Task found", "test");
 
 		}else if($method=='activities'){
-			deliver_response(200, "Activities found", getCommitsFromBranch("master"));
+			deliver_response(200, "Activities found", getGithubActivities());
 
 		}else{
 			deliver_response(400, "invalid request", NULL);
