@@ -121,6 +121,3 @@ function getWorklog() {
   
   return json_encode($complete);
 }
-
-$results = getWorklog();
-printf("%s\n", $results);
