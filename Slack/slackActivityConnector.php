@@ -109,10 +109,6 @@ public function getChatlog ($base, $command, $token, $channel, $latest, $oldest,
 	return $result;
 	}
 	
-	
-	
-	//public function getFullChatLog($base, $command, $token, $channel, $oldest, $inclusive, $count, $unread, $pretty, &$log){
-	//public function getFullChatLog($oldest, $inclusive, $count, &$log){
 	public function getFullChatLog(&$log){
 	//$result = json_decode(getChatlog($base, $command, $token, $channel, "-1", $oldest, $inclusive, $count, $unread, $pretty),true);
 	$result = json_decode($this->getChatLog("-1", "0", "1", "1000"),true);
@@ -154,9 +150,10 @@ $this->addMessagesToArray($result["messages"], $log);
 	Get chat log entries from within a certain time window. Will call until all messages from window have been pulled.
 */
 
-public function getChatLogInTimeWindow($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty, &$log){
+	//public function getChatLogInTimeWindow($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty, &$log){
+public function getChatLogInTimeWindow($latest, $oldest, &$log){
 	
-	$result = json_decode(getChatlog($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty),true);
+	$result = json_decode($this->getChatlog($latest, $oldest, "1", "1000"),true);
 
 	$lastMessageIndex = count($result["messages"])-1;
 	
@@ -168,7 +165,7 @@ public function getChatLogInTimeWindow($base, $command, $token, $channel, $lates
 	//while($i < 5){
 		while(($lastMessageIndex != -1) && (floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest))){
 			//while(($lastMessageIndex != -1) && (floatval($result["messages"][$lastMessageIndex]["ts"]) > floatval($oldest)){
-			addMessagesToArray($result["messages"], $log);
+			$this->addMessagesToArray($result["messages"], $log);
 			//var_dump($firstResult["messages"]);
 			//echo "just dumped\n";
 			//$lastMessageIndex = count($result["messages"])-1;
@@ -179,7 +176,8 @@ public function getChatLogInTimeWindow($base, $command, $token, $channel, $lates
 			//echo $earliestTimestamp;
 			//echo " ";
 			//echo "updated Timestamp";
-			$result = json_decode(getChatlog($base, $command, $token, $channel, $earliestTimestamp, $oldest, "1", $count, $unread, $pretty),true);
+			//$result = json_decode(getChatlog($base, $command, $token, $channel, $earliestTimestamp, $oldest, "1", $count, $unread, $pretty),true);
+			$result = json_decode($this->getChatlog($earliestTimestamp, $oldest, "1", "1000"),true);
 			if (count($result["messages"]) != 0){
 				$lastMessageIndex = count($result["messages"])-1;
 				echo $lastMessageIndex;
@@ -211,7 +209,7 @@ public function getChatLogInTimeWindow($base, $command, $token, $channel, $lates
 			
 		}
 	}
-	addMessagesToArray($result["messages"], $log);
+	$this->addMessagesToArray($result["messages"], $log);
 
 	//var_dump($log);
 	//var_dump(json_encode($log));
@@ -253,13 +251,14 @@ public function editDownMessages($startingLog){
 
 $sl = new SlackActivityConnector();
 
-//$ts =  "1461465086.000825";
+$ts =  "1461465086.000825";
 
 $messageHistory = array();
 
 //var_dump($sl->getChatLog("-1", "0", "1", "1000"));
 //var_dump($sl->getFullChatLog("0","1","1000", $messageHistory));
-$sl->getFullChatLog($messageHistory);
+//$sl->getFullChatLog($messageHistory);
+$sl->getChatLogInTimeWindow($ts, "0", $messageHistory);
 
 var_dump($messageHistory);
 
