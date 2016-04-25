@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 define('APPLICATION_NAME', 'Drive API Quickstart');
 define('CREDENTIALS_PATH', '~/.credentials/drive-php-quickstart.json');
-define('CLIENT_SECRET_PATH', __DIR__ . '/client_secret.json');
+define('CLIENT_SECRET_PATH', __DIR__ . '/vendor/google/api_client/client_secret.json');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-php-quickstart.json
 define('SCOPES', implode(' ', array(
