@@ -84,9 +84,36 @@ function getWorklog() {
   $service = new Google_Service_Drive($client);
   
   $fileId = '1UUJAbPlcJ9ODmTmRNrNEG3tkGhjTF2c4WIwCG_RbKck';
-  $content = $service->files->export($fileId, 'text/csv', array(
+  $csv = $service->files->export($fileId, 'text/csv', array(
   'alt' => 'media' ));  
-  return $content;
+  
+  $array = array_map("str_getcsv", explode("\n", $csv));
+  
+  // Column names are TaskID; Actor; component:feature:task; Description; Status; Milestone;
+        //   Importance; StartTime; CompletionTime; EstimatedTimeRequired;
+  $complete[] = array();
+  foreach (array_slice($array, 1, count($array)-1) as $row) {
+    printf("%s", json_encode($row));
+    $components = explode(":", $row[2]);
+    printf("Task Data: %s %s %s\n", $components[0], $components[1], $components[2]);
+    $task = array('id' => $row[0],
+                  'actor' => $row[1],
+                  'component' => $components[0],
+                  'feature' => $components[1],
+                  'name' => $components[2],
+                  'description' => $row[3],
+                  'status' => $row[4],
+                  'milestone' => $row[5],
+                  'importance' => $row[6],
+                  'startDate' => $row[7],
+                  'completionDate' => $row[8],
+                  'estimatedTime' => $row[9]
+    );
+    $json = json_encode($task);
+    array_push($complete, $json);
+  }
+  
+  return $complete;
 }
 
 $results = getWorklog();
