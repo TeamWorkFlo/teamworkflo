@@ -136,16 +136,15 @@ class SlackActivityConnector{
 	public function getActivityWindow($latest,$oldest){
 		$activityList = array();
 		$this->getChatLogWindow($latest, $oldest, $activityList);
-		echo(count($activityList));
 		$activityJSON = json_encode($this->reduceMessages($activityList));
 		return $activityJSON;
 	}
 	
 }
 
-$sl = new SlackActivityConnector();
+//$sl = new SlackActivityConnector();
 
 //var_dump($sl->getActivity());
-var_dump($sl->getActivityWindow("-1","0"));
+//var_dump($sl->getActivityWindow("-1","0"));
 
 ?>
