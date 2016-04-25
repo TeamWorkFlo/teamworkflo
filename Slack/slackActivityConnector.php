@@ -112,9 +112,10 @@ public function getChatlog ($base, $command, $token, $channel, $latest, $oldest,
 	
 	
 	//public function getFullChatLog($base, $command, $token, $channel, $oldest, $inclusive, $count, $unread, $pretty, &$log){
-	public function getFullChatLog($oldest, $inclusive, $count, &$log){
+	//public function getFullChatLog($oldest, $inclusive, $count, &$log){
+	public function getFullChatLog(&$log){
 	//$result = json_decode(getChatlog($base, $command, $token, $channel, "-1", $oldest, $inclusive, $count, $unread, $pretty),true);
-	$result = json_decode($this->getChatLog("-1", $oldest, $inclusive, $count),true);
+	$result = json_decode($this->getChatLog("-1", "0", "1", "1000"),true);
 
 $i = 0;
 	//while($i < 5){
@@ -126,7 +127,8 @@ while($result['has_more'] == 1){
 	//echo "updated index\n";
 		$earliestTimestamp = $result["messages"][$lastMessageIndex]["ts"];
 	//echo "updated Timestamp";
-	$result = json_decode($this->getChatLog($earliestTimestamp, $oldest, $inclusive, $count),true);
+	$result = json_decode($this->getChatLog($earliestTimestamp, "0", "1", "1000"),true);
+	//var_dump($result["messages"]);
 	//$result = json_decode(getChatlog($base, $command, $token, $channel, $earliestTimestamp, $oldest, "0", $count, $unread, $pretty),true);
 	//echo "updated firstResult";
 	//var_dump($firstResult);
@@ -143,6 +145,7 @@ while($result['has_more'] == 1){
 }
 $this->addMessagesToArray($result["messages"], $log);
 
+		//var_dump($log);
 //var_dump($messageHistory);
 	//var_dump(json_encode($log));
 }
@@ -255,7 +258,10 @@ $sl = new SlackActivityConnector();
 $messageHistory = array();
 
 //var_dump($sl->getChatLog("-1", "0", "1", "1000"));
-var_dump($sl->getFullChatLog("0","1","1000", $messageHistory));
+//var_dump($sl->getFullChatLog("0","1","1000", $messageHistory));
+$sl->getFullChatLog($messageHistory);
+
+var_dump($messageHistory);
 
 //$sl->getFullChatLog($urlBase, $apiCommand, $userToken, $channelID, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting, $messageHistory);
 
