@@ -37,7 +37,7 @@ class SlackActivityConnector{
 	/*
 
 */
-public function addMessagesToArray($messageObjects, &$destinationArray){
+private function addMessagesToArray($messageObjects, &$destinationArray){
 	$numMessages = count($messageObjects);
 	for ($j = 0; $j < $numMessages; $j++){
 		array_push($destinationArray, $messageObjects[$j]);
@@ -79,7 +79,7 @@ public function getChatlog ($base, $command, $token, $channel, $latest, $oldest,
 */
 
 	
-	public function getChatLog($latest, $oldest, $inclusive, $count){
+	private function getChatLog($latest, $oldest, $inclusive, $count){
 		//html POST request code (from here: http://stackoverflow.com/questions/5647461/how-do-i-send-a-post-request-with-php)
 	$url = "";
 	if ($latest != "-1"){
@@ -109,7 +109,7 @@ public function getChatlog ($base, $command, $token, $channel, $latest, $oldest,
 	return $result;
 	}
 	
-	public function getFullChatLog(&$log){
+	private function getFullChatLog(&$log){
 	//$result = json_decode(getChatlog($base, $command, $token, $channel, "-1", $oldest, $inclusive, $count, $unread, $pretty),true);
 	$result = json_decode($this->getChatLog("-1", "0", "1", "1000"),true);
 
@@ -151,7 +151,7 @@ $this->addMessagesToArray($result["messages"], $log);
 */
 
 	//public function getChatLogInTimeWindow($base, $command, $token, $channel, $latest, $oldest, $inclusive, $count, $unread, $pretty, &$log){
-public function getChatLogInTimeWindow($latest, $oldest, &$log){
+private function getChatLogWindow($latest, $oldest, &$log){
 	
 	$result = json_decode($this->getChatlog($latest, $oldest, "1", "1000"),true);
 
@@ -219,7 +219,7 @@ public function getChatLogInTimeWindow($latest, $oldest, &$log){
 	Convert Slack UserIDs to Actual Names
 */
 
-public function convertUserIDToName($userID){
+private function convertUserIDToName($userID){
 	switch($userID){
 		case "U0VA9MRSA":
 			return "Cullen Brown";
@@ -232,13 +232,13 @@ public function convertUserIDToName($userID){
 	}
 }
 
-public function editDownMessages($startingLog){
+private function editDownMessages($startingLog){
 	$numMessages = count($startingLog);
 	$editedMessages = array();
 	
 	for ($i = 0; $i < $numMessages; $i++){
 		$newMessage = array();
-		$newMessage["name"] = convertUserIDToName($startingLog[$i]["user"]);
+		$newMessage["actor"] = $this->convertUserIDToName($startingLog[$i]["user"]);
 		$newMessage["source"] = "Slack";
 		$newMessage["timestamp"] = floatval($startingLog[$i]["ts"]);
 		array_push($editedMessages, $newMessage);
@@ -247,30 +247,43 @@ public function editDownMessages($startingLog){
 	return $editedMessages;
 }
 	
+	public function getActivity(){
+		$activityList = array();
+		
+		$this->getFullChatLog($activityList);
+	
+		$activityJSON = json_encode($this->editDownMessages($activityList));
+		
+		return $activityJSON;
+	}	
+	
+	public function getActivityWindow($latest,$oldest){
+		$activityList = array();
+		
+		$this->getChatLogWindow($latest, $oldest, $activityList);
+	
+		$activityJSON = json_encode($this->editDownMessages($activityList));
+		
+		return $activityJSON;
+	}
+	
 }
 
 $sl = new SlackActivityConnector();
 
 $ts =  "1461465086.000825";
 
-$messageHistory = array();
+//$messageHistory = array();
 
 //var_dump($sl->getChatLog("-1", "0", "1", "1000"));
 //var_dump($sl->getFullChatLog("0","1","1000", $messageHistory));
 //$sl->getFullChatLog($messageHistory);
-$sl->getChatLogInTimeWindow($ts, "0", $messageHistory);
-
-var_dump($messageHistory);
-
-//$sl->getFullChatLog($urlBase, $apiCommand, $userToken, $channelID, $oldestTimestamp, $inclusiveBounds, $msgCount, $unreadMessages, $prettyFormatting, $messageHistory);
-
-//getChatLogInTimeWindow($urlBase, $apiCommand, $userToken, $channelID, $ts, $latestTimestamp, $inclusiveBounds, "100", $unreadMessages, $prettyFormatting, $messageHistory);
-
-//$resultantJSON = json_encode($messageHistory);
+//$sl->getChatLogInTimeWindow($ts, "0", $messageHistory);
 
 //var_dump($messageHistory);
-//var_dump($resultantJSON);
-//var_dump(editDownMessages($messageHistory));
-	//var_dump(json_encode(editDownMessages($messageHistory)));
+
+var_dump($sl->getActivity());
+//var_dump($sl->getActivityWindow($ts,"0"));
+
 
 ?>
