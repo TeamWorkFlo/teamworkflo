@@ -91,47 +91,36 @@ function getWorklog() {
   
   // Column names are TaskID; Actor; component:feature:task; Description; Status; Milestone;
         //   Importance; StartTime; CompletionTime; EstimatedTimeRequired;
-  $complete[] = array();
+       
+  date_default_timezone_set('America/Chicago');
+  $complete = array();
   foreach (array_slice($array, 1, count($array)-1) as $row) {
-    printf("%s", json_encode($row));
-    $components = explode(":", $row[2]);
-    printf("Task Data: %s %s %s\n", $components[0], $components[1], $components[2]);
+    
+    $startDate = $row[8];
+    $endDate = $row[9];
+    printf("start: %s; end: %s\t", $startDate, $endDate);
+    $startDate = empty($startDate) ? 0 : strtotime($startDate);
+    $endDate = empty($endDate) ? 0 : strtotime($endDate);
+    printf("tstart: %d; tend: %d\n", $startDate, $endDate);
+    
     $task = array('id' => $row[0],
                   'actor' => $row[1],
-                  'component' => $components[0],
-                  'feature' => $components[1],
-                  'name' => $components[2],
-                  'description' => $row[3],
-                  'status' => $row[4],
-                  'milestone' => $row[5],
-                  'importance' => $row[6],
-                  'startDate' => $row[7],
-                  'completionDate' => $row[8],
-                  'estimatedTime' => $row[9]
+                  'component' => $row[2],
+                  'feature' => $row[3],
+                  'name' => $row[4],
+                  'description' => $row[5],
+                  'milestone' => $row[6],
+                  'importance' => $row[7],
+                  'startDate' => $startDate,
+                  'endDate' => $endDate,
+                  'estimatedTime' => $row[10]
     );
-    $json = json_encode($task);
-    array_push($complete, $json);
+   
+    array_push($complete, $task);
   }
   
-  return $complete;
+  return json_encode($complete);
 }
 
 $results = getWorklog();
-printf("%s", $results);
-
-
-// Print the names and IDs for up to 10 files.
-$optParams = array(
-  'pageSize' => 10,
-  'fields' => "nextPageToken, files(id, name)"
-);
-$results = $service->files->listFiles($optParams);
-
-if (count($results->getFiles()) == 0) {
-  print "No files found.\n";
-} else {
-  print "Files:\n";
-  foreach ($results->getFiles() as $file) {
-    printf("%s (%s)\n", $file->getName(), $file->getId());
-  }
-}
+printf("%s\n", $results);
