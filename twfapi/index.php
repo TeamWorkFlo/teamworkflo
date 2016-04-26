@@ -12,8 +12,7 @@
 		$method = $_GET['method'];
 
 		if ($method=='tasks') {
-
-			deliver_response(200, "Task found", "test");
+			deliver_response(200, "Tasks found", getWorklog());
 
 		}else if($method=='activities'){
 			deliver_response(200, "Activities found", getGithubActivities());

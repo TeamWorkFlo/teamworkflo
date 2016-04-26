@@ -10,10 +10,6 @@ define('SCOPES', implode(' ', array(
   Google_Service_Drive::DRIVE_FILE, Google_Service_Drive::DRIVE_READONLY)
 ));
 
-if (php_sapi_name() != 'cli') {
-  throw new Exception('This application must be run on the command line.');
-}
-
 /**
  * Returns an authorized API client.
  * @return Google_Client the authorized client object
@@ -27,6 +23,8 @@ function getClient() {
   
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
+    printf("the credentials path is finding: %s", $credentialsPath);
+
   if (file_exists($credentialsPath)) {
     $accessToken = file_get_contents($credentialsPath);
   } else {
@@ -94,10 +92,8 @@ function getWorklog() {
     
     $startDate = $row[8];
     $endDate = $row[9];
-    printf("start: %s; end: %s\t", $startDate, $endDate);
     $startDate = empty($startDate) ? 0 : strtotime($startDate);
     $endDate = empty($endDate) ? 0 : strtotime($endDate);
-    printf("tstart: %d; tend: %d\n", $startDate, $endDate);
     
     $task = array('id' => $row[0],
                   'actor' => $row[1],
@@ -115,8 +111,5 @@ function getWorklog() {
     array_push($complete, $task);
   }
   
-  return json_encode($complete);
+  return $complete;
 }
-
-$results = getWorklog();
-printf("%s\n", $results);
