@@ -4,6 +4,7 @@
 	//include($_SERVER['DOCUMENT_ROOT']."teamworkflo/twfapi/functions.php");
 
 	include_once './activity_processors/github_activity_processor.php';
+	include_once './activity_processors/drive_client.php';
 
 
 	if (!empty($_GET['method'])) {
@@ -11,8 +12,7 @@
 		$method = $_GET['method'];
 
 		if ($method=='tasks') {
-
-			deliver_response(200, "Task found", "test");
+			deliver_response(200, "Tasks found", getWorklog());
 
 		}else if($method=='activities'){
 			deliver_response(200, "Activities found", getGithubActivities());
