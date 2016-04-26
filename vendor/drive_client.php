@@ -1,13 +1,13 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/autoload.php';
 
 define('APPLICATION_NAME', 'Drive API Quickstart');
 define('CREDENTIALS_PATH', '~/.credentials/drive-php-quickstart.json');
-define('CLIENT_SECRET_PATH', __DIR__ . '/client_secret.json');
+define('CLIENT_SECRET_PATH', __DIR__ . '/google/client_secret.json');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-php-quickstart.json
 define('SCOPES', implode(' ', array(
-  Google_Service_Drive::DRIVE_METADATA_READONLY)
+  Google_Service_Drive::DRIVE_FILE, Google_Service_Drive::DRIVE_READONLY)
 ));
 
 if (php_sapi_name() != 'cli') {
@@ -24,7 +24,7 @@ function getClient() {
   $client->setScopes(SCOPES);
   $client->setAuthConfigFile(CLIENT_SECRET_PATH);
   $client->setAccessType('offline');
-
+  
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
   if (file_exists($credentialsPath)) {
@@ -45,9 +45,11 @@ function getClient() {
     }
     file_put_contents($credentialsPath, $accessToken);
     printf("Credentials saved to %s\n", $credentialsPath);
+    
+    
   }
   $client->setAccessToken($accessToken);
-
+  
   // Refresh the token if it's expired.
   if ($client->isAccessTokenExpired()) {
     $client->refreshToken($client->getRefreshToken());
@@ -73,18 +75,49 @@ function expandHomeDirectory($path) {
 $client = getClient();
 $service = new Google_Service_Drive($client);
 
-// Print the names and IDs for up to 10 files.
-$optParams = array(
-  'pageSize' => 10,
-  'fields' => "nextPageToken, files(id, name)"
-);
-$results = $service->files->listFiles($optParams);
-
-if (count($results->getFiles()) == 0) {
-  print "No files found.\n";
-} else {
-  print "Files:\n";
-  foreach ($results->getFiles() as $file) {
-    printf("%s (%s)\n", $file->getName(), $file->getId());
+/**
+ * Parses the worklog file and returns the data vehicle for tasks
+ * @return string the JSON string with all the task entries.
+ */
+function getWorklog() {
+  $client = getClient();
+  $service = new Google_Service_Drive($client);
+  
+  $fileId = '1UUJAbPlcJ9ODmTmRNrNEG3tkGhjTF2c4WIwCG_RbKck';
+  $csv = $service->files->export($fileId, 'text/csv', array(
+  'alt' => 'media' ));  
+  
+  $array = array_map("str_getcsv", explode("\n", $csv));
+  
+  // Column names are TaskID; Actor; component:feature:task; Description; Status; Milestone;
+        //   Importance; StartTime; CompletionTime; EstimatedTimeRequired;
+       
+  date_default_timezone_set('America/Chicago');
+  $complete = array();
+  foreach (array_slice($array, 1, count($array)-1) as $row) {
+    
+    $startDate = $row[8];
+    $endDate = $row[9];
+    printf("start: %s; end: %s\t", $startDate, $endDate);
+    $startDate = empty($startDate) ? 0 : strtotime($startDate);
+    $endDate = empty($endDate) ? 0 : strtotime($endDate);
+    printf("tstart: %d; tend: %d\n", $startDate, $endDate);
+    
+    $task = array('id' => $row[0],
+                  'actor' => $row[1],
+                  'component' => $row[2],
+                  'feature' => $row[3],
+                  'name' => $row[4],
+                  'description' => $row[5],
+                  'milestone' => $row[6],
+                  'importance' => $row[7],
+                  'startDate' => $startDate,
+                  'endDate' => $endDate,
+                  'estimatedTime' => $row[10]
+    );
+   
+    array_push($complete, $task);
   }
+  
+  return json_encode($complete);
 }
