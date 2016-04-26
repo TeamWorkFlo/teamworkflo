@@ -4,6 +4,7 @@
 	//include($_SERVER['DOCUMENT_ROOT']."teamworkflo/twfapi/functions.php");
 
 	include_once './activity_processors/github_activity_processor.php';
+	include_once './activity_processors/drive_client.php';
 
 
 	if (!empty($_GET['method'])) {
