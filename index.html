@@ -360,7 +360,7 @@ function getGanttTasks(json_tasks){
         var obj = json_tasks[i];
         var task_name = obj['id'] + " - "+obj['name'];
 
-alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
+//alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
 
 
 var intervals = [{
@@ -422,9 +422,9 @@ function getTaskNames(json_tasks){
         
 
         // Define milestones
-        /*var milestones = [{
+        var milestones = [{
             name: 'Get to bed',
-            time: Date.UTC(0, 0, 0, 22),
+            time: Date.UTC(2016, 04, 12, 0),
             task: 1,
             marker: {
                 symbol: 'triangle',
@@ -433,7 +433,7 @@ function getTaskNames(json_tasks){
                 radius: 8
             }
         }];
-        */
+        
         // re-structure the tasks into line seriesvar series = [];
         var series = [];
         $.each(tasks.reverse(), function(i, task) {
