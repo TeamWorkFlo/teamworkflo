@@ -9,7 +9,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="d3/d3.min.js"></script>
-  <script src="scripts/task.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
   <script src="scripts/client/taskmanager.js"></script>
@@ -563,13 +562,14 @@ function getTaskNames(json_tasks){
 //JQuery Methods for API Call Example
 $( "#call_api_activities" ).click(function() {
   $.get("./twfapi/index.php?method=activities", function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
+    console.log("Found data! \n%s\n", data);
+        
     });
 });
 
 $( "#call_api_tasks" ).click(function() {
   $.get("./twfapi/index.php?method=tasks", function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
+        console.log("Found data! \n%s\n", data);
     });
 
 });
