@@ -82,7 +82,8 @@
 //JQuery Methods for API Call Example
 $( "#call_api_activities" ).click(function() {
   $.get("./twfapi/index.php?method=activities", function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
+    console.log("Found data! \n%s\n", data);
+        
     });
 });
 
