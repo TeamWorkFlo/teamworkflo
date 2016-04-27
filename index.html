@@ -51,7 +51,7 @@
       </div>
     </div>
     <div class="row">
-      <div id="vis2" class="vis col-sm-6">
+      <div id="vis2" class="vis col-sm-6" onclick="switchSecondary()">
         <div class="panel panel-default">
           <div class="panel-heading" style="width:220px;">
             <h5 class="panel-title">[Secondary visualization]</h5>
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div id="vis3" class="vis col-sm-6">
+      <div id="vis3" class="vis col-sm-6" onclick="switchTertiary()">
         <div class="panel panel-card">
           <div class="panel-heading" style="width:200px;">
             <h5 class="panel-title">[Tertiary visualization]</h5>
@@ -76,6 +76,8 @@
   Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub.
 </footer>
   <script src="scripts/client/taskload.js"></script>
+  <script src="scripts/client/activityvis.js"></script>
+  <script src="scripts/client/switchvis.js"></script>
 
 <script>
 
