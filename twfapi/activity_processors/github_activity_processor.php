@@ -32,7 +32,7 @@
 	function getCommitsFromBranch($branch_name){
 		$client = new \Github\Client();
 		$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => $branch_name));
-		return json_encode($commits);
+		return $commits;
 	}
 
 
@@ -41,7 +41,7 @@
 		$activities_array = array();
 
 		foreach($branches as $branch){
-			$committs = json_decode(getCommitsFromBranch($branch['name']),true);
+			$committs = getCommitsFromBranch($branch['name']);
 
 
 			foreach($committs as $commit){
