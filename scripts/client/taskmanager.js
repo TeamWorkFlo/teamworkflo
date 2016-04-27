@@ -29,30 +29,28 @@ function TaskManager () {
     
       var entry = data.feed.entry;
     
+    var ts = [];
     // Extract tasks from worklog
       $(entry).each(function(){
         // Column names are TaskID; Actor; component:feature:task; Description; Status; Milestone;
         //   Importance; StartTime; CompletionTime; EstimatedTimeRequired;
-        var task = new Task();
-        task.id = this.gsx$TaskID.$t;
-        task.actor = this.gsx$Actor.$t;
-        var components = this.gsx$component/feature/task.$t.split("/");
-        task.component = components[0];
-        task.feature = components[1];
-        task.task = components[2];
-        task.description = this.gsx$Description.$t;
-        task.status = this.gsx$Status.$t;
-        task.milestone = this.gsx$Milestone.$t;
-        task.importance = this.gsx$StartTime.$t;
-        task.startDate = this.gsx$StartDate.$t;
-        task.completionDate = this.gsx$CompletionDate.$t;
-        task.estimatedTime = this.gsx$EstimatedTimeRequired.$t;
-        this.tasks.push(task);
+        var task = {};
+        task.id = this.gsx$taskid.$t;
+        task.actor = this.gsx$actor.$t;
+        task.component = this.gsx$component.$t;
+        task.feature = this.gsx$feature.$t;
+        task.name = this.gsx$name.$t;
+        task.description = this.gsx$description.$t;
+        task.milestone = this.gsx$milestone.$t;
+        task.importance = this.gsx$importance.$t;
+        task.startDate = this.gsx$starttime.$t;
+        task.completionDate = this.gsx$completiontime.$t;
+        task.estimatedTime = this.gsx$estimatedtimerequired.$t;
+        taskManager.tasks.push(task);
       });
       
-      var length = this.queue.length;
-      while (this.queue.length) {
-        processTasks(this.queue.pop());
+      while (taskManager.queue.length) {
+        taskManager.processTasks(taskManager.queue.pop());
       }
     
     });
@@ -62,11 +60,11 @@ function TaskManager () {
   pass the provided filter rules. The parameter
   should be of type TaskFilter to behave correctly. */
    this.getTasks = function (callback) {
-     if (this.tasks.length > 0) {
-      this.processTasks(callback);
+     if (taskManager.tasks.length > 0) {
+      taskManager.processTasks(callback);
      }
      else {
-       this.queue.push(callback);
+       taskManager.queue.push(callback);
      }
    }
    
