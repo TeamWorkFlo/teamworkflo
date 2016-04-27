@@ -350,92 +350,76 @@ function removeTask() {
 -->
 
 <script>
+
+function getGanttTasks(json_tasks){
+  var gantt_tasks = [];
+
+
+ for(var i=0;i<json_tasks.length;i++){
+       
+        var obj = json_tasks[i];
+        var task_name = obj['id'] + " - "+obj['name'];
+
+alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
+
+
+var intervals = [{
+    name:task_name,
+    from:obj['startDate']*1000,
+    to:obj['endDate']*1000,
+    label:obj['actor']
+    
+}];
+
+
+var task = {
+    name:task_name,
+    actor:obj['actor'],
+    description:obj['description'],
+    intervals:intervals
+    
+};
+
+        gantt_tasks.push(task);
+    }
+
+    return gantt_tasks;
+}
+
+
+function getTaskNames(json_tasks){
+  var task_names = [];
+
+
+ for(var i=0;i<json_tasks.length;i++){
+       
+        var obj = json_tasks[i];
+        var task_name = obj['id'] + " - "+obj['name'];
+        task_names.splice(0,0,task_name);
+    }
+
+    return task_names;
+}
+
+
+
  $(function () {
         // Define tasks
-        var tasks = [{
-            name: 'Category 1',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2010,5, 21),
-                to: Date.UTC(2015, 5, 21),
-                label: 'Category 1'
-            }]
-        }, {
-            name: 'Category 2- Should be null',
-            intervals: []
-        }, {
-            name: 'Category 3',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2011,05,16),
-                to: Date.UTC(2012,03,21 ),
-                label: 'Category 3'
-            }, {
-                from: Date.UTC(2013,07,09),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 3'
-            }]
-        }, {
-            name: 'Category 4',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,07,18 ),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 4'
-            }]
-        }, {
-            name: 'Category 5',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,06,17),
-                to: Date.UTC(2014,04,21),
-                label: 'Category 5'
-            }, {
-                from: Date.UTC(2015,01,22),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 5'
-            }]
-        }, {
-            name: 'Category 6',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,06,17),
-                to: Date.UTC(2014,04,21),
-                label: 'Category 6'
-            }, {
-                from: Date.UTC(2015,01,22),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 6'
-            }]
-        }, {
-            name: 'Category 7',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,06,17),
-                to: Date.UTC(2014,04,21),
-                label: 'Category 7'
-            }, {
-                from: Date.UTC(2015,01,22),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 7'
-            }]
-        }, {
-            name: 'Category 8',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,06,17),
-                to: Date.UTC(2014,04,21),
-                label: 'Category 8'
-            }, {
-                from: Date.UTC(2015,01,22),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 8'
-            }]
-        }, {
-            name: 'Category 9',
-            intervals: [{ // From-To pairs
-                from: Date.UTC(2013,06,17),
-                to: Date.UTC(2014,04,21),
-                label: 'Category 9'
-            }, {
-                from: Date.UTC(2015,01,22),
-                to: Date.UTC(2015,05,22),
-                label: 'Category 9'
-            }]
-        }];
+
+        var task_string = '[{"id":"2","actor":"Eric","component":"Repo setup","feature":"","name":"Repo Setup","description":"Repository Setup","milestone":"Functional Prototype","importance":"low","startDate":1460481300,"endDate":1460496600,"estimatedTime":"15 min"}, {"id":"3","actor":"Jorge","component":"Gantt Visualization","feature":"","name":"Gantt Viz","description":"Setting gantt chart using highcharts library","milestone":"Functional Prototype","importance":"medium","startDate":1460481300,"endDate":1460496600,"estimatedTime":"1 hour"}]';
+
+
+ 
+
+        var tasks = getGanttTasks(JSON.parse(task_string));
+        var task_names = getTaskNames(JSON.parse(task_string));
+        //alert(JSON.stringify(tasks, null, 4));
+
+
+
+       
+
+        
 
         // Define milestones
         /*var milestones = [{
@@ -507,20 +491,15 @@ function removeTask() {
             },
 
             xAxis: {
-                type: 'datetime'
+                type: 'datetime',
+                min: new Date('2016/04/10').getTime(),
+                max: new Date('2016/04/17').getTime(),
+                
             },
 
             yAxis: {
 
-                categories: ['Category 9',
-                             'Category 8',
-                             'Category 7',
-                             'Category 6',
-                             'Category 5',
-                             'Category 4',
-                             'Category 3',
-                             'Category 2',
-                             'Category 1'],
+                categories: task_names,
                 tickInterval: 1,            
                 tickPixelInterval: 200,
                 labels: {
@@ -538,7 +517,7 @@ function removeTask() {
                 startOnTick: false,
                 endOnTick: false,
                 title: {
-                    text: 'Criteria'
+                    text: 'Tasks'
                 },
                 minPadding: 0.2,
                 maxPadding: 0.2,
@@ -552,8 +531,11 @@ function removeTask() {
             tooltip: {
                 formatter: function() {
                     return '<b>'+ tasks[this.y].name + '</b><br/>' +
-                        Highcharts.dateFormat('%m-%d-%Y', this.point.options.from)  +
-                        ' - ' + Highcharts.dateFormat('%m-%d-%Y', this.point.options.to); 
+                        "Actor: "+ tasks[this.y].actor +'</b><br/>' +
+                        "Description: "+tasks[this.y].description; 
+
+                        // Highcharts.dateFormat('%m-%d-%Y', this.point.options.from)  +
+                        // ' - ' + Highcharts.dateFormat('%m-%d-%Y', this.point.options.to)
                 }
             },
 
