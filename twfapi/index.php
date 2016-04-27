@@ -3,6 +3,7 @@
 	//$path = $_SERVER['DOCUMENT_ROOT'];
 	//include($_SERVER['DOCUMENT_ROOT']."teamworkflo/twfapi/functions.php");
 
+	include_once './activity_aggregator.php';
 	include_once './activity_processors/github_activity_processor.php';
 	include_once './activity_processors/drive_client.php';
 
@@ -14,8 +15,8 @@
 		if ($method=='tasks') {
 			deliver_response(200, "Tasks found", getWorklog());
 
-		}else if($method=='activities'){
-			deliver_response(200, "Activities found", getGithubActivities());
+		}else if($method=='activities'){			
+			deliver_response(200, "Activities found", $activityAggregator->getActivity());
 
 		}else{
 			deliver_response(400, "invalid request", NULL);

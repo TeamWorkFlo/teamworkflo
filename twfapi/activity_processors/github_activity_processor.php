@@ -30,12 +30,13 @@
 
 	function getCommitsFromBranch($branch_name){
 		$client = new \Github\Client();
-		$committs = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => $branch_name));
-		return json_encode($committs);
+		$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => $branch_name));
+		return json_encode($commits);
 	}
 
 
-	function getGithubActivities(){
+	function getGithubActivity(){
+		printf("Gathering github activity");
 		$branches = getBranches();
 		$activities_array = array();
 
@@ -65,12 +66,10 @@
 
 		}
 
-		return json_encode($activities_array);
+		return $activities_array;
 
 	}
 
-
-
-
+$activityAggregator->registerConnector(getGithubActivity);
 
 	?>
