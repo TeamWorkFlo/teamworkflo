@@ -126,7 +126,7 @@ class SlackActivityConnector{
 	public function getActivity(){
 		$activityList = array();
 		$this->getFullChatLog($activityList);
-		$activityJSON = json_encode($this->reduceMessages($activityList));
+		$activityJSON = $this->reduceMessages($activityList);
 		return $activityJSON;
 	}	
 	
@@ -136,7 +136,7 @@ class SlackActivityConnector{
 	public function getActivityWindow($latest,$oldest){
 		$activityList = array();
 		$this->getChatLogWindow($latest, $oldest, $activityList);
-		$activityJSON = json_encode($this->reduceMessages($activityList));
+		$activityJSON = $this->reduceMessages($activityList);
 		return $activityJSON;
 	}
 	

@@ -1,11 +1,14 @@
 <?php
 
 include_once './activity_processors/github_activity_processor.php';
+include_once './activity_processors/Slack/slackActivityConnector.php';
 
 function getActivity() {
   $results = [];
-  $gitActivity = getGithubActivity();
-  array_merge($results, $gitActivity);
+  $slackConnector = new SlackActivityConnector();
+  $slactivity = $slackConnector->getActivity();
+  $results = array_merge($results, getGithubActivity());
+  $results = array_merge($results, json_decode($slackConnector->getActivity()));
   
   return $results;  
 } 

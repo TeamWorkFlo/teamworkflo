@@ -37,7 +37,6 @@
 
 
 	function getGithubActivity(){
-		printf("Gathering github activity");
 		$branches = getBranches();
 		$activities_array = array();
 
