@@ -71,9 +71,9 @@ function TaskManager () {
    this.processTasks = function(callback) {
       var filteredTasks = [];
       var taskCount = this.tasks.length;
-      for (task in this.tasks) {
-        if (callback.filter(task))
-          filteredTasks.push(task);
+      for (var i =0; i < taskCount; i++) {
+        if (callback.filter(this.tasks[i]))
+          filteredTasks.push(this.tasks[i]);
       }
       callback.results(filteredTasks);
    }

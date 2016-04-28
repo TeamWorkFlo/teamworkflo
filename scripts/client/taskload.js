@@ -1,24 +1,59 @@
 
+/*
+    Parse through task list to make components
+*/
+/*
+function getComponentList(taskArray){
+    var componentNames = Array();
+    var nameUsed = 0;
+    for (var i = 0; i < tasks.length; i++){
+        nameUsed = 0;
+        for (var j = 0; j < componentNames.length; j++){
+            if (taskArray[i].component == componentNames[j]){
+                nameUsed = 1;
+                break;
+            }
+        } 
+        if (nameUsed != 1){
+            componentNames.push(taskArray[i].component);
+        }
+    }
+    return componentNames;
+}
+*/
 var render = function(element) {
   var vwFilter = function(task) { return true; }
-  var results = function (tasks) {
-    d3.select(element)
-    .selectAll("svg")
-    .data(tasks)
-    .enter()
-    .append("svg")
-    .attr("width",200)
-    .attr("height",200)
-    .append("circle")
-    .attr("cx",25)
-    .attr("cy",25)
-    .attr("r",25)
-    .style("fill", "gold");
-    /*
-    <svg width="50" height="50">
-2  <circle cx="25" cy="25" r="25" fill="purple" />
-3</svg>
-*/
+  //var compNames = getComponentList(tasks);
+  
+  var compNames = function getComponentList(taskArray){
+    var componentNames = Array();
+    var nameUsed = 0;
+    for (var i = 0; i < tasks.length; i++){
+        nameUsed = 0;
+        for (var j = 0; j < componentNames.length; j++){
+            if (taskArray[i].component == componentNames[j]){
+                nameUsed = 1;
+                break;
+            }
+        } 
+        if (nameUsed != 1){
+            componentNames.push(taskArray[i].component);
+        }
+    }
+    return componentNames;
+};
+  
+  var results = function(tasks) {
+       $(element).highcharts({
+			series: [{
+				type: "treemap",
+				data: tasks
+			}],
+			title: {
+				text: "Test Title"
+			}
+		});
+    
   };
     
   taskManager.getTasks({filter:vwFilter,results:results}); 
@@ -27,5 +62,6 @@ var render = function(element) {
 var configuration = { name:"Taskload", renderer:render };
 
 var vis = new Visualization(configuration);
+
 
 vis.render("#vis1-body");
