@@ -30,16 +30,16 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
-      data: new buckets.PriorityQueue()
+      data: new buckets.PriorityQueue(activityCompare)
     },{
       name: "Cullen Brown",
-      data: new buckets.PriorityQueue()
+      data: new buckets.PriorityQueue(activityCompare)
     },{
       name: "Eric Gonzalez",
-      data: new buckets.PriorityQueue()
+      data: new buckets.PriorityQueue(activityCompare)
     },{
       name: "Jorge Herrera",
-      data: new buckets.PriorityQueue()
+      data: new buckets.PriorityQueue(activityCompare)
     }];
     $.each(activities, function(key, data) {
       var actor = data.actor;
@@ -85,6 +85,7 @@ var render = function(element) {
       legend: {
         enabled: false
       },
+      turboThreshold: 4000,
       series: actorArr
     });
   };
