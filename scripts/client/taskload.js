@@ -25,6 +25,29 @@ var render = function(element) {
   var vwFilter = function(task) { return true; }
   //var compNames = getComponentList(tasks);
   
+  function recompileArray(taskArray){
+    //first, get list of component names
+    var compNames = getComponentList(taskArray);
+    console.log(compNames.length);
+    var compLayerTasks = createComponentLayer(taskArray, compNames);
+    console.log(compLayerTasks.length);
+  }
+
+  function createComponentLayer(taskArray, componentNames){
+    var results = Array();
+    //create a subarray for each component
+    for (var i = 0; i < componentNames.length; i++){
+        var temp = Array();
+        for (var j = 0; j < taskArray.length; j++){
+            if (taskArray[j].component == componentNames[i]){
+                temp.push(taskArray[j]);
+            }
+        }
+        results[componentNames[i]] = temp;
+    }
+    return results;
+  }
+
   function getComponentList(taskArray){
     var componentNames = Array();
     var nameUsed = 0;
@@ -44,9 +67,8 @@ var render = function(element) {
 };
   
   var results = function(tasks) {
-        var compNames = getComponentList(tasks);
-        console.log(compNames.length);
-
+        var reformattedTasks = recompileArray(tasks);
+        
        $(element).highcharts({
 			series: [{
 				type: "treemap",
