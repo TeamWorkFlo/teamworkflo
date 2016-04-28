@@ -8,12 +8,13 @@
   <link rel="stylesheet" href="./css/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="d3/d3.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
-  <script src="scripts/client/taskmanager.js"></script>
-  <script src="scripts/client/activitymanager.js"></script>
-  <script src="scripts/client/visualization.js"></script>
+  <script src="scripts/taskmanager.js"></script>
+  <script src="scripts/activitymanager.js"></script>
+  <script src="scripts/visualization.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-default">
@@ -33,17 +34,17 @@
           <div class="panel-body">
             <div id="vis1-body" class="fill">
               <h1>Content goes here</h1>
-            </div>
-            <div id="vis1-filter" class="panel-checkbox">
-              <h3>Filter</h3>
-              <form>
-                <input class="scatter_checkbox" type="checkbox" checked=true>
-                <text>Test </text>
-                <input class="scatter_checkbox" type="checkbox" checked=true>
-                <text>Test</text>
-                <input class="scatter_checkbox" type="checkbox" checked=true>
-                <text>Test</text>
-              </form>
+              <div id="vis1-filter" class="panel-checkbox">
+                <h3>Filter</h3>
+                <form>
+                  <input class="scatter_checkbox" type="checkbox" checked=true>
+                  <text>Test </text>
+                  <input class="scatter_checkbox" type="checkbox" checked=true>
+                  <text>Test</text>
+                  <input class="scatter_checkbox" type="checkbox" checked=true>
+                  <text>Test</text>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -78,10 +79,10 @@
 
   Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub.
 </footer>
-  <script src="scripts/client/taskload.js"></script>
-  <script src="scripts/client/activityvis.js"></script>
-  <script src="scripts/client/switchvis.js"></script>
-  <script src="scripts/client/gantt.js"></script>
+  <script src="scripts/taskload.js"></script>
+  <script src="scripts/activityvis.js"></script>
+  <script src="scripts/switchvis.js"></script>
+  <script src="scripts/gantt.js"></script>
 
 <script>
 
