@@ -28,11 +28,12 @@ class SlackActivityConnector{
 	private function getChatLog($latest, $oldest, $inclusive, $count){
 		//html POST request code (from here: http://stackoverflow.com/questions/5647461/how-do-i-send-a-post-request-with-php)
 		$url = "";
+		$token = file_get_contents(__DIR__ . "/slacktoken.txt");
 		if ($latest != "-1"){	//user has entered a request with a "latest" timestamp
-		$url .= "https://slack.com/api/channels.history?token=xoxp-29306991603-36823942725-36963802992-bc0a966b80&channel=C0V9109MZ&latest=" . $latest . "&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=0&pretty=1";
+			$url .= "https://slack.com/api/channels.history?token=" . $token . "&channel=C0V9109MZ&latest=" . $latest . "&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=0&pretty=1";
 		}
 		else{	//user has entered a requsest without a "latest" timestamp
-		$url .= "https://slack.com/api/channels.history?token=xoxp-29306991603-36823942725-36963802992-bc0a966b80&channel=C0V9109MZ&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=0&pretty=1";
+			$url .= "https://slack.com/api/channels.history?token=" . $token . "&channel=C0V9109MZ&oldest=" . $oldest . "&inclusive=" . $inclusive . "&count=" . $count . "&unreads=0&pretty=1";
 		}
 	
 		$data = array();
