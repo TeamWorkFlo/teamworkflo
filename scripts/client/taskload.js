@@ -25,10 +25,10 @@ var render = function(element) {
   var vwFilter = function(task) { return true; }
   //var compNames = getComponentList(tasks);
   
-  var compNames = function getComponentList(taskArray){
+  function getComponentList(taskArray){
     var componentNames = Array();
     var nameUsed = 0;
-    for (var i = 0; i < tasks.length; i++){
+    for (var i = 0; i < taskArray.length; i++){
         nameUsed = 0;
         for (var j = 0; j < componentNames.length; j++){
             if (taskArray[i].component == componentNames[j]){
@@ -44,6 +44,9 @@ var render = function(element) {
 };
   
   var results = function(tasks) {
+        var compNames = getComponentList(tasks);
+        console.log(compNames.length);
+
        $(element).highcharts({
 			series: [{
 				type: "treemap",
