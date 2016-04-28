@@ -49,14 +49,15 @@ var render = function(element) {
         
       var actorActivity = actorArr[index];
       
-      //var source = data.source;
+      var source = data.source;
       var sourceSeries = actorActivity.data;
       
       //var yValue = nameToNumber(actor);
       
       var entry = {
         x: data.timestamp * 1000,
-        y: index
+        y: index,
+        name: source
       };
       
       sourceSeries.add(entry);
@@ -85,7 +86,11 @@ var render = function(element) {
       legend: {
         enabled: false
       },
-      turboThreshold: 4000,
+      plotOptions: {
+        series: {
+          turboThreshold: 3000
+        }
+      },
       series: actorArr
     });
   };
