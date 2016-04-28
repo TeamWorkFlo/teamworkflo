@@ -6,6 +6,24 @@ var activityCompare = function(a,b) {
   return bTime - aTime;
 }
 
+var nameToIndex = function(name) {
+  if (name === null)
+    return -1;
+  if (name.match(/jorge/i)) {
+    return 3;
+  }  
+  if (name.match(/eric/i)) {
+    return 2;
+  }
+  if (name.match(/cullen/i)) {
+    return 1;
+  }
+  if (name.match(/aqib/i)) {
+    return 0;
+  }
+  return -1;
+}
+
 var render = function(element) {
   var vwFilter = function(activity) { return true; }
   var activityCallback = function (activities) {
@@ -25,16 +43,28 @@ var render = function(element) {
     }];
     $.each(activities, function(key, data) {
       var actor = data.actor;
+      var index = nameToIndex(actor);
+      if (index < 0) // not a member
+        return;
+        
+      var actorActivity = actorArr[index];
       
-      var actorActivity = actorArr[actor];
+      //var source = data.source;
+      var sourceSeries = actorActivity.data;
       
-      var source = data.source;
-      var sourceSeries = actorActivity[source];
+      //var yValue = nameToNumber(actor);
       
-      var entry = {x:data.timestamp,y:source}
+      var entry = {
+        x: data.timestamp * 1000,
+        y: index
+      };
       
       sourceSeries.add(entry);
     });
+    
+    actorArr.forEach(function(object) {
+      object.data = object.data.toArray();
+    }, this);
     
     $(element).highcharts({
       chart: {
@@ -49,12 +79,13 @@ var render = function(element) {
       yAxis: {
         title: {
           text: 'Team Member'
-        }
+        },
+        categories: ["Aqib Bhat", "Cullen Brown", "Eric Gonzalez", "Jorge Herrera"]
       },
       legend: {
         enabled: false
       },
-      series: [{data:[1,2,3,5,6,1]}]
+      series: actorArr
     });
   };
     
