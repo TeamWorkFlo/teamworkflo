@@ -33,6 +33,41 @@ var render = function(element) {
     console.log(compLayerTasks.length);
   }
 
+    function getFeatureList(taskArray){
+    var featureNames = Array();
+    var nameUsed = 0;
+    for (var i = 0; i < taskArray.length; i++){
+        nameUsed = 0;
+        for (var j = 0; j < featureNames.length; j++){
+            if (taskArray[i].feature == featureNames[j]){
+                nameUsed = 1;
+                break;
+            }
+        } 
+        if (nameUsed != 1){
+            featureNames.push(taskArray[i].feature);
+        }
+    }
+    return featureNames;
+  }
+
+  function createFeatureLayer(taskArray, featureNames){
+    var results = Array();
+    //create a subarray for each component
+    for (var i = 0; i < featureNames.length; i++){
+        var temp = Array();
+        for (var j = 0; j < taskArray.length; j++){
+            if (taskArray[j].feature == featureNames[i]){
+                temp.push(taskArray[j]);
+            }
+        }
+        console.log("Number of items in feature " + featureNames[i] + ": " + temp.length);
+        results[featureNames[i]] = temp;
+    }
+
+    return results;
+  }
+
   function createComponentLayer(taskArray, componentNames){
     var results = Array();
     //create a subarray for each component
@@ -43,10 +78,16 @@ var render = function(element) {
                 temp.push(taskArray[j]);
             }
         }
-        results[componentNames[i]] = temp;
+        var tempFeatureNames = getFeatureList(temp);
+        console.log(tempFeatureNames.length);
+        var tempFeatureLayer = createFeatureLayer(temp, tempFeatureNames);
+
+        results[componentNames[i]] = tempFeatureLayer;
     }
     return results;
   }
+
+
 
   function getComponentList(taskArray){
     var componentNames = Array();
