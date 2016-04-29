@@ -1,15 +1,15 @@
 var task_milestones = {};
 
 function getGanttTasks(json_tasks,milestone){
+    //This functions transforms the json_task into the Array needed by the Gantt Chart
   var gantt_tasks = [];
 
  for(var i=0;i<json_tasks.length;i++){
        
         var obj = json_tasks[i];
-        var task_name = obj['id'] + " - "+obj['name'];
+        //var task_name = obj['id'] + " - "+obj['name'];
+        var task_name = obj['id'];
         if(obj['milestone']==milestone){
-//alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
-
 
 var intervals = [{
     name:task_name,
@@ -31,9 +31,6 @@ var task = {
         gantt_tasks.push(task);
     }
 
-
-
-
     }
 
     return gantt_tasks;
@@ -41,6 +38,7 @@ var task = {
 
 
 function getTaskNames(json_tasks){
+    //This function get the names of the tasks and return an array
   var task_names = [];
 
 
@@ -57,6 +55,7 @@ function getTaskNames(json_tasks){
 
 
 function getMilestones(json_tasks){
+    //This function get the different milestones available from the tasks
   var task_milestones = [];
 
  for(var i=0;i<json_tasks.length;i++){
@@ -73,13 +72,13 @@ function getMilestones(json_tasks){
 
 
 
-function getPreviousDate(date){
-return date.setTime( date.getTime() - 1 * 86400000 );
-}
+// function getPreviousDate(date){
+// return date.setTime( date.getTime() - 1 * 86400000 );
+// }
 
-function getNextDate(date){
-return date.setTime( date.getTime() + 1 * 86400000 );;
-}
+// function getNextDate(date){
+// return date.setTime( date.getTime() + 1 * 86400000 );;
+// }
 
 
 
@@ -140,7 +139,7 @@ return date.setTime( date.getTime() + 1 * 86400000 );;
         // create the chart
         var chart = new Highcharts.Chart({
             chart: {
-                renderTo: 'viz_one', //This might change, its the id of the first visualization
+                renderTo: 'vis2-body', //This might change, its the id of the first visualization
                 zoomType: 'x'
             },
 
@@ -150,8 +149,8 @@ return date.setTime( date.getTime() + 1 * 86400000 );;
 
             xAxis: {
                 type: 'datetime',
-                min: new Date("2016/04/10").getTime(), //This would need to change depending on the time window the user select
-                max: new Date("2016/04/25").getTime(), //This would need to change depending on the time window the user select
+                min: new Date("2016/04/22").getTime(), //This would need to change depending on the time window the user select
+                max: new Date("2016/04/28").getTime(), //This would need to change depending on the time window the user select
                 
             },
 
@@ -160,12 +159,11 @@ return date.setTime( date.getTime() + 1 * 86400000 );;
                 categories: task_names,
                 tickInterval: 1,            
                 tickPixelInterval: 200,
-                max: 10,
                 scalable: true,
                 labels: {
                     style: {
                         color: '#525151',
-                        font: '12px Helvetica',
+                        font: '8px Helvetica',
                         fontWeight: 'bold'
                     },
                    /* formatter: function() {
@@ -185,9 +183,9 @@ return date.setTime( date.getTime() + 1 * 86400000 );;
                 
             },
 
-scrollbar: {
-        enabled: true
-    },
+            scrollbar: {
+             enabled: true
+            },
             legend: {
                 enabled: false
             },
@@ -204,7 +202,7 @@ scrollbar: {
 
             plotOptions: {
                 line: {
-                    lineWidth: 10,
+                    lineWidth: 20,
                     marker: {
                         enabled: false
                     },
