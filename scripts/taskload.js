@@ -11,25 +11,30 @@ var render = function(element) {
         return filterByMilestone(task,"")
         */
 
-        /*
-        //filter out tasks completed before given StartTime
-        return filterByStartTime(task,"");
-        */
-
-        /*
-        //filter out tasks started after given EndTime
-        return filterByEndTime(task,"1460678400");
-        */
-
         //filter by timeWindow
         //return filterOverTimeWindow(task,"",""); //all tasks
         //return filterOverTimeWindow(task,"1460678400",""); //tasks in progress after 4/15
         //return filterOverTimeWindow(task,"","1460678400"); //tasks completed 4/15
         //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
+
+        //filter by actor
+        return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown
     }
     
     }
   
+  function filterByActor (task,actor){
+    if (actor != ""){
+        if (!task.actor.includes(actor))
+            return false;
+        return true;
+    }
+    else{
+        //no actor specified; all tasks are good
+        return true;
+    }
+  }
+
   function filterByMilestone(task,milestone){
     //add case for no filter
     if (milestone == ""){
