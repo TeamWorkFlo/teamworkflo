@@ -1,6 +1,11 @@
 
 var render = function(element) {
-  var vwFilter = function(task) { return true; }
+  var vwFilter = function(task) { 
+    if (task.actor == ""){
+        return false;
+    }
+    return true; 
+    }
   //var compNames = getComponentList(tasks);
   
   function recompileArray(taskArray){
@@ -86,9 +91,71 @@ var render = function(element) {
     return componentNames;
 };
   
+  function determineTaskValue(task){
+    if (task.importance == "Low")
+        return 1;
+    else if (task.importance == "Medium")
+        return 3;
+    else if (task.importance == "High")
+        return 5;
+    return 0;
+  }
+
+  
+
   var results = function(tasks) {
         var reformattedTasks = recompileArray(tasks);
-        
+        var compKeyList = Object.keys(tasks);
+        var updatedTasks = Array();
+        var compI = 0;
+
+        //for (component in reformattedTasks){
+        for (component in tasks){
+            var c = component;
+            var componentID = "id_" + compI;
+            var featI = 0;
+            var compS = 0;
+            //create component segment for graph
+            var compP = {
+                id: componentID,
+                name: compKeyList[compI]
+            };
+            var featKeyList = Object.keys(tasks[component]);
+            for (feature in tasks[component]){
+                var f = feature;
+                var featureID = componentID + "_" + featI; 
+                var taskI = 0;
+                var featS = 0;
+                // create feature segment for graph
+                var featP = {
+                    id: featureID,
+                    name:tasks[component][feature],
+                    parent:componentID
+                };
+                //var taskKeyList = Object.keys(tasks[component][feature]);
+                for (task in feature){
+                    var taskID = featureID + "_" + taskI;
+                    //create task segment for graph
+                    var taskP ={
+                        //actor:reformattedTasks[component][feature][task].actor,
+                        //component:task.component,
+                        name: "task " + task.id + "-" + task.name,
+                        //description:task.description,
+                        id: taskID,
+                        parent:featureID,
+                    }
+                    taskP.value = determineTaskValue(task);
+                    featS += taskP.value;
+                    //console.log(taskID);
+                    taskI++;
+                }
+                //console.log(featureID);
+                featI++;
+            }
+            //console.log(componentID);
+            compI++;
+        }
+
 
 
        $(element).highcharts({
@@ -102,9 +169,59 @@ var render = function(element) {
 		});
     
   };
-    
-  taskManager.getTasks({filter:vwFilter,results:results}); 
+
+  //taskManager.getTasks({filter:vwFilter,results:results}); 
+  var sampleTasks = {
+    comp1:{
+        feat1:{
+            task1:{
+                id:0,
+                name:"task1",
+            },
+            task2:{
+                id:1,
+                name:"task12",
+            }
+        },
+        feat2:{
+            task1:{
+                id:2,
+                name:"task1",
+            },
+            task2:{
+                id:3,
+                name:"task2",
+            }
+        }
+    },
+    comp2:{
+        feat1:{
+            task1:{
+                id:0,
+                name:"task1",
+            },
+            task2:{
+                id:1,
+                name:"task12",
+            }
+        },
+        feat2:{
+            task1:{
+                id:2,
+                name:"task1",
+            },
+            task2:{
+                id:3,
+                name:"task2",
+            }
+        }
+    }
 };
+
+results(sampleTasks);
+};
+
+
 
 var configuration = { name:"Taskload", renderer:render };
 
