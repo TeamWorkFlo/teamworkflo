@@ -3,7 +3,7 @@
 var activityCompare = function(a,b) {
   var aTime = a.x;
   var bTime = b.x;
-  return bTime - aTime;
+  return aTime - bTime;
 }
 
 var nameToIndex = function(name) {
@@ -80,18 +80,17 @@ var render = function(element) {
     actorArr.forEach(function(actorObject) {
       // Translate each bin to an entry
       
-      var data = new buckets.PriorityQueue(activityCompare);
+      var data = [];//new buckets.PriorityQueue(activityCompare);
       var bins = actorObject.Slack.bins;
       for (var binKey in bins) {
         var bin = bins[binKey];
-        data.add(bin);
+        data.push(bin);
       }
-      data = data.toArray();
+      data.sort(activityCompare);
       
       var divId = 'act-' + actorObject.name.split(" ")[0];
       $(element).append('<div id=\'' + divId + '\'></div>');
-      var divdiv = '#'+divId; 
-      $(divdiv).highcharts({
+      $('#'+divId).highcharts({
         chart: {
           type: 'area'
         },
@@ -99,10 +98,8 @@ var render = function(element) {
           text: 'Team Activity'
         },
         xAxis: {
-          type: 'datetime',
-          allowDecimals: false,
+          type: 'datetime'
         },
-        type: 'area',
         legend: {
           enabled: false
         },
