@@ -80,7 +80,8 @@ var render = function(element) {
     actorArr.forEach(function(actorObject) {
       // Translate each bin to an entry
       
-      var data = [];//new buckets.PriorityQueue(activityCompare);
+      var name = actorObject.name;
+      var data = [];
       var bins = actorObject.Slack.bins;
       for (var binKey in bins) {
         var bin = bins[binKey];
@@ -88,17 +89,23 @@ var render = function(element) {
       }
       data.sort(activityCompare);
       
-      var divId = 'act-' + actorObject.name.split(" ")[0];
+      var divId = 'act-' + name.split(" ")[0];
       $(element).append('<div id=\'' + divId + '\'></div>');
       $('#'+divId).highcharts({
         chart: {
-          type: 'area'
+          type: 'area',
+          height: 200
         },
         title: {
-          text: 'Team Activity'
+          text: name
         },
         xAxis: {
           type: 'datetime'
+        },
+        yAxis: {
+          title: {
+            text: 'Count'
+          }
         },
         legend: {
           enabled: false
