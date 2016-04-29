@@ -14,89 +14,8 @@
   <script src="scripts/client/taskmanager.js"></script>
   <script src="scripts/client/activitymanager.js"></script>
   <script src="scripts/client/visualization.js"></script>
-<script src="http://code.highcharts.com/stock/highstock.js"></script>
-  <style>
-html,body,#wrapper {
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-}
-
-.chart {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-}
-
-.axis path,.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.bar {
-  fill: #33b5e5;
-}
-
-.bar-failed {
-  fill: #CC0000;
-}
-
-.bar-running {
-  fill: #669900;
-}
-
-.bar-succeeded {
-  fill: #33b5e5;
-}
-
-.bar-killed {
-  fill: #ffbb33;
-}
-
-.grid .tick {
-    stroke: lightgrey;
-    opacity: 0.7;
-}
-.grid path {
-      stroke-width: 0;
-}
-
-#forkme_banner {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 5px;
-  z-index: 10;
-  padding: 10px 40px 10px 5px;
-  color: #fff;
-  background:
-    url('http://dk8996.github.io/Gantt-Chart/images/blacktocat.png')
-    #0090ff no-repeat 95% 50%;
-  font-weight: 700;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  text-decoration: none;
-}
-
-#twittme_banner {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 180px;
-  z-index: 10;
-  padding: 10px 40px 10px 5px;
-  color: #fff;
-  background:
-    url('http://dk8996.github.io/Gantt-Chart/images/twitter.png')
-    #0090ff no-repeat 95% 50%;
-  font-weight: 700;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  text-decoration: none;
-}
-  </style>
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  
 </head>
 <body>
   <nav class="navbar navbar-default">
@@ -111,48 +30,91 @@ html,body,#wrapper {
       <div id="vis1" class="vis col-sm-12">
         <div class="panel panel-card">
           <div class="panel-heading" >
-          <h5 class="panel-title"  >[Main visualization]</h5>
+            <h5 class="panel-title"  >[Main visualization]</h5>
           </div>
-          <div class="panel-body">
-            <div id="viz_one" style="margin: 0 auto;">
-               
-            </div>
-          </div>
+          <div class="panel-body" style="height: 870px;">
+            <select class="selectpicker" class="select" id="milestones_selector" style="display:block;">
+              <input id="work_day" class="date" type="date" name="wday"  style="display:block;">
+              <button id="show_viz" class="btn">Show viz</button>
+
+            </select>
+            <div class="col-sm-12" >
+             <div class="col-sm-2" >
+             </div>
+             <div class="col-sm-10" id="viz_one" >
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ <!--   <div class="row">
+    <div id="vis2" class="vis col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading" style="width:220px;">
+          <h5 class="panel-title">[Secondary visualization]</h5>
+        </div>
+        <div class="panel-body">
         </div>
       </div>
     </div>
-    <div class="row">
-      <div id="vis2" class="vis col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading" style="width:220px;">
-            <h5 class="panel-title">[Secondary visualization]</h5>
-          </div>
-          <div class="panel-body">
-          </div>
+    <div id="vis3" class="vis col-sm-6">
+      <div class="panel panel-card">
+        <div class="panel-heading" style="width:200px;">
+          <h5 class="panel-title">[Tertiary visualization]</h5>
         </div>
-      </div>
-      <div id="vis3" class="vis col-sm-6">
-        <div class="panel panel-card">
-          <div class="panel-heading" style="width:200px;">
-            <h5 class="panel-title">[Tertiary visualization]</h5>
-          </div>
-          <div class="panel-body">
-          </div>
+        <div class="panel-body">
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+</div>
 <footer>
 
   Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub.
 </footer>
-  <!--<script src="scripts/client/taskload.js"></script>-->s
+<!--<script src="scripts/client/taskload.js"></script>-->s
 
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
- <script type="text/javascript" src="./scripts/client/gantt_d3.js"></script>
- <script type="text/javascript" src="./scripts/client/gantt_highcharts.js"></script>
+<script type="text/javascript" src="./scripts/client/gantt_d3.js"></script>
+<script type="text/javascript" src="./scripts/client/gantt_highcharts.js"></script>
 
 <script>
+
+
+
+          //var milestones_selector = $("#milestones_selector");
+$.get("./twfapi/index.php?method=tasks", function(data, status){
+    var json_data = JSON.parse(data);
+    //console.log("Fund data! \n%s\n", data);
+    localStorage.setItem("task_array",JSON.stringify(json_data['data']));
+    if(json_data['status']==200){
+         
+          var milestones = getMilestones(json_data['data']);
+          for(i = 0; i < milestones.length; i++) {
+           $('#milestones_selector').append('<option value='+milestones[i]+'>'+milestones[i]+'</option>');
+         }
+        }else{
+          alert("Error "+ json_data['status']);
+        }
+      });
+
+
+
+  
+
+  $( "#show_viz" ).click(function() {
+    var date = $( "#work_day" ).val();
+    var milestone = $( "#milestones_selector option:selected" ).text();
+
+    showVisualization(date,milestone);
+
+
+
+
+  });
+
+
 
 //JQuery Methods for API Call Example
 $( "#call_api_activities" ).click(function() {
@@ -166,27 +128,60 @@ $( "#call_api_activities" ).click(function() {
         }
 
         
-    });
+      });
 });
+
+
+function showVisualization(date,milestone){
+
+    var json_data = JSON.parse(localStorage.getItem("task_array"));
+    //console.log("Found data! \n%s\n", data);
+
+          var milestones = getMilestones(json_data);
+          var milestone_tasks = getGanttTasks(json_data,milestone);
+          var formatted_date = date.replace("-", "/");
+          var formatted_date = formatted_date.replace("-", "/");
+          showChart(formatted_date, milestones,milestone_tasks);
+
+
+}
 
 
 $( "#call_api_tasks" ).click(function() {
   $.get("./twfapi/index.php?method=tasks", function(data, status){
-        var json_data = JSON.parse(data);
-        console.log("Fund data! \n%s\n", data);
-        
-        if(json_data['status']==200){
-          showChart(json_data['data']);
+    var json_data = JSON.parse(data);
+    console.log("Fund data! \n%s\n", data);
+
+    if(json_data['status']==200){
+          //First parameter is going to be the data
+          //The second parameter is going to be the milestone
+          //The third parameter is going to be a date. It will show the day before and the day after that.
+          var milestones = getMilestones(json_data['data']);
+          //var milestones_selector = $("#milestones_selector");
+
+          for(i = 0; i < milestones.length; i++) {
+           $('#milestones_selector').append('<option value='+i+'>'+milestones[i]+'</option>');
+         }
+
+
+
+
+
+
+
+          //getDataFromMilestone
+
+          //showChart(json_data['data']);
         }else{
           alert("Error "+ json_data['status']);
         }
 
 
-    });
+      });
 });
 </script>
 
- 
+
 
 
 </body>

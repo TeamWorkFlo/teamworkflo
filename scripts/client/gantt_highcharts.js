@@ -1,12 +1,13 @@
-function getGanttTasks(json_tasks){
-  var gantt_tasks = [];
+var task_milestones = {};
 
+function getGanttTasks(json_tasks,milestone){
+  var gantt_tasks = [];
 
  for(var i=0;i<json_tasks.length;i++){
        
         var obj = json_tasks[i];
         var task_name = obj['id'] + " - "+obj['name'];
-
+        if(obj['milestone']==milestone){
 //alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
 
 
@@ -30,6 +31,11 @@ var task = {
         gantt_tasks.push(task);
     }
 
+
+
+
+    }
+
     return gantt_tasks;
 }
 
@@ -41,7 +47,8 @@ function getTaskNames(json_tasks){
  for(var i=0;i<json_tasks.length;i++){
        
         var obj = json_tasks[i];
-        var task_name = obj['id'] + " - "+obj['name'];
+        //var task_name = obj['id'] + " - "+obj['name'];
+        var task_name = obj['name'];
         task_names.splice(0,0,task_name);
     }
 
@@ -49,13 +56,39 @@ function getTaskNames(json_tasks){
 }
 
 
+function getMilestones(json_tasks){
+  var task_milestones = [];
 
- function showChart(task_string) {
+ for(var i=0;i<json_tasks.length;i++){
+       
+        var obj = json_tasks[i];
+        var current_milestone = obj['milestone'];
+        if(jQuery.inArray(current_milestone, task_milestones) == -1){
+        task_milestones.push(current_milestone);
+        }
+    }
+
+    return task_milestones;
+}
+
+
+
+function getPreviousDate(date){
+return date.setTime( date.getTime() - 1 * 86400000 );
+}
+
+function getNextDate(date){
+return date.setTime( date.getTime() + 1 * 86400000 );;
+}
+
+
+
+ function showChart(date,milestones, milestone_tasks) {
         //potentially we could receive two dates here, and use them to filter 
         //what data are we going to show on the visualization
-        var tasks = getGanttTasks(task_string);
-        var task_names = getTaskNames(task_string);
-        
+        var tasks = milestone_tasks;
+        var task_names = getTaskNames(milestone_tasks);
+        var date = new Date(date);
        
         
         // re-structure the tasks into line seriesvar series = [];
@@ -107,7 +140,8 @@ function getTaskNames(json_tasks){
         // create the chart
         var chart = new Highcharts.Chart({
             chart: {
-                renderTo: 'viz_one' //This might change, its the id of the first visualization
+                renderTo: 'viz_one', //This might change, its the id of the first visualization
+                zoomType: 'x'
             },
 
             title: {
@@ -116,8 +150,8 @@ function getTaskNames(json_tasks){
 
             xAxis: {
                 type: 'datetime',
-                min: new Date('2016/04/10').getTime(), //This would need to change depending on the time window the user select
-                max: new Date('2016/04/17').getTime(), //This would need to change depending on the time window the user select
+                min: new Date("2016/04/10").getTime(), //This would need to change depending on the time window the user select
+                max: new Date("2016/04/25").getTime(), //This would need to change depending on the time window the user select
                 
             },
 
@@ -126,6 +160,8 @@ function getTaskNames(json_tasks){
                 categories: task_names,
                 tickInterval: 1,            
                 tickPixelInterval: 200,
+                max: 10,
+                scalable: true,
                 labels: {
                     style: {
                         color: '#525151',
@@ -149,6 +185,9 @@ function getTaskNames(json_tasks){
                 
             },
 
+scrollbar: {
+        enabled: true
+    },
             legend: {
                 enabled: false
             },
