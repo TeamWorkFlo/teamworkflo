@@ -129,6 +129,24 @@ var render = function(element) {
     else if (task.actor == "Jorge Herrera"){
         return '#BAF165';
     }
+    else{
+        return '#999999';
+    }
+  }
+
+  function determineStatus(task){
+    if (task.startDate != ""){
+        if (task.completionDate != ""){
+            return "Completed";
+        }
+        else{
+            return "In Progress";
+        }
+    }
+    else{
+        return "Not Started";
+    }
+
   }
 
   function setToolTip(task){
@@ -152,7 +170,8 @@ var render = function(element) {
                 name: compKeyList[compI],
                 description:"",
                 startTime: "",
-                endTime: ""
+                endTime: "",
+                status:""
             };
             var featKeyList = Object.keys(tasks[component]);
             var featActors = Array();
@@ -166,7 +185,8 @@ var render = function(element) {
                     parent:compP.id,
                     description:"",
                     startTime: "",
-                    endTime: ""
+                    endTime: "",
+                    status:""
                 };
                 //var taskKeyList = Object.keys(tasks[component][feature]);
                 var taskActors = Array();
@@ -180,11 +200,13 @@ var render = function(element) {
                         parent:featP.id,
                         description: tasks[component][feature][task].description,
                         startTime: tasks[component][feature][task].startDate,
-                        endTime: tasks[component][feature][task].completionDate
+                        endTime: tasks[component][feature][task].completionDate,
+                        status:""
                     }
                     
                     taskP.value = determineTaskValue(tasks[component][feature][task]);
                     taskP.color = determineColor(tasks[component][feature][task]);
+                    taskP.status = determineStatus(tasks[component][feature][task]);
                     //taskP.tooltip = setToolTip(tasks[component][feature][task]);
 
                     if ($.inArray(taskP.actor, taskActors) == -1){
@@ -262,7 +284,7 @@ var render = function(element) {
                         return '<b>Name: </b>' + this.point.name + '<br>' 
                         + '<b>Assignee(s): </b>' + this.point.actor + '<br>'
                         + this.point.description + '<br>'
-                        + this.point.startTime + '-' + this.point.endTime;
+                        + '<b>' + this.point.status + '</b>';
                         
                     //return '<b>Actor(s): </b>' + this.point.actor + '</br>' ;
                }
