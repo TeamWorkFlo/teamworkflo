@@ -7,30 +7,49 @@ var render = function(element) {
         return false;
     }
     else{
-        if (!filterByMilestone(task,"")){
-            return false
-        }
-        return true; 
+        /*
+        //filter by milestone
+        return filterByMilestone(task,"")
+        */
+
+        /*
+        //filter out tasks completed before given StartTime
+        return filterByStartTime(task,"");
+        */
     }
     
     }
-  //var compNames = getComponentList(tasks);
   
   function filterByMilestone(task,milestone){
+    //add case for no filter
     if (milestone == ""){
         return true;
     }
+    //filter out tasks not from milestone
     if (task.milestone != milestone)
         return false;
     return true;
   }
 
+  /*
+        Return false if a task is completed before startTime; else, return true
+  */
   function filterByStartTime(task,startTime){
-    //if (task.startTime < )
     if (startTime != ""){
-    var endTask = convertTimestampToDate(task.completeDate);
-    var startDate = convertTimestampToDate(startTime);
-    //return false if startDate is before startTask
+        if (task.completionDate != ""){
+            var completeDate = convertTimestampToDate(task.completionDate);
+            var completeTime = completeDate.getTime()/1000;
+            //var startDate = convertTimestampToDate(startTime);
+            if (completeTime< startTime)
+                return false;
+            return true;
+        }
+        //return true otherwise (task still in process)
+        return true;
+    }
+    else{
+        //no limiting start time; return all tasks from beginning of time until now
+        return true;
     }
   }
 
