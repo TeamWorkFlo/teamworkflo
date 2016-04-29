@@ -8,17 +8,32 @@ var render = function(element) {
     else{
         /*
         //filter by milestone
-        return filterByMilestone(task,"")
+        //return filterByMilestone(task,"") //all tasks
+        return filterByMilestone(task,"Functional Prototype"); //only tasks in functional prototype
         */
 
+        /*
         //filter by timeWindow
         //return filterOverTimeWindow(task,"",""); //all tasks
         //return filterOverTimeWindow(task,"1460678400",""); //tasks in progress after 4/15
         //return filterOverTimeWindow(task,"","1460678400"); //tasks completed 4/15
-        //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
+        return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
+        */
 
+        /*
         //filter by actor
-        return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown
+        return filterByActor(task,""); //all tasks (no actor specified)
+        //return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown (alone or as part of a group)
+        */
+
+        //filter by component
+        return filterByComponent(task, ""); //returns all tasks (no component specified)
+        //return filterByComponent(task, "Revise User Study"); //returns tasks from 'Revise User Study' component
+
+
+
+        //no other filters set
+        return true;
     }
     
     }
@@ -42,6 +57,16 @@ var render = function(element) {
     }
     //filter out tasks not from milestone
     if (task.milestone != milestone)
+        return false;
+    return true;
+  }
+
+  function filterByComponent(task,component){
+    if (component == ""){
+        return true;
+    }
+    //filter out tasks not from component
+    if (task.component != component)
         return false;
     return true;
   }
