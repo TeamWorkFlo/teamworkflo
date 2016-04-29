@@ -6,62 +6,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/date_slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="d3/d3.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
-  <script src="scripts/client/taskmanager.js"></script>
-  <script src="scripts/client/activitymanager.js"></script>
-  <script src="scripts/client/visualization.js"></script>
   <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  <script src="scripts/buckets.min.js"></script>
+  <script src="scripts/taskmanager.js"></script>
+  <script src="scripts/activitymanager.js"></script>
+  <script src="scripts/visualization.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="scripts/client/dateslider/jQRangeSliderMouseTouch.js"></script>
+<script src="scripts/client/dateslider/jQRangeSliderDraggable.js"></script>
+<script src="scripts/client/dateslider/jQRangeSliderBar.js"></script>
+<script src="scripts/client/dateslider/jQRangeSliderHandle.js"></script>
+<script src="scripts/client/dateslider/jQRangeSliderLabel.js"></script>
+<script src="scripts/client/dateslider/jQRangeSlider.js"></script>
+<script src="scripts/client/dateslider/jQRuler.js"></script>
+<script src="scripts/client/dateslider/jQDateRangeSliderHandle.js"></script>
+<script src="scripts/client/dateslider/jQDateRangeSlider.js"></script>
   
 </head>
-<body>
-  <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">TeamWorkFlo</a>
-      <button id="call_api_activities">Call Activities</button>
-      <button id="call_api_tasks">Call Tasks</button>
-    </div>
-  </nav>
-  <div class="container">
-    <div>
-      <div id="vis1" class="vis col-sm-12">
-        <div class="panel panel-card">
-          <div class="panel-heading" >
+  <style type="text/css">
+    .top-right-button {
+      line-height: 12px;
+      width: 35px;
+      font-size: 8pt;
+      font-family: tahoma;
+      margin-top: 1px;
+      margin-right: 2px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  </style>
+
+</head>
+<body style="height:100%">
+
+  <div class="container-full">
+    <div class="row content container-full" style="height:100%;" > 
+
+      <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
+        <div class="panel" id="viz_panel_1" style="margin-bottom: 0px;">
+          <div class="panel-heading" style="width:200px;">
             <h5 class="panel-title"  >[Main visualization]</h5>
           </div>
-          <div class="panel-body" style="height: 870px;">
-            <select class="selectpicker" class="select" id="milestones_selector" style="display:block;">
-              <input id="work_day" class="date" type="date" name="wday"  style="display:block;">
-              <button id="show_viz" class="btn">Show viz</button>
+          <div class="panel-body" style="padding:0px;">
+            <div id="vis1-body" >
+              <!-- <h1>Content goes here</h1> -->
+            </div>
+            
+          </div>
+        </div>
 
-            </select>
-            <div class="col-sm-12" >
-             <div class="col-sm-2" >
-             </div>
-             <div class="col-sm-10" id="viz_one" >
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
- 
-</div>
+        <div class="panel" style="background-color:#66368E; padding-left:15px;" id="viz_control_panel">
+          
+          <div class="panel-body" style="padding-left:5px;padding-top:0px">
+
+
+            <div id="control_panel" >
+
+            <table width="100%" height="100%">
+            <tr width="100%">
+              <td width="50%">
+               <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
+              <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;"></select></label>
+              <button id="show_viz" class="btn btn-primary">Show viz</button></td>
+               <td width="50%">  <div id="slider">
+                
+              </div></td>
+            </tr>
+            </table>
+           
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="vis col-sm-5 left-border" style="padding-bottom: 0px; padding-left: 2px;">
+
+        <div id="vis2" class="vis col-sm-12" style="padding-bottom: 2px; padding-right: 0px; padding-left: 0px; padding-right: 0px;">
+          <div class="panel" id="viz_panel_2" style="margin-bottom:0px;">
+            <div class="panel-heading" style="width:220px;">
+              <h5 class="panel-title">[Secondary visualization]</h5>
+            </div>
+            <button class="top-right-button">Max</button>
+            <div class="panel-body fill" style="padding:0px;">
+              <div id="vis2-body" class="fill" style="overflow-y:auto; min-height: 1500px;">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px; overflow-y:auto">
+          <div class="panel" id="viz_panel_3"  style="margin-bottom:0px;">
+            <div class="panel-heading" style="width:200px; padding-right: 0px; padding-left: 0px;">
+              <h5 class="panel-title">[Tertiary visualization]</h5>
+            </div>
+            <!-- <div stlye="float:right;" ><button class="btn btn-primary" id="prev">Prev</button> <label>Showing 1-15 tasks of 48</label><button class="btn btn-primary" id="next" >Next</button> <button class="btn btn-secondary" style="margin-left:50px;" id="max" >MAX</button></div> -->
+            <button class="top-right-button">Max</button>
+            <div class="fill" style="padding:0px;">
+            
+              <div id="vis3-body" class="fill" style="height:100%; width:100%; position:absolute;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+    
+  </div>
+
+ <!--  Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub. -->
+
 <footer>
+<script>
+  var height = $( window ).height();
+//alert(height);
 
-  Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub.
+
+$("#viz_panel_1").css({ 'height': height*.8 + "px" });
+$("#viz_control_panel").css({ 'height': height*.23 + "px" });
+$("#viz_panel_2").css({ 'height': height/2 + 10 + "px" });
+$("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
+
+localStorage.setItem("main_viz_height",height*.8);
+localStorage.setItem("secondary_viz_height",height/2 + 10);
+
+
+$('html, body').css({
+  'overflow': 'hidden',
+  'height': '100%'
+});
+
+
+$("#slider").dateRangeSlider({
+    bounds:{
+        min: new Date(1421841600000),
+        max: new Date(1431841600000)
+    }
+});
+
+
+</script>
+
+
+  <script src="scripts/taskload.js"></script>
+  <script src="scripts/activityvis.js"></script>
+  <script src="scripts/switchvis.js"></script>
+  <script src="scripts/gantt.js"></script>
+  <!-- // <script type="text/javascript" src="./scripts/client/gantt_highcharts.js"></script> -->
+
 </footer>
-<!--<script src="scripts/client/taskload.js"></script>-->s
-<script type="text/javascript" src="./scripts/client/gantt_highcharts.js"></script>
+
+
+
 
 <script>
 
-
-
-          //var milestones_selector = $("#milestones_selector");
+          var milestones_selector = $("#milestones_selector");
 $.get("./twfapi/index.php?method=tasks", function(data, status){
     var json_data = JSON.parse(data);
     //console.log("Fund data! \n%s\n", data);
@@ -80,87 +200,13 @@ $.get("./twfapi/index.php?method=tasks", function(data, status){
 
 
   
-
-  $( "#show_viz" ).click(function() {
-    var date = $( "#work_day" ).val();
-    var milestone = $( "#milestones_selector option:selected" ).text();
-
-    showVisualization(date,milestone);
+</script>
 
 
-
-
-  });
-
-
-
-//JQuery Methods for API Call Example
-$( "#call_api_activities" ).click(function() {
-  $.get("./twfapi/index.php?method=activities", function(data, status){
-    var json_data = JSON.parse(data);
-    console.log("Found data! \n%s\n", data);
-    if(json_data['status']==200){
-          //json_data['data'] contains the array we need
-        }else{
-          alert("Error "+ json_data['status']);
-        }
-
-        
-      });
-});
-
-
-function showVisualization(date,milestone){
-
-    var json_data = JSON.parse(localStorage.getItem("task_array"));
-    //console.log("Found data! \n%s\n", data);
-
-          var milestones = getMilestones(json_data);
-          var milestone_tasks = getGanttTasks(json_data,milestone);
-          var formatted_date = date.replace("-", "/");
-          var formatted_date = formatted_date.replace("-", "/");
-          showChart(formatted_date, milestones,milestone_tasks);
-
-
-}
-
-
-$( "#call_api_tasks" ).click(function() {
-  $.get("./twfapi/index.php?method=tasks", function(data, status){
-    var json_data = JSON.parse(data);
-    console.log("Fund data! \n%s\n", data);
-
-    if(json_data['status']==200){
-          //First parameter is going to be the data
-          //The second parameter is going to be the milestone
-          //The third parameter is going to be a date. It will show the day before and the day after that.
-          var milestones = getMilestones(json_data['data']);
-          //var milestones_selector = $("#milestones_selector");
-
-          for(i = 0; i < milestones.length; i++) {
-           $('#milestones_selector').append('<option value='+i+'>'+milestones[i]+'</option>');
-         }
-
-
-
-
-
-
-
-          //getDataFromMilestone
-
-          //showChart(json_data['data']);
-        }else{
-          alert("Error "+ json_data['status']);
-        }
-
-
-      });
-});
 </script>
 
 
 
-
 </body>
+
 </html>

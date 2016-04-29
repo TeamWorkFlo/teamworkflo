@@ -1,26 +1,51 @@
-var task_milestones = {};
+
+//var task_milestones = {};
+
+
+
+function setPaginationEvents(){
+$( "#next" ).click(function() {
+  alert( "Show next" );
+});
+
+$( "#prev" ).click(function() {
+  alert( "Show prev" );
+});
+}
+
+
+function getUnixTimestamp(date_string){
+var newdate = new Date(date_string);
+return newdate.getTime();
+}
+
+function getDateFromUnixTimestamp(unix_timestamp){
+    return new Date(unix_timestamp);
+}
+
 
 function getGanttTasks(json_tasks,milestone){
-    //This functions transforms the json_task into the Array needed by the Gantt Chart
   var gantt_tasks = [];
 
- for(var i=0;i<json_tasks.length;i++){
-       
-        var obj = json_tasks[i];
+  for(var i=0;i<json_tasks.length;i++){
+
+    var obj = json_tasks[i];
         //var task_name = obj['id'] + " - "+obj['name'];
-        var task_name = obj['id'];
+        var task_id = obj['id'];
+         var task_name = obj['name'];
         if(obj['milestone']==milestone){
+//alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
 
 var intervals = [{
-    name:task_name,
-    from:obj['startDate']*1000,
-    to:obj['endDate']*1000,
+    from: getUnixTimestamp(obj['startDate']),
+    to: getUnixTimestamp(obj['completionDate']),
     label:obj['actor']
     
 }];
 
 
 var task = {
+    taskid:task_id,
     name:task_name,
     actor:obj['actor'],
     description:obj['description'],
@@ -28,23 +53,25 @@ var task = {
     
 };
 
-        gantt_tasks.push(task);
-    }
+gantt_tasks.push(task);
+}
 
-    }
 
-    return gantt_tasks;
+
+
+}
+
+return gantt_tasks;
 }
 
 
 function getTaskNames(json_tasks){
-    //This function get the names of the tasks and return an array
   var task_names = [];
 
 
- for(var i=0;i<json_tasks.length;i++){
-       
-        var obj = json_tasks[i];
+  for(var i=0;i<json_tasks.length;i++){
+
+    var obj = json_tasks[i];
         //var task_name = obj['id'] + " - "+obj['name'];
         var task_name = obj['name'];
         task_names.splice(0,0,task_name);
@@ -55,41 +82,45 @@ function getTaskNames(json_tasks){
 
 
 function getMilestones(json_tasks){
-    //This function get the different milestones available from the tasks
   var task_milestones = [];
 
- for(var i=0;i<json_tasks.length;i++){
-       
-        var obj = json_tasks[i];
-        var current_milestone = obj['milestone'];
-        if(jQuery.inArray(current_milestone, task_milestones) == -1){
-        task_milestones.push(current_milestone);
-        }
-    }
+  for(var i=0;i<json_tasks.length;i++){
 
-    return task_milestones;
+    var obj = json_tasks[i];
+    var current_milestone = obj['milestone'];
+    if(jQuery.inArray(current_milestone, task_milestones) == -1){
+        task_milestones.push(current_milestone);
+    }
+}
+
+return task_milestones;
 }
 
 
 
 // function getPreviousDate(date){
-// return date.setTime( date.getTime() - 1 * 86400000 );
+//     return date.setTime( date.getTime() - 1 * 86400000 );
 // }
 
 // function getNextDate(date){
-// return date.setTime( date.getTime() + 1 * 86400000 );;
+//     return date.setTime( date.getTime() + 1 * 86400000 );;
 // }
 
 
 
- function showChart(date,milestones, milestone_tasks) {
-        //potentially we could receive two dates here, and use them to filter 
-        //what data are we going to show on the visualization
-        var tasks = milestone_tasks;
-        var task_names = getTaskNames(milestone_tasks);
-        var date = new Date(date);
-       
-        
+var render = function(element) {
+
+  var vwFilter = function(task_array) { 
+    return true;
+}
+
+var results = function (tasks) {
+
+    var tasks = getGanttTasks(tasks,"Functional Prototype")
+    var task_names = getTaskNames(tasks);
+    //var date = new Date(date);
+
+
         // re-structure the tasks into line seriesvar series = [];
         var series = [];
         $.each(tasks.reverse(), function(i, task) {
@@ -115,7 +146,7 @@ function getMilestones(json_tasks){
                 if (task.intervals[j + 1]) {
                     item.data.push(
                         [(interval.to + task.intervals[j + 1].from) / 2, null]
-                    );
+                        );
                 }
 
             });
@@ -134,13 +165,16 @@ function getMilestones(json_tasks){
             });
             series.push(item);
         });
-        */
+*/
 
         // create the chart
-        var chart = new Highcharts.Chart({
+
+        alert(task_names.length);
+        $(element).highcharts({
             chart: {
-                renderTo: 'vis2-body', //This might change, its the id of the first visualization
-                zoomType: 'x'
+                zoomType: 'y',                  
+                panning: true
+
             },
 
             title: {
@@ -159,7 +193,8 @@ function getMilestones(json_tasks){
                 categories: task_names,
                 tickInterval: 1,            
                 tickPixelInterval: 200,
-                scalable: true,
+                scalable: false,
+                max:task_names.length,
                 labels: {
                     style: {
                         color: '#525151',
@@ -177,46 +212,61 @@ function getMilestones(json_tasks){
                 title: {
                     text: 'Tasks'
                 },
-                minPadding: 0.2,
-                maxPadding: 0.2,
-                   fontSize:'15px'
+                //minPadding: 0.2,
+                //maxPadding: 0.2,
+                fontSize:'15px'
                 
             },
 
             scrollbar: {
-             enabled: true
-            },
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+ tasks[this.y].name + '</b><br/>' +
-                        "Actor: "+ tasks[this.y].actor +'</b><br/>' +
-                        "Description: "+tasks[this.y].description; 
+               enabled: true
+           },
+           legend: {
+            enabled: false
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>ID: '+ tasks[this.y].taskid + '</b><br/>' +
+                "Name: "+ tasks[this.y].name +'</b><br/>' +
+                "Actor: "+ tasks[this.y].actor +'</b><br/>' +
+                "Description: "+tasks[this.y].description  +'</b><br/>' +
+                "Start: "+ getDateFromUnixTimestamp(this.point.options.from) +'</b><br/>' +
+                "End: "+ getDateFromUnixTimestamp(this.point.options.to) +'</b><br/>'; 
 
                         // Highcharts.dateFormat('%m-%d-%Y', this.point.options.from)  +
                         // ' - ' + Highcharts.dateFormat('%m-%d-%Y', this.point.options.to)
-                }
-            },
+                    }
+                },
 
-            plotOptions: {
-                line: {
-                    lineWidth: 20,
-                    marker: {
-                        enabled: false
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        align: 'left',
-                        formatter: function() {
-                            return this.point.options && this.point.options.label;
+                plotOptions: {
+                    line: {
+                        lineWidth: 20,
+                        marker: {
+                            enabled: false
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            align: 'left',
+                            formatter: function() {
+                                return this.point.options && this.point.options.label;
+                            }
                         }
                     }
-                }
-            },
+                },
 
-            series: series
+                series: series
 
-        });      
-     };
+        
+
+            });   
+
+};
+taskManager.getTasks({filter:vwFilter,results:results}); 
+
+}
+
+var configuration = { name:"Gantt", renderer:render };
+setPaginationEvents();
+var vis = new Visualization(configuration);
+
+vis.render("#vis3-body");

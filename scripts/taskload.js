@@ -191,9 +191,9 @@ var render = function(element) {
 		});
     
   };
-    //taskManager.getTasks({filter:vwFilter,results:results}); 
+  //taskManager.getTasks({filter:vwFilter,results:results}); 
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
-
+  /*
   var sampleTasks = {
     comp1:{
         feat1:{
@@ -248,8 +248,8 @@ var render = function(element) {
         }
     }
 };
-
-results(sampleTasks);
+*/
+//results(sampleTasks);
 };
 
 
@@ -258,5 +258,4 @@ var configuration = { name:"Taskload", renderer:render };
 
 var vis = new Visualization(configuration);
 
-
-vis.render("#vis1-body");
+vis.render("#viz_panel_1");
