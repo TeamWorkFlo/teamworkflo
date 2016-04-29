@@ -30,22 +30,22 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
-      slack: {data:{}},
+      Slack: {data:{}},
       github: {data:{}},
       drive: {data:{}}
     },{
       name: "Cullen Brown",
-      slack: {data:{}},
+      Slack: {data:{}},
       github: {data:{}},
       drive: {data:{}}
     },{
       name: "Eric Gonzalez",
-      slack: {data:{}},
+      Slack: {data:{}},
       github: {data:{}},
       drive: {data:{}}
     },{
       name: "Jorge Herrera",
-      slack: {data:{}},
+      Slack: {data:{}},
       github: {data:{}},
       drive: {data:{}}
     }];
@@ -73,14 +73,14 @@ var render = function(element) {
         sourceBins[day] = dayBin;
       }
       dayBin.y++;
-      if (data.hasOwnProperty(task))
+      if (data.hasOwnProperty('task'))
         dayBin.tasks.push(task);
     });
     
     actorArr.forEach(function(actorObject) {
       // Translate each bin to an entry
-      var data = actorObject.slack.data;
-      actorObject.slack.data = Array.prototype.slice.call(data);
+      var data = actorObject.Slack.data;
+      actorObject.Slack.data = Array.prototype.slice.call(data);
     }, this);
     
     $(element).highcharts({
