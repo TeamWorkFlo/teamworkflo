@@ -30,40 +30,55 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
-      data: new buckets.PriorityQueue(activityCompare)
+      slack: [],
+      github: [],
+      drive: []
     },{
       name: "Cullen Brown",
-      data: new buckets.PriorityQueue(activityCompare)
+      slack: [],
+      github: [],
+      drive: []
     },{
       name: "Eric Gonzalez",
-      data: new buckets.PriorityQueue(activityCompare)
+      slack: [],
+      github: [],
+      drive: []
     },{
       name: "Jorge Herrera",
-      data: new buckets.PriorityQueue(activityCompare)
+      slack: [],
+      github: [],
+      drive: []
     }];
+    
+    //Bucketize the data
     $.each(activities, function(key, data) {
       var actor = data.actor;
       var index = nameToIndex(actor);
       if (index < 0) // not a member
         return;
-        
+      
+      // Get the actor's activity series  
       var actorActivity = actorArr[index];
       
+      // Get the series for the activity occurring
       var source = data.source;
-      var sourceSeries = actorActivity.data;
+      var sourceBins = actorActivity[source];
       
-      //var yValue = nameToNumber(actor);
-      
-      var entry = {
-        x: data.timestamp * 1000,
-        y: index,
-        name: source
-      };
-      
-      sourceSeries.add(entry);
+      // Increment the number of instances on that day
+      var date = new Date(data.timestamp * 1000);
+      var day = date.setHours(0,0,0,0);
+      var dayBin = sourceBins[day];
+      if (!dayBin) {
+        dayBin = {x:date,count:0,tasks:new buckets.Set()};
+        sourceBins[day] = dayBin;
+      }
+      dayBin.count++;
+      if (data.hasOwnProperty(task))
+        dayBin.tasks.push(task);
     });
     
     actorArr.forEach(function(object) {
+      // Translate each bin to an entry
       object.data = object.data.toArray();
     }, this);
     
