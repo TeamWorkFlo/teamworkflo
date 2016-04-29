@@ -80,5 +80,5 @@ function TaskManager () {
    }
 }
 
-taskManager = new TaskManager();
-taskManager.loadTasks();
+//taskManager = new TaskManager();
+//taskManager.loadTasks();
