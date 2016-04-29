@@ -16,10 +16,16 @@ var render = function(element) {
         return filterByStartTime(task,"");
         */
 
-        
+        /*
         //filter out tasks started after given EndTime
         return filterByEndTime(task,"1460678400");
-        
+        */
+
+        //filter by timeWindow
+        //return filterOverTimeWindow(task,"",""); //all tasks
+        //return filterOverTimeWindow(task,"1460678400",""); //tasks in progress after 4/15
+        //return filterOverTimeWindow(task,"","1460678400"); //tasks completed 4/15
+        //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
     }
     
     }
@@ -79,6 +85,17 @@ var render = function(element) {
         //no limiting end time; return all tasks from now to end of time
         return true;
     }
+  }
+
+  /*
+        Return true if task not filtered out by either startTime or endTime
+  */
+  function filterOverTimeWindow(task,startTime,endTime){
+    var passStartFilter = filterByStartTime(task,startTime);
+    var passEndFilter = filterByEndTime(task,endTime);
+    if (passStartFilter && passEndFilter)
+        return true;
+    return false;
   }
 
   function convertTimestampToDate(timestamp){
