@@ -30,24 +30,24 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
-      slack: [],
-      github: [],
-      drive: []
+      slack: {data:{}},
+      github: {data:{}},
+      drive: {data:{}}
     },{
       name: "Cullen Brown",
-      slack: [],
-      github: [],
-      drive: []
+      slack: {data:{}},
+      github: {data:{}},
+      drive: {data:{}}
     },{
       name: "Eric Gonzalez",
-      slack: [],
-      github: [],
-      drive: []
+      slack: {data:{}},
+      github: {data:{}},
+      drive: {data:{}}
     },{
       name: "Jorge Herrera",
-      slack: [],
-      github: [],
-      drive: []
+      slack: {data:{}},
+      github: {data:{}},
+      drive: {data:{}}
     }];
     
     //Bucketize the data
@@ -69,17 +69,18 @@ var render = function(element) {
       var day = date.setHours(0,0,0,0);
       var dayBin = sourceBins[day];
       if (!dayBin) {
-        dayBin = {x:date,count:0,tasks:new buckets.Set()};
+        dayBin = {x:date,y:0,tasks:new buckets.Set()};
         sourceBins[day] = dayBin;
       }
-      dayBin.count++;
+      dayBin.y++;
       if (data.hasOwnProperty(task))
         dayBin.tasks.push(task);
     });
     
-    actorArr.forEach(function(object) {
+    actorArr.forEach(function(actorObject) {
       // Translate each bin to an entry
-      object.data = object.data.toArray();
+      var data = actorObject.slack.data;
+      actorObject.slack.data = Array.prototype.slice.call(data);
     }, this);
     
     $(element).highcharts({
