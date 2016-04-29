@@ -26,11 +26,15 @@ var render = function(element) {
         //return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown (alone or as part of a group)
         */
 
+        /*
         //filter by component
         return filterByComponent(task, ""); //returns all tasks (no component specified)
         //return filterByComponent(task, "Revise User Study"); //returns tasks from 'Revise User Study' component
+        */
 
-
+        //filter by feature
+        //return filterByFeature(task, ""); //returns all tasks (no feature specified);
+        return filterByFeature(task, "API"); //returns all tasks in features called API
 
         //no other filters set
         return true;
@@ -67,6 +71,16 @@ var render = function(element) {
     }
     //filter out tasks not from component
     if (task.component != component)
+        return false;
+    return true;
+  }
+
+   function filterByFeature(task,feature){
+    if (feature == ""){
+        return true;
+    }
+    //filter out tasks not from feature
+    if (task.feature != feature)
         return false;
     return true;
   }
