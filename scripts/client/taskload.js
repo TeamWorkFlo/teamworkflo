@@ -97,7 +97,7 @@ var render = function(element) {
     else if (task.importance == "Medium")
         return 3;
     else if (task.importance == "High")
-        return 5;
+        return 9;
     return 2;
   }
 
@@ -191,8 +191,9 @@ var render = function(element) {
 		});
     
   };
+    //taskManager.getTasks({filter:vwFilter,results:results}); 
+  taskManager.getTasks({filter:vwFilter,results:callResults}); 
 
-  //taskManager.getTasks({filter:vwFilter,results:results}); 
   var sampleTasks = {
     comp1:{
         feat1:{
