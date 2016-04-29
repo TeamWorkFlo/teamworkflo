@@ -17,6 +17,15 @@ var render = function(element) {
     return compLayerTasks;
   }
 
+    function flattenActorList(actorList){
+        var actorNameString = "";
+        for (var i = 0; i < actorList.length-1; i++){
+            actorNameString += actorList[i] + ", ";
+        }
+        actorNameString+=actorList[actorList.length-1];
+    return actorNameString;
+    }
+
     function getFeatureList(taskArray){
     var featureNames = Array();
     var nameUsed = 0;
@@ -122,6 +131,11 @@ var render = function(element) {
     }
   }
 
+  function setToolTip(task){
+    var tip = Array();
+    tip.backgroundColor = "(0,0,0,0)";
+    return tip;
+  }
 
   var results = function(tasks) {
         //var reformattedTasks = recompileArray(tasks);
@@ -129,16 +143,19 @@ var render = function(element) {
         var updatedTasks = Array();
         var compI = 0;
 
-        //for (component in reformattedTasks){
         for (component in tasks){
             var featI = 0;
             var compS = 0;
             //create component segment for graph
             var compP = {
                 id: "id_" + compI,
-                name: compKeyList[compI]
+                name: compKeyList[compI],
+                description:"",
+                startTime: "",
+                endTime: ""
             };
             var featKeyList = Object.keys(tasks[component]);
+            var featActors = Array();
             for (feature in tasks[component]){
                 var taskI = 0;
                 var featS = 0;
@@ -146,26 +163,44 @@ var render = function(element) {
                 var featP = {
                     id: compP.id + "_" + featI,
                     name:featKeyList[featI],
-                    parent:compP.id
+                    parent:compP.id,
+                    description:"",
+                    startTime: "",
+                    endTime: ""
                 };
                 //var taskKeyList = Object.keys(tasks[component][feature]);
+                var taskActors = Array();
                 for (task in tasks[component][feature]){
                     //create task segment for graph
                     var taskP ={
                         actor:tasks[component][feature][task].actor,
-                        //component:task.component,
-                        name: "task/" + tasks[component][feature][task].id + "-" + tasks[component][feature][task].name,
-                        //description:task.description,
+                        //name: "task/" + tasks[component][feature][task].id + "-" + tasks[component][feature][task].name,
+                        name:tasks[component][feature][task].name,
                         id: featP.id + "_" + taskI,
                         parent:featP.id,
-                        //color:Highcharts.getOptions().colors[taskI]
+                        description: tasks[component][feature][task].description,
+                        startTime: tasks[component][feature][task].startDate,
+                        endTime: tasks[component][feature][task].completionDate
                     }
+                    
                     taskP.value = determineTaskValue(tasks[component][feature][task]);
                     taskP.color = determineColor(tasks[component][feature][task]);
+                    //taskP.tooltip = setToolTip(tasks[component][feature][task]);
+
+                    if ($.inArray(taskP.actor, taskActors) == -1){
+                        taskActors.push(taskP.actor);
+                    }
+
                     updatedTasks.push(taskP);
                     featS += taskP.value;
                     //console.log(taskID);
                     taskI++;
+                }
+                featP.actor = flattenActorList(taskActors);
+                for (var i = 0; i < taskActors.length; i++){
+                    if ($.inArray(taskActors[i], featActors) == -1){
+                        featActors.push(taskActors[i]);
+                    }
                 }
                 //console.log(featureID);
                 featP.value = featS;
@@ -174,6 +209,7 @@ var render = function(element) {
                 featI++;
             }
             //console.log(componentID);
+            compP.actor = flattenActorList(featActors);
             compP.value = compS;
             updatedTasks.push(compP);
             compI++;
@@ -187,19 +223,50 @@ var render = function(element) {
                 layoutAlgorithm: 'squarified',
                 allowDrillToNode: true,
                 animationLimit: 1000,
-                 dataLabels: {
+                dataLabels: {
                 enabled: false
-            },
-            levelIsConstant: false,
-            levels: [{
+                },
+
+                levelIsConstant: false,
+                levels: [{
                 level: 1,
                 dataLabels: {
                     enabled: true
                 },
-                borderWidth: 3
-            }],
-				data: updatedTasks
+                borderWidth: 3,
+
+                },{
+                level:2,
+                //layoutAlgorithm: "stripes"
+                //dataLabels:{
+                //    formatter: function(){
+                //        return '<b>Name: </b>' + this.point.name;
+                //    }
+                //},
+                             
+                }],
+
+				data: updatedTasks,
+
+                tooltip:{
+                    backgroundColor:'#00ffff',
+                    formatter: function() 
+                    {    
+                        return '<b>Actor(s): </b>' + this.point.actor;
+                    }
+                }
+   
 			}],
+            tooltip:{
+                formatter: function() {
+                        return '<b>Name: </b>' + this.point.name + '<br>' 
+                        + '<b>Assignee(s): </b>' + this.point.actor + '<br>'
+                        + this.point.description + '<br>'
+                        + this.point.startTime + '-' + this.point.endTime;
+                        
+                    //return '<b>Actor(s): </b>' + this.point.actor + '</br>' ;
+               }
+            },
             subtitle:{
                 text: 'Tasks grouped by features and components, colored by actor. Click components to drill down'
             },
@@ -209,65 +276,7 @@ var render = function(element) {
 		});
     
   };
-  //taskManager.getTasks({filter:vwFilter,results:results}); 
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
-  /*
-  var sampleTasks = {
-    comp1:{
-        feat1:{
-            task1:{
-                id:10,
-                name:"task1",
-                importance: "Low"
-            },
-            task2:{
-                id:1,
-                name:"task12",
-                importance: "Low"
-            }
-        },
-        feat2:{
-            task1:{
-                id:2,
-                name:"task1",
-                importance: "Medium"
-            },
-            task2:{
-                id:3,
-                name:"task2",
-                importance: "Medium"
-            }
-        }
-    },
-    comp2:{
-        feat3:{
-            task1:{
-                id:0,
-                name:"task1",
-                importance: "Low"
-            },
-            task2:{
-                id:1,
-                name:"task12",
-                importance: "High"
-            }
-        },
-        feat4:{
-            task1:{
-                id:2,
-                name:"task1",
-                importance: "High"
-            },
-            task2:{
-                id:3,
-                name:"task2",
-                importance: "High"
-            }
-        }
-    }
-};
-*/
-//results(sampleTasks);
 };
 
 
