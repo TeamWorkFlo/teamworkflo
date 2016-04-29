@@ -14,28 +14,37 @@
   <script src="scripts/client/taskmanager.js"></script>
   <script src="scripts/client/activitymanager.js"></script>
   <script src="scripts/client/visualization.js"></script>
+  
+<style type="text/css">
+  .top-right-button {
+    line-height: 12px;
+    width: 35px;
+    font-size: 8pt;
+    font-family: tahoma;
+    margin-top: 1px;
+    margin-right: 2px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+</style>
 </head>
-<body>
-  <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">TeamWorkFlo</a>
-      <button id="call_api_activities">Call Activities</button>
-      <button id="call_api_tasks">Call Tasks</button>
-    </div>
-  </nav>
-  <div class="container">
-    <div class="row content">
-      <div id="vis1" class="vis col-sm-12">
-        <div class="panel panel-card">
+<body style="height:100%">
+ 
+  <div class="container-full">
+    <div class="row content container-full" style="height:100%;" > 
+
+      <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
+        <div class="panel" id="viz_panel_1" style="margin-bottom: 0px;">
           <div class="panel-heading" style="width:200px;">
           <h5 class="panel-title"  >[Main visualization]</h5>
           </div>
-          <div class="panel-body">
-            <div id="vis1-body" class="fill">
-              <h1>Content goes here</h1>
+          <div class="panel-body" style="padding:0px;">
+            <div id="vis1-body" >
+              <!-- <h1>Content goes here</h1> -->
             </div>
             <div id="vis1-filter" class="panel-checkbox">
-              <h3>Filter</h3>
+              <!-- <h3>Filter</h3>
               <form>
                 <input class="scatter_checkbox" type="checkbox" checked=true>
                 <text>Test </text>
@@ -43,38 +52,91 @@
                 <text>Test</text>
                 <input class="scatter_checkbox" type="checkbox" checked=true>
                 <text>Test</text>
-              </form>
+              </form> -->
             </div>
           </div>
         </div>
+
+         <div class="panel" style="background-color:#66368E;" id="viz_control_panel">
+          <div class="panel-heading" style="width:200px;">
+          <h5 class="panel-title"  >[Control panel]</h5>
+          </div>
+          <div class="panel-body">
+            <div id="vis1-body" >
+           
+              <!-- <h1>Content goes here</h1> -->
+            </div>
+            <div id="vis1-filter" class="panel-checkbox">
+              <!-- <h3>Filter</h3>
+              <form>
+                <input class="scatter_checkbox" type="checkbox" checked=true>
+                <text>Test </text>
+                <input class="scatter_checkbox" type="checkbox" checked=true>
+                <text>Test</text>
+                <input class="scatter_checkbox" type="checkbox" checked=true>
+                <text>Test</text>
+              </form> -->
+            </div>
+          </div>
+        </div>
+
+
       </div>
-    </div>
-    <div class="row">
-      <div id="vis2" class="vis col-sm-6">
-        <div class="panel panel-default">
+
+      <div class="vis col-sm-5 left-border" style="padding-bottom: 0px; padding-left: 2px;">
+
+      <div id="vis2" class="vis col-sm-12" style="padding-bottom: 2px; padding-right: 0px; padding-left: 0px; padding-right: 0px;">
+        <div class="panel" id="viz_panel_2" style="margin-bottom:0px;">
           <div class="panel-heading" style="width:220px;">
             <h5 class="panel-title">[Secondary visualization]</h5>
           </div>
+          <button class="top-right-button">Max</button>
           <div class="panel-body">
           </div>
         </div>
       </div>
-      <div id="vis3" class="vis col-sm-6">
-        <div class="panel panel-card">
-          <div class="panel-heading" style="width:200px;">
+
+      <div id="vis3" class="vis col-sm-12" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;">
+        <div class="panel" id="viz_panel_3"  style="margin-bottom:0px;">
+          <div class="panel-heading" style="width:200px;" style="padding-right: 0px; padding-left: 0px;">
             <h5 class="panel-title">[Tertiary visualization]</h5>
           </div>
+          <button class="top-right-button">Max</button>
           <div class="panel-body">
           </div>
         </div>
       </div>
+
+
+      </div>
+
+
+
     </div>
+
+
+
+    
   </div>
-<footer>
+<!-- <footer>
 
   Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub.
-</footer>
+</footer> -->
   <script src="scripts/client/taskload.js"></script>
+<script>
+var height = $( window ).height();
+//alert(height);
+$("#viz_panel_1").css({ 'height': height*.8 + "px" });
+$("#viz_control_panel").css({ 'height': height*.23 + "px" });
+$("#viz_panel_2").css({ 'height': height/2 + 10 + "px" });
+$("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
+
+$('html, body').css({
+    'overflow': 'hidden',
+    'height': '100%'
+});
+</script>
+
 
 <script>
 
