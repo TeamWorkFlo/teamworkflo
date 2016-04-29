@@ -169,7 +169,7 @@ var results = function (tasks) {
 
         // create the chart
 
-        alert(task_names.length);
+        //alert(task_names.length);
         $(element).highcharts({
             chart: {
                 zoomType: 'y',                  
