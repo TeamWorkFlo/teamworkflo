@@ -30,24 +30,24 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
-      Slack: {data:{}},
-      github: {data:{}},
-      drive: {data:{}}
+      Slack: {bins:{}},
+      github: {bins:{}},
+      drive: {bins:{}}
     },{
       name: "Cullen Brown",
-      Slack: {data:{}},
-      github: {data:{}},
-      drive: {data:{}}
+      Slack: {bins:{}},
+      github: {bins:{}},
+      drive: {bins:{}}
     },{
       name: "Eric Gonzalez",
-      Slack: {data:{}},
-      github: {data:{}},
-      drive: {data:{}}
+      Slack: {bins:{}},
+      github: {bins:{}},
+      drive: {bins:{}}
     },{
       name: "Jorge Herrera",
-      Slack: {data:{}},
-      github: {data:{}},
-      drive: {data:{}}
+      Slack: {bins:{}},
+      github: {bins:{}},
+      drive: {bins:{}}
     }];
     
     //Bucketize the data
@@ -62,14 +62,14 @@ var render = function(element) {
       
       // Get the series for the activity occurring
       var source = data.source;
-      var sourceBins = actorActivity[source];
+      var sourceBins = actorActivity[source].bins;
       
       // Increment the number of instances on that day
       var date = new Date(data.timestamp * 1000);
       var day = date.setHours(0,0,0,0);
       var dayBin = sourceBins[day];
       if (!dayBin) {
-        dayBin = {x:date,y:0,tasks:new buckets.Set()};
+        dayBin = {x:day,y:0,tasks:new buckets.Set()};
         sourceBins[day] = dayBin;
       }
       dayBin.y++;
@@ -79,36 +79,36 @@ var render = function(element) {
     
     actorArr.forEach(function(actorObject) {
       // Translate each bin to an entry
-      var data = actorObject.Slack.data;
-      actorObject.Slack.data = Array.prototype.slice.call(data);
-    }, this);
-    
-    $(element).highcharts({
-      chart: {
-        zoomType: 'x'
-      },
-      title: {
-        text: 'Team Activity'
-      },
-      xAxis: {
-        type: 'datetime'
-      },
-      yAxis: {
-        title: {
-          text: 'Team Member'
+      
+      var data = new buckets.PriorityQueue(activityCompare);
+      var bins = actorObject.Slack.bins;
+      for (var binKey in bins) {
+        var bin = bins[binKey];
+        data.add(bin);
+      }
+      data = data.toArray();
+      
+      var divId = 'act-' + actorObject.name.split(" ")[0];
+      $(element).append('<div id=\'' + divId + '\'></div>');
+      var divdiv = '#'+divId; 
+      $(divdiv).highcharts({
+        chart: {
+          type: 'area'
         },
-        categories: ["Aqib Bhat", "Cullen Brown", "Eric Gonzalez", "Jorge Herrera"]
-      },
-      legend: {
-        enabled: false
-      },
-      plotOptions: {
-        series: {
-          turboThreshold: 3000
-        }
-      },
-      series: actorArr
-    });
+        title: {
+          text: 'Team Activity'
+        },
+        xAxis: {
+          type: 'datetime',
+          allowDecimals: false,
+        },
+        type: 'area',
+        legend: {
+          enabled: false
+        },
+        series: [{data: data}]
+      });
+    }, this);
   };
     
   activityManager.getActivity({filter:vwFilter,results:activityCallback}); 
