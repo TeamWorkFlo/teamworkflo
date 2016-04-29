@@ -1,13 +1,45 @@
 
 var render = function(element) {
   var vwFilter = function(task) { 
+    //console.log(task.startDate);
+    //filterByStartTime(task,task.startDate);
     if (task.actor == ""){
         return false;
     }
-    return true; 
+    else{
+        if (!filterByMilestone(task,"")){
+            return false
+        }
+        return true; 
+    }
+    
     }
   //var compNames = getComponentList(tasks);
   
+  function filterByMilestone(task,milestone){
+    if (milestone == ""){
+        return true;
+    }
+    if (task.milestone != milestone)
+        return false;
+    return true;
+  }
+
+  function filterByStartTime(task,startTime){
+    //if (task.startTime < )
+    if (startTime != ""){
+    var endTask = convertTimestampToDate(task.completeDate);
+    var startDate = convertTimestampToDate(startTime);
+    //return false if startDate is before startTask
+    }
+  }
+
+  function convertTimestampToDate(timestamp){
+    var match = timestamp.match(/^(\d+)\/(\d+)\/(\d+) (\d+)\:(\d+)\:(\d+)$/)
+    var date = new Date(match[3], match[1] - 1, match[2], match[4], match[5], match[6])
+    return date;
+  }
+
   function recompileArray(taskArray){
     //first, get list of component names
     var compNames = getComponentList(taskArray);
@@ -287,7 +319,7 @@ var render = function(element) {
                         + '<b>' + this.point.status + '</b>';
                         
                     //return '<b>Actor(s): </b>' + this.point.actor + '</br>' ;
-               }
+               },
             },
             subtitle:{
                 text: 'Tasks grouped by features and components, colored by actor. Click components to drill down'
