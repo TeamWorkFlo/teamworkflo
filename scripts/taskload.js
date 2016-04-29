@@ -1,8 +1,7 @@
 
 var render = function(element) {
   var vwFilter = function(task) { 
-    //console.log(task.startDate);
-    //filterByStartTime(task,task.startDate);
+    //filter out blank tasks (unassigned tasks)
     if (task.actor == ""){
         return false;
     }
@@ -16,6 +15,11 @@ var render = function(element) {
         //filter out tasks completed before given StartTime
         return filterByStartTime(task,"");
         */
+
+        
+        //filter out tasks started after given EndTime
+        return filterByEndTime(task,"1460678400");
+        
     }
     
     }
@@ -36,11 +40,12 @@ var render = function(element) {
   */
   function filterByStartTime(task,startTime){
     if (startTime != ""){
+        //task has been completed
         if (task.completionDate != ""){
             var completeDate = convertTimestampToDate(task.completionDate);
             var completeTime = completeDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
-            if (completeTime< startTime)
+            if (completeTime < startTime)
                 return false;
             return true;
         }
@@ -49,6 +54,29 @@ var render = function(element) {
     }
     else{
         //no limiting start time; return all tasks from beginning of time until now
+        return true;
+    }
+  }
+
+  /*
+        Return false if a task is started after the endTime; else, return true
+  */
+  function filterByEndTime(task,endTime){
+    if (endTime != ""){
+        //task has been started
+        if (task.startDate != ""){
+            var startingDate = convertTimestampToDate(task.startDate);
+            var startTime = startingDate.getTime()/1000;
+            //var startDate = convertTimestampToDate(startTime);
+            if (endTime < startTime)
+                return false;
+            return true;
+        }
+        //return true otherwise (task not started)
+        return true;
+    }
+    else{
+        //no limiting end time; return all tasks from now to end of time
         return true;
     }
   }
