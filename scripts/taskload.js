@@ -107,6 +107,22 @@ var render = function(element) {
   }
 
 
+  function determineColor(task){
+    if (task.actor == "Cullen Brown"){
+        return '#E25F9D';
+    }
+    else if (task.actor == "Eric Gonzalez"){
+        return '#58D27D';
+    }
+    else if (task.actor == "Aqib Bhat"){
+        return '#FF7F6B';
+    }
+    else if (task.actor == "Jorge Herrera"){
+        return '#BAF165';
+    }
+  }
+
+
   var results = function(tasks) {
         //var reformattedTasks = recompileArray(tasks);
         var compKeyList = Object.keys(tasks);
@@ -136,14 +152,16 @@ var render = function(element) {
                 for (task in tasks[component][feature]){
                     //create task segment for graph
                     var taskP ={
-                        //actor:reformattedTasks[component][feature][task].actor,
+                        actor:tasks[component][feature][task].actor,
                         //component:task.component,
                         name: "task/" + tasks[component][feature][task].id + "-" + tasks[component][feature][task].name,
                         //description:task.description,
                         id: featP.id + "_" + taskI,
                         parent:featP.id,
+                        //color:Highcharts.getOptions().colors[taskI]
                     }
                     taskP.value = determineTaskValue(tasks[component][feature][task]);
+                    taskP.color = determineColor(tasks[component][feature][task]);
                     updatedTasks.push(taskP);
                     featS += taskP.value;
                     //console.log(taskID);
@@ -258,4 +276,4 @@ var configuration = { name:"Taskload", renderer:render };
 
 var vis = new Visualization(configuration);
 
-vis.render("#viz_panel_1");
+vis.render("#vis1-body");
