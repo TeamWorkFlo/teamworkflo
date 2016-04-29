@@ -160,7 +160,7 @@ return date.setTime( date.getTime() + 1 * 86400000 );;
                 categories: task_names,
                 tickInterval: 1,            
                 tickPixelInterval: 200,
-                max: 10,
+                max: 20,
                 scalable: true,
                 labels: {
                     style: {
