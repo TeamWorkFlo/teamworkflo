@@ -9,3 +9,9 @@ function Visualization(configuration) {
   this.name = configuration.name;
   this.render = configuration.renderer;
 }
+
+function switchActiveVisualization(activeVis, activeRender, activeFilter, targetVis, targetRender, targetFilter){
+	activeVis = targetVis;
+	activeRender = targetRender;
+	activeFilter = targetFilter;
+}

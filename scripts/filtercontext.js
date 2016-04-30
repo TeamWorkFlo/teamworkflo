@@ -2,11 +2,6 @@
  *	Filter context object for use in filters
  */
 
-
-
-
-
-
 var FilterContext = function(object) {
 	this.actor = "";
 	this.component = "";
@@ -30,14 +25,16 @@ var FilterContext = function(object) {
 
 }
 
+function filterVis(vis, renderContext, filterContext){
+  var dates = $("#slider").dateRangeSlider("values");
+  var milestone = $( "#milestones_selector option:selected" ).text();
+  var actor = $( "#actor_selector option:selected" ).text();
+  var minDate = getUnixTimestamp(dates.min)/1000;
+  var maxDate = getUnixTimestamp(dates.max)/1000;
 
-
-function updateVisualizations(milestone, minDate, maxDate){
-	var filterContext = new FilterContext();
-	filterContext['milestone'] = milestone;
-	filterContext['minDate'] = minDate;
-	filterContext['maxDate'] = maxDate;
-	alert(filterContext['milestone'] + " &&"+ filterContext['minDate']+ "&& "+filterContext['maxDate']);
-
-
+  filterContext.milestone = milestone;
+  filterContext.startTime = minDate;
+  filterContext.endTime = maxDate;
+  filterContext.actor = actor;
+  vis.render(renderContext,filterContext);
 }

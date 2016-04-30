@@ -175,23 +175,6 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
 
-
-
-$( "#show_viz" ).click(function() {
-  var dates = $("#slider").dateRangeSlider("values");
-  var milestone = $( "#milestones_selector option:selected" ).text();
-  var actor = $( "#actor_selector option:selected" ).text();
-  var minDate = getUnixTimestamp(dates.min)/1000;
-  var maxDate = getUnixTimestamp(dates.max)/1000;
-  taskloadFilterContext.milestone = milestone;
-  taskloadFilterContext.startTime = minDate;
-  taskloadFilterContext.endTime = maxDate;
-  taskloadFilterContext.actor = actor;
-  taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
-  //updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
-  
-});
-
 $('html, body').css({
   'overflow': 'hidden',
   'height': '100%'
@@ -234,8 +217,17 @@ var taskloadVis = new Visualization(taskloadConfiguration);
 taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
 </script>
 
+<script>
+var activeRenderContext = taskloadRenderContext;
+var activeFilterContext = taskloadFilterContext;
+var activeVis = taskloadVis;
+</script>
+
  <script>
 
+$( "#show_viz" ).click(function() {
+  filterVis(activeVis, activeRenderContext, activeFilterContext);
+});
 
 // //alert();
 
