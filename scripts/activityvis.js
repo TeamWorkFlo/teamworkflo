@@ -72,21 +72,12 @@ var render = function(element) {
         sourceBins[day] = dayBin;
       }
       dayBin.y++;
-      if (data.hasOwnProperty('task'))
-        dayBin.tasks.push(task);
+      if (data.hasOwnProperty('taskid'))
+        dayBin.tasks.push(data.taskid);
     });
     
     actorArr.forEach(function(actorObject) {
-      // Translate each bin to an entry
-      
-      var name = actorObject.name;
-      var data = [];
-      var bins = actorObject.Slack.bins;
-      for (var binKey in bins) {
-        var bin = bins[binKey];
-        data.push(bin);
-      }
-      data.sort(activityCompare);
+      var series = getActorSeries(actorObject);
       
       var divId = 'act-' + name.split(" ")[0];
       $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
@@ -108,7 +99,7 @@ var render = function(element) {
         legend: {
           enabled: false
         },
-        series: [{data: data}]
+        series: series
       });
     }, this);
   };
@@ -116,8 +107,39 @@ var render = function(element) {
   activityManager.getActivity({filter:vwFilter,results:activityCallback}); 
 };
 
+function translateData(bins, translator) {
+  var data = [];    
+  
+  for (var binKey in bins) {
+    var bin = bins[binKey];
+    data.push(translator(bin));
+  }
+  data.sort(activityCompare);
+}
+
+function getActorSeries(actor) {
+  // Translate each bin to an entry
+  var name = actor.name;
+  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'drive',data:[]}];
+  
+  series[0].data = translateData(actor.Slack.bins, function(bin) {
+    return bin;
+  });
+  series[1].data = translateData(actor.github.bins, function(bin) {
+    bin.n = bin.y;
+    bin.y = 0;
+    return bin;
+  });
+  series[2].data = translateData(actor.drive.actorActivitybins, function(bin) {
+    bin.y *= -1;
+    return bin;
+  });
+      
+  return series;
+}
+
 var configuration = { name:"Activity", renderer:render };
 
 var vis = new Visualization(configuration);
 
-vis.render("#vis2-body");
+vis.render("#vis1-body");
