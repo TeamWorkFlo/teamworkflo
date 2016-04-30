@@ -6,8 +6,8 @@ var render = function(element) {
         return false;
     }
     else{
-        var testContext = new FilterContext({'actor':'Jorge Herrera','component':'','feature':'',
-         'milestone':'Functional Prototype', 'startTime':'','endTime':''});
+        var testContext = new FilterContext({'actor':'','component':'','feature':'',
+         'milestone':'', 'startTime':'','endTime':''});
         /*
         //filter by milestone
         //return filterByMilestone(task,"") //all tasks
