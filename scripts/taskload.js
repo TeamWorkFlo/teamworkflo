@@ -43,7 +43,7 @@ var taskloadRender = function(renderContext,filterContext) {
     
 
   function filterByActor (task,filterContext){
-    if (filterContext.actor != ""){
+    if ((filterContext.actor != "") && (filterContext.actor !="All")){
         if (!task.actor.includes(filterContext.actor))
             return false;
         return true;
@@ -55,14 +55,15 @@ var taskloadRender = function(renderContext,filterContext) {
   }
 
   function filterByMilestone(task,filterContext){
-    //add case for no filter
-    if (filterContext.milestone == ""){
+    if ((filterContext.milestone != "") && (filterContext.milestone != "All") ){
+        if (task.milestone != filterContext.milestone)
+            return false;
         return true;
     }
-    //filter out tasks not from milestone
-    if (task.milestone != filterContext.milestone)
-        return false;
-    return true;
+    else{
+        //no milestone specified; all tasks are good
+        return true;
+    }
   }
 
   //function filterByComponent(task,component){

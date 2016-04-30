@@ -88,7 +88,7 @@
 
               <label style="display:inline; color:white; padding-right:10px;">Actor:<select class="form-control" id="actor_selector" style="display:inline; width:150px; margin-left:10px;">
                 <option>All</option>
-                <option>Aquib Bhat</option>
+                <option>Aqib Bhat</option>
                 <option>Cullen Brown</option>
                 <option>Eric Gonzalez</option>
                 <option>Jorge Herrera</option>
@@ -180,11 +180,13 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 $( "#show_viz" ).click(function() {
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
+  var actor = $( "#actor_selector option:selected" ).text();
   var minDate = getUnixTimestamp(dates.min)/1000;
   var maxDate = getUnixTimestamp(dates.max)/1000;
   taskloadFilterContext.milestone = milestone;
   taskloadFilterContext.startTime = minDate;
   taskloadFilterContext.endTime = maxDate;
+  taskloadFilterContext.actor = actor;
   taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
   //updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
   
