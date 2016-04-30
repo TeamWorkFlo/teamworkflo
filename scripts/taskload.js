@@ -1,13 +1,13 @@
 
-var render = function(element) {
+var render = function(renderContext,filterContext) {
   var vwFilter = function(task) { 
     //filter out blank tasks (unassigned tasks)
     if (task.actor == ""){
         return false;
     }
     else{
-        var testContext = new FilterContext({'actor':'Jorge Herrera','component':'','feature':'',
-         'milestone':'Functional Prototype', 'startTime':'','endTime':''});
+        //var testContext = new FilterContext({'actor':'','component':'','feature':'',
+         //'milestone':'', 'startTime':'','endTime':''});
         /*
         //filter by milestone
         //return filterByMilestone(task,"") //all tasks
@@ -22,7 +22,7 @@ var render = function(element) {
         //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
         */
 
-        return overallTaskFilter(task,testContext);
+        return overallTaskFilter(task,filterContext);
 
         //no other filters set
         return true;
@@ -378,7 +378,7 @@ var render = function(element) {
 
 
 
-       $(element).highcharts({
+       $(renderContext.renderElement).highcharts({
 			series: [{
 				type: "treemap",
                 layoutAlgorithm: 'squarified',
@@ -440,10 +440,12 @@ var render = function(element) {
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
 };
 
-
+var testRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
+var testFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':'', 'startTime':'','endTime':''});
 
 var configuration = { name:"Taskload", renderer:render };
 
 var vis = new Visualization(configuration);
 
-vis.render("#vis1-body");
+vis.render(testRenderContext,testFilterContext);
