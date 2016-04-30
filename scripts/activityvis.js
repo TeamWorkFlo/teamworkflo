@@ -68,12 +68,14 @@ var render = function(element) {
       var day = date.setHours(0,0,0,0);
       var dayBin = sourceBins[day];
       if (!dayBin) {
-        dayBin = {x:day,y:0,tasks:new buckets.Set()};
+        dayBin = {x:day,y:0,tasks:new buckets.Set(function(activity) {
+          return activity.taskid
+        })};
         sourceBins[day] = dayBin;
       }
       dayBin.y++;
       if (data.hasOwnProperty('taskid'))
-        dayBin.tasks.push(data.taskid);
+        dayBin.tasks.add(data.taskid);
     });
     
     actorArr.forEach(function(actorObject) {
