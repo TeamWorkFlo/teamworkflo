@@ -257,19 +257,67 @@ var taskloadRender = function(renderContext,filterContext) {
 
 
   function determineColor(task){
+    var taskStatus = determineStatus(task);
     if (task.actor == "Cullen Brown"){
-        return '#E25F9D';
+
+        if(taskStatus == "Completed"){
+            //return "#FF8E3A";
+            return "#ED2A2A";
+        }
+        else if (taskStatus == "In Progress"){
+            return "#FF5858";
+        }
+        else{
+            return "#FFA8A8";
+        }
+        return "#ED2A2A";
     }
     else if (task.actor == "Eric Gonzalez"){
-        return '#58D27D';
+        if(taskStatus == "Completed"){
+            return "#EDBC2A";
+        }
+        else if (taskStatus == "In Progress"){
+            return "#FFD558";
+        }
+        else{
+            return "#FFE9A8";
+        }
+        return "#EDBC2A";
     }
     else if (task.actor == "Aqib Bhat"){
-        return '#FF7F6B';
+        if(taskStatus == "Completed"){
+            return "#22BE22";
+        }
+        else if (taskStatus == "In Progress"){
+            return "#55F855";
+        }
+        else{
+            return "#8AD18A";
+        }
+        return "#22BE22";
     }
     else if (task.actor == "Jorge Herrera"){
-        return '#BAF165';
+        if(taskStatus == "Completed"){
+            return "#3232A6";
+        }
+        else if (taskStatus == "In Progress"){
+            return "#6C6CF4";
+        }
+        else{
+            return "#8484BA";
+        }
+        return "#3232A6";
     }
     else{
+        if(taskStatus == "Completed"){
+            return '#999999';
+        }
+        else if (taskStatus == "In Progress"){
+            return "#cccccc";
+        }
+        else{
+            return "#eeeeee";
+        }
         return '#999999';
     }
   }
@@ -396,6 +444,7 @@ var taskloadRender = function(renderContext,filterContext) {
                     enabled: true
                 },
                 borderWidth: 3,
+                color:"rgba(127,127,127,0)"
 
                 },{
                 level:2,
@@ -440,6 +489,7 @@ var taskloadRender = function(renderContext,filterContext) {
   };
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
 };
+
 /*
 var testRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
 var testFilterContext = new FilterContext({'actor':'','component':'','feature':'',
