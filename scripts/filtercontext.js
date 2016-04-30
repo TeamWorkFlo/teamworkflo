@@ -2,7 +2,7 @@
  *	Filter context object for use in filters
  */
 
-function FilterContext(object){
+var FilterContext = function(object) {
 	//this.name = object.name;
 	if (object.hasOwnProperty('actor'))
 		this.actor = object.actor;

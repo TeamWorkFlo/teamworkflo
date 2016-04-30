@@ -6,7 +6,7 @@ var render = function(element) {
         return false;
     }
     else{
-        //var testContext = FilterContext({'actor':'Eric Gonzales','component':'Client'});
+        var testContext = new FilterContext({'actor':'Eric Gonzales','component':'Client'});
         /*
         //filter by milestone
         //return filterByMilestone(task,"") //all tasks
@@ -24,7 +24,7 @@ var render = function(element) {
         
         //filter by actor
         //return filterByActor(task,""); //all tasks (no actor specified)
-        return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown (alone or as part of a group)
+        //return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown (alone or as part of a group)
         
 
         /*
@@ -32,7 +32,7 @@ var render = function(element) {
         return filterByComponent(task, ""); //returns all tasks (no component specified)
         //return filterByComponent(task, "Revise User Study"); //returns tasks from 'Revise User Study' component
         */
-        //return filterByComponent(task,testContext); //returns all tasks (no component specified)
+        return filterByComponent(task,testContext); //returns all tasks (no component specified)
 
         /*
         //filter by feature
