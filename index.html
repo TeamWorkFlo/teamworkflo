@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="./css/date_slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
-  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+
   <script src="scripts/buckets.min.js"></script>
   <script src="scripts/taskmanager.js"></script>
   <script src="scripts/activitymanager.js"></script>
@@ -78,10 +79,19 @@
               <td width="50%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
               <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;">
+                <option>All</option>
                 <option>Initial Setup</option>
                 <option>Lightweight Prototype</option>
                 <option>Functional Prototype</option>
                 <option>User Study 2</option>
+              </select></label>
+
+              <label style="display:inline; color:white; padding-right:10px;">Actor:<select class="form-control" id="actor_selector" style="display:inline; width:150px; margin-left:10px;">
+                <option>All</option>
+                <option>Aquib Bhat</option>
+                <option>Cullen Brown</option>
+                <option>Eric Gonzalez</option>
+                <option>Jorge Herrera</option>
               </select></label>
               <button id="show_viz" class="btn btn-primary">Show viz</button></td>
                <td width="50%">  <div id="slider">
@@ -165,10 +175,18 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
 
+
+
 $( "#show_viz" ).click(function() {
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
-  updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
+  var minDate = getUnixTimestamp(dates.min)/1000;
+  var maxDate = getUnixTimestamp(dates.max)/1000;
+  taskloadFilterContext.milestone = milestone;
+  taskloadFilterContext.startTime = minDate;
+  taskloadFilterContext.endTime = maxDate;
+  taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+  //updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
   
 });
 
@@ -203,9 +221,19 @@ $("#slider").dateRangeSlider({
 </footer>
 
 
+<script>
+var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
+var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':'', 'startTime':'','endTime':''});
 
+var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
-// <script>
+var taskloadVis = new Visualization(taskloadConfiguration);
+
+taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+</script>
+
+ <script>
 
 
 // //alert();
@@ -229,7 +257,7 @@ $("#slider").dateRangeSlider({
 
 
   
-// </script>
+ </script>
 
 
 
