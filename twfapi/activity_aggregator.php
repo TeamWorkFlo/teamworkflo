@@ -19,5 +19,4 @@ function getActivity() {
   return $results;  
 } 
 
-print_r(getActivity());
 ?>
