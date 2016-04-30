@@ -1,29 +1,13 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php';
-
-/**
- * Returns an authorized API client.
- * @return Google_Client the authorized client object
- */
-function getClient() {
-  $client = new Google_Client();
-  $client->setDeveloperKey(AIzaSyAwlujIEYdHghcpposU4F61jcfgJHqHkb8);
-  
-  return $client;
-}
+	
 
 /**
  * Parses the worklog file and returns the data vehicle for tasks
  * @return string the JSON string with all the task entries.
  */
-function getWorklog() {
-  //$csv = file_get_contents(__DIR__ . "/google/worklog.csv");
-  $client = getClient();
-  $service = new Google_Service_Drive($client);
-  
-  $fileId = '1UUJAbPlcJ9ODmTmRNrNEG3tkGhjTF2c4WIwCG_RbKck';
-  $csv = $service->files->export($fileId, 'text/csv', array(
-  'alt' => 'media' ));  
+function getWorklog() {  
+  $csv = file_get_contents(__DIR__ . "/google/worklog.csv");  
   
   $array = array_map("str_getcsv", explode("\n", $csv));
   
