@@ -6,7 +6,8 @@ var render = function(element) {
         return false;
     }
     else{
-        var testContext = new FilterContext({'actor':'Eric Gonzales','component':'Client'});
+        var testContext = new FilterContext({'actor':'Jorge Herrera','component':'','feature':'',
+         'milestone':'Functional Prototype', 'startTime':'','endTime':''});
         /*
         //filter by milestone
         //return filterByMilestone(task,"") //all tasks
@@ -21,32 +22,7 @@ var render = function(element) {
         //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
         */
 
-        
-        //filter by actor
-        //return filterByActor(task,""); //all tasks (no actor specified)
-        //return filterByActor(task,"Cullen Brown"); //tasks assigned to Cullen Brown (alone or as part of a group)
-        
-
-        /*
-        //filter by component
-        return filterByComponent(task, ""); //returns all tasks (no component specified)
-        //return filterByComponent(task, "Revise User Study"); //returns tasks from 'Revise User Study' component
-        */
-        return filterByComponent(task,testContext); //returns all tasks (no component specified)
-
-        /*
-        //filter by feature
-        //return filterByFeature(task, ""); //returns all tasks (no feature specified);
-        return filterByFeature(task, "API"); //returns all tasks in features called API, across components
-        */
-
-        
-        //combined task filtering
-        //return overallTaskFilter(task,"","","","","","");
-        //return overallTaskFilter(task,"Eric Gonzalez", "", "", "Functional Prototype", "", ""); //return all tasks assigned to Eric Gonzales in the Functional Prototype milestone
-        //return overallTaskFilter(task,"","","API","Functional Prototype","",""); //return all tasks in API features on the Functional Prototype milestone
-        //return overallTaskFilter(task,"Aqib Bhat","","","","1461628800",""); //return all tasks worked on by Aqib Bhat since 4/26
-        
+        return overallTaskFilter(task,testContext);
 
         //no other filters set
         return true;
@@ -54,21 +30,21 @@ var render = function(element) {
     
     }
   
-  /*
-    function overallTaskFilter(task,actor,component,feature,milestone,startTime,endTime){
-        var actorResult = filterByActor(task,actor);
-        var componentResult = filterByComponent(task,component);
-        var featureResult = filterByFeature(task,feature);
-        var milestoneResult = filterByMilestone(task,milestone);
-        var timeResult = filterOverTimeWindow(task,startTime,endTime);
+  
+    function overallTaskFilter(task,filterContext){
+        var actorResult = filterByActor(task,filterContext);
+        var componentResult = filterByComponent(task,filterContext);
+        var featureResult = filterByFeature(task,filterContext);
+        var milestoneResult = filterByMilestone(task,filterContext);
+        var timeResult = filterOverTimeWindow(task,filterContext);
 
         return (actorResult && componentResult && featureResult && milestoneResult && timeResult); 
     }
-    */
+    
 
-  function filterByActor (task,actor){
-    if (actor != ""){
-        if (!task.actor.includes(actor))
+  function filterByActor (task,filterContext){
+    if (filterContext.actor != ""){
+        if (!task.actor.includes(filterContext.actor))
             return false;
         return true;
     }
@@ -78,13 +54,13 @@ var render = function(element) {
     }
   }
 
-  function filterByMilestone(task,milestone){
+  function filterByMilestone(task,filterContext){
     //add case for no filter
-    if (milestone == ""){
+    if (filterContext.milestone == ""){
         return true;
     }
     //filter out tasks not from milestone
-    if (task.milestone != milestone)
+    if (task.milestone != filterContext.milestone)
         return false;
     return true;
   }
@@ -100,12 +76,12 @@ var render = function(element) {
     return true;
   }
 
-   function filterByFeature(task,feature){
-    if (feature == ""){
+   function filterByFeature(task,filterContext){
+    if (filterContext.feature == ""){
         return true;
     }
     //filter out tasks not from feature
-    if (task.feature != feature)
+    if (task.feature != filterContext.feature)
         return false;
     return true;
   }
@@ -113,14 +89,14 @@ var render = function(element) {
   /*
         Return false if a task is completed before startTime; else, return true
   */
-  function filterByStartTime(task,startTime){
-    if (startTime != ""){
+  function filterByStartTime(task,filterContext){
+    if (filterContext.startTime != ""){
         //task has been completed
         if (task.completionDate != ""){
             var completeDate = convertTimestampToDate(task.completionDate);
             var completeTime = completeDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
-            if (completeTime < startTime)
+            if (completeTime < filterContext.startTime)
                 return false;
             return true;
         }
@@ -136,14 +112,14 @@ var render = function(element) {
   /*
         Return false if a task is started after the endTime; else, return true
   */
-  function filterByEndTime(task,endTime){
-    if (endTime != ""){
+  function filterByEndTime(task,filterContext){
+    if (filterContext.endTime != ""){
         //task has been started
         if (task.startDate != ""){
             var startingDate = convertTimestampToDate(task.startDate);
             var startTime = startingDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
-            if (endTime < startTime)
+            if (filterContext.endTime < startTime)
                 return false;
             return true;
         }
@@ -159,9 +135,9 @@ var render = function(element) {
   /*
         Return true if task not filtered out by either startTime or endTime
   */
-  function filterOverTimeWindow(task,startTime,endTime){
-    var passStartFilter = filterByStartTime(task,startTime);
-    var passEndFilter = filterByEndTime(task,endTime);
+  function filterOverTimeWindow(task,filterContext){
+    var passStartFilter = filterByStartTime(task,filterContext);
+    var passEndFilter = filterByEndTime(task,filterContext);
     return (passStartFilter && passEndFilter);
   }
 
