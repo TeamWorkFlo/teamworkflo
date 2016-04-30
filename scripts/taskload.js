@@ -16,8 +16,8 @@ var render = function(element) {
         //filter by timeWindow
         //return filterOverTimeWindow(task,"",""); //all tasks
         //return filterOverTimeWindow(task,"1460678400",""); //tasks in progress after 4/15
-        //return filterOverTimeWindow(task,"","1460678400"); //tasks completed 4/15
-        return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
+        return filterOverTimeWindow(task,"","1460678400"); //tasks completed by 4/15
+        //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
         */
 
         /*
@@ -32,9 +32,19 @@ var render = function(element) {
         //return filterByComponent(task, "Revise User Study"); //returns tasks from 'Revise User Study' component
         */
 
+        /*
         //filter by feature
         //return filterByFeature(task, ""); //returns all tasks (no feature specified);
-        return filterByFeature(task, "API"); //returns all tasks in features called API
+        return filterByFeature(task, "API"); //returns all tasks in features called API, across components
+        */
+
+        
+        //combined task filtering
+        return overallTaskFilter(task,"","","","","","");
+        //return overallTaskFilter(task,"Eric Gonzalez", "", "", "Functional Prototype", "", ""); //return all tasks assigned to Eric Gonzales in the Functional Prototype milestone
+        //return overallTaskFilter(task,"","","API","Functional Prototype","",""); //return all tasks in API features on the Functional Prototype milestone
+        //return overallTaskFilter(task,"Aqib Bhat","","","","1461628800",""); //return all tasks worked on by Aqib Bhat since 4/26
+        
 
         //no other filters set
         return true;
@@ -42,6 +52,16 @@ var render = function(element) {
     
     }
   
+    function overallTaskFilter(task,actor,component,feature,milestone,startTime,endTime){
+        var actorResult = filterByActor(task,actor);
+        var componentResult = filterByComponent(task,component);
+        var featureResult = filterByFeature(task,feature);
+        var milestoneResult = filterByMilestone(task,milestone);
+        var timeResult = filterOverTimeWindow(task,startTime,endTime);
+
+        return (actorResult && componentResult && featureResult && milestoneResult && timeResult); 
+    }
+
   function filterByActor (task,actor){
     if (actor != ""){
         if (!task.actor.includes(actor))
@@ -137,9 +157,7 @@ var render = function(element) {
   function filterOverTimeWindow(task,startTime,endTime){
     var passStartFilter = filterByStartTime(task,startTime);
     var passEndFilter = filterByEndTime(task,endTime);
-    if (passStartFilter && passEndFilter)
-        return true;
-    return false;
+    return (passStartFilter && passEndFilter);
   }
 
   function convertTimestampToDate(timestamp){
