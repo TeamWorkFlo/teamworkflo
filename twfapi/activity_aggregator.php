@@ -8,8 +8,8 @@ function getActivity() {
   $results = [];
   $slackConnector = new SlackActivityConnector();
   $slactivity = $slackConnector->getActivity();
-  //$results = array_merge($results, getGithubActivity());
   $results = array_merge($results, $slactivity);
+  $results = array_merge($results, getGithubActivity());
   
   $googleDriveConnector = new GoogleDriveActivityConnector();
   $gdactivity = $googleDriveConnector->getActivity();
