@@ -101,6 +101,7 @@ class SlackActivityConnector{
 			case "U0VBU9NN9":
 				return "Aqib Bhat";
 		}
+		return "Discard"; //discard any extra ones
 	}
 
 	/*
@@ -115,7 +116,9 @@ class SlackActivityConnector{
 			$newMessage["actor"] = $this->convertUserIDToName($startingLog[$i]["user"]);
 			$newMessage["source"] = "Slack";
 			$newMessage["timestamp"] = floatval($startingLog[$i]["ts"]);
-			array_push($editedMessages, $newMessage);
+			if ($newMessage["actor"] != "Discard"){
+				array_push($editedMessages, $newMessage);
+			}
 			unset($newMessage);
 		}
 		return $editedMessages;
