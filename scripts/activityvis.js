@@ -31,22 +31,22 @@ var render = function(element) {
       name: "Aqib Bhat",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Cullen Brown",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Eric Gonzalez",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Jorge Herrera",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     }];
     
     //Bucketize the data
@@ -60,7 +60,7 @@ var render = function(element) {
       var actorActivity = actorArr[index];
       
       // Get the series for the activity occurring
-      var source = data.source;
+      var source = data.source; 
       var sourceBins = actorActivity[source].bins;
       
       // Increment the number of instances on that day
@@ -122,7 +122,7 @@ function translateData(bins, translator) {
 function getActorSeries(actor) {
   // Translate each bin to an entry
   var name = actor.name;
-  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'drive',data:[]}];
+  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'googledrive',data:[]}];
   
   series[0].data = translateData(actor.Slack.bins, function(bin) {
     return bin;
@@ -132,7 +132,7 @@ function getActorSeries(actor) {
     bin.y = 0;
     return bin;
   });
-  series[2].data = translateData(actor.drive.actorActivitybins, function(bin) {
+  series[2].data = translateData(actor.googledrive.actorActivitybins, function(bin) {
     bin.y *= -1;
     return bin;
   });
