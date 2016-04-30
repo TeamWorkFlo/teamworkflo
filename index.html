@@ -84,6 +84,14 @@
                 <option>Functional Prototype</option>
                 <option>User Study 2</option>
               </select></label>
+
+              <label style="display:inline; color:white; padding-right:10px;">Actor:<select class="form-control" id="actor_selector" style="display:inline; width:150px; margin-left:10px;">
+                <option>All</option>
+                <option>Aquib Bhat</option>
+                <option>Cullen Brown</option>
+                <option>Eric Gonzalez</option>
+                <option>Jorge Herrera</option>
+              </select></label>
               <button id="show_viz" class="btn btn-primary">Show viz</button></td>
                <td width="50%">  <div id="slider">
                 
@@ -169,6 +177,7 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 $( "#show_viz" ).click(function() {
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
+  var actor = $( "#actor_selector option:selected" ).text();
   updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
   
 });
