@@ -143,14 +143,18 @@
 
 
 $("#viz_panel_1").css({ 'height': height*.8 + "px" });
-$("#vis1-body").css({ 'height': height*.8 + "px" });
+
 
 $("#viz_control_panel").css({ 'height': height*.23 + "px" });
 $("#viz_panel_2").css({ 'height': height/2 + 10 + "px" });
 $("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
 
-localStorage.setItem("main_viz_height",height*.8);
-localStorage.setItem("secondary_viz_height",height/2 + 10);
+$("#vis1-body").css({ 'height': height*.8 -50+ "px" });
+$("#vis2-body").css({ 'height': height/2 - 40 + "px" });
+$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
+
+//localStorage.setItem("main_viz_height",height*.8 - 50);
+//localStorage.setItem("secondary_viz_height",height/2 + 10);
 
 
 $('html, body').css({

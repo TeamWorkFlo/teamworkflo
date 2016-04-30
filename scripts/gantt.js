@@ -240,7 +240,7 @@ var results = function (tasks) {
 
                 plotOptions: {
                     line: {
-                        lineWidth: 20,
+                        lineWidth: 10,
                         marker: {
                             enabled: false
                         },
