@@ -171,9 +171,11 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 $( "#show_viz" ).click(function() {
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
+  var minDate = getUnixTimestamp(dates.min)/1000;
+  var maxDate = getUnixTimestamp(dates.max)/1000;
   taskloadFilterContext.milestone = milestone;
-  taskloadFilterContext.startTime = getUnixTimestamp(dates.min);
-  taskloadFilterContext.endTime = getUnixTimestamp(dates.max);
+  taskloadFilterContext.startTime = minDate;
+  taskloadFilterContext.endTime = maxDate;
   taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
   //updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
   
