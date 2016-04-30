@@ -28,7 +28,6 @@
 		return $branches;
 	}
 
-
 	function getCommitsFromBranch($branch_name){
 		$client = new \Github\Client();
 		$commits = $client->api('repo')->commits()->all('TeamWorkFlo', 'teamworkflo', array('sha' => $branch_name));
@@ -43,6 +42,7 @@
 		foreach($branches as $branch){
 			$committs = getCommitsFromBranch($branch['name']);
 
+			$committs = getCommitsFromBranch('master');
 
 			foreach($committs as $commit){
 				$commit = $commit['commit'];
@@ -51,15 +51,18 @@
 				$task_id = getTaskID($message);
 
 				if($task_id!='-1'){
-				$activity_array = array();
-				$activity_array['actor'] = $author['name']; 
-				$activity_array['timestamp'] = strtotime($author['date']); 
-				$activity_array['taskid'] = $task_id;
-				$activity_array['source'] = 'github';
-				//$activity_array['message'] = $message;
+					$activity_array = array();
+					$name = $author['name'];
+					if (preg_match('/aqib/', $name))
+						$name = "Aqib Bhat";
+					$activity_array['actor'] = $name; 
+					$activity_array['timestamp'] = strtotime($author['date']); 
+					$activity_array['taskid'] = $task_id;
+					$activity_array['source'] = 'github';
+					//$activity_array['message'] = $message;
 
-				
-				array_push($activities_array, $activity_array);
+					
+					array_push($activities_array, $activity_array);
 				}
 
 			}

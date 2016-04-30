@@ -31,22 +31,22 @@ var render = function(element) {
       name: "Aqib Bhat",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Cullen Brown",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Eric Gonzalez",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     },{
       name: "Jorge Herrera",
       Slack: {bins:{}},
       github: {bins:{}},
-      drive: {bins:{}}
+      googledrive: {bins:{}}
     }];
     
     //Bucketize the data
@@ -60,7 +60,7 @@ var render = function(element) {
       var actorActivity = actorArr[index];
       
       // Get the series for the activity occurring
-      var source = data.source;
+      var source = data.source; 
       var sourceBins = actorActivity[source].bins;
       
       // Increment the number of instances on that day
@@ -68,25 +68,18 @@ var render = function(element) {
       var day = date.setHours(0,0,0,0);
       var dayBin = sourceBins[day];
       if (!dayBin) {
-        dayBin = {x:day,y:0,tasks:new buckets.Set()};
+        dayBin = {x:day,y:0,tasks:new buckets.Set(function(activity) {
+          return activity.taskid
+        })};
         sourceBins[day] = dayBin;
       }
       dayBin.y++;
-      if (data.hasOwnProperty('task'))
-        dayBin.tasks.push(task);
+      if (data.hasOwnProperty('taskid'))
+        dayBin.tasks.add(data.taskid);
     });
     
     actorArr.forEach(function(actorObject) {
-      // Translate each bin to an entry
-      
-      var name = actorObject.name;
-      var data = [];
-      var bins = actorObject.Slack.bins;
-      for (var binKey in bins) {
-        var bin = bins[binKey];
-        data.push(bin);
-      }
-      data.sort(activityCompare);
+      var series = getActorSeries(actorObject);
       
       var divId = 'act-' + name.split(" ")[0];
       $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
@@ -108,13 +101,51 @@ var render = function(element) {
         legend: {
           enabled: false
         },
-        series: [{data: data}]
+        series: series
       });
     }, this);
   };
     
   activityManager.getActivity({filter:vwFilter,results:activityCallback}); 
 };
+
+function translateData(bins, translator) {
+  var data = [];    
+  
+  for (var binKey in bins) {
+    var bin = bins[binKey];
+    var translation = translator(bin);
+    data.push(translation);
+  }
+  data.sort(activityCompare);
+  return data;
+}
+
+function getActorSeries(actor) {
+  // Translate each bin to an entry
+  var name = actor.name;
+  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'googledrive',data:[]}];
+  
+  var sData = translateData(actor.Slack.bins, function(bin) {
+    return bin;
+  });
+  series[0].data = sData;
+  
+  var uData = translateData(actor.github.bins, function(bin) {
+    bin.n = bin.y;
+    bin.y = 0;
+    return bin;
+  });
+  series[1].data = uData;
+  
+  var vData = translateData(actor.googledrive.actorActivitybins, function(bin) {
+    bin.y *= -1;
+    return bin;
+  });
+  series[2].data = vData;
+      
+  return series;
+}
 
 var configuration = { name:"Activity", renderer:render };
 
