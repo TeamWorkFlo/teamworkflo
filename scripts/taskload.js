@@ -1,13 +1,152 @@
 
-var render = function(element) {
+var render = function(renderContext,filterContext) {
   var vwFilter = function(task) { 
+    //filter out blank tasks (unassigned tasks)
     if (task.actor == ""){
         return false;
     }
-    return true; 
+    else{
+        //var testContext = new FilterContext({'actor':'','component':'','feature':'',
+         //'milestone':'', 'startTime':'','endTime':''});
+        /*
+        //filter by milestone
+        //return filterByMilestone(task,"") //all tasks
+        return filterByMilestone(task,"Functional Prototype"); //only tasks in functional prototype
+        */
+
+        /*
+        //filter by timeWindow
+        //return filterOverTimeWindow(task,"",""); //all tasks
+        //return filterOverTimeWindow(task,"1460678400",""); //tasks in progress after 4/15
+        return filterOverTimeWindow(task,"","1460678400"); //tasks completed by 4/15
+        //return filterOverTimeWindow(task,"1460678400","1461628800"); //tasks from 4/15 - 4/26
+        */
+
+        return overallTaskFilter(task,filterContext);
+
+        //no other filters set
+        return true;
     }
-  //var compNames = getComponentList(tasks);
+    
+    }
   
+  
+    function overallTaskFilter(task,filterContext){
+        var actorResult = filterByActor(task,filterContext);
+        var componentResult = filterByComponent(task,filterContext);
+        var featureResult = filterByFeature(task,filterContext);
+        var milestoneResult = filterByMilestone(task,filterContext);
+        var timeResult = filterOverTimeWindow(task,filterContext);
+
+        return (actorResult && componentResult && featureResult && milestoneResult && timeResult); 
+    }
+    
+
+  function filterByActor (task,filterContext){
+    if (filterContext.actor != ""){
+        if (!task.actor.includes(filterContext.actor))
+            return false;
+        return true;
+    }
+    else{
+        //no actor specified; all tasks are good
+        return true;
+    }
+  }
+
+  function filterByMilestone(task,filterContext){
+    //add case for no filter
+    if (filterContext.milestone == ""){
+        return true;
+    }
+    //filter out tasks not from milestone
+    if (task.milestone != filterContext.milestone)
+        return false;
+    return true;
+  }
+
+  //function filterByComponent(task,component){
+    function filterByComponent(task,filterContext){
+    if (filterContext.component == ""){
+        return true;
+    }
+    //filter out tasks not from component
+    if (task.component != filterContext.component)
+        return false;
+    return true;
+  }
+
+   function filterByFeature(task,filterContext){
+    if (filterContext.feature == ""){
+        return true;
+    }
+    //filter out tasks not from feature
+    if (task.feature != filterContext.feature)
+        return false;
+    return true;
+  }
+
+  /*
+        Return false if a task is completed before startTime; else, return true
+  */
+  function filterByStartTime(task,filterContext){
+    if (filterContext.startTime != ""){
+        //task has been completed
+        if (task.completionDate != ""){
+            var completeDate = convertTimestampToDate(task.completionDate);
+            var completeTime = completeDate.getTime()/1000;
+            //var startDate = convertTimestampToDate(startTime);
+            if (completeTime < filterContext.startTime)
+                return false;
+            return true;
+        }
+        //return true otherwise (task still in process)
+        return true;
+    }
+    else{
+        //no limiting start time; return all tasks from beginning of time until now
+        return true;
+    }
+  }
+
+  /*
+        Return false if a task is started after the endTime; else, return true
+  */
+  function filterByEndTime(task,filterContext){
+    if (filterContext.endTime != ""){
+        //task has been started
+        if (task.startDate != ""){
+            var startingDate = convertTimestampToDate(task.startDate);
+            var startTime = startingDate.getTime()/1000;
+            //var startDate = convertTimestampToDate(startTime);
+            if (filterContext.endTime < startTime)
+                return false;
+            return true;
+        }
+        //return true otherwise (task not started)
+        return true;
+    }
+    else{
+        //no limiting end time; return all tasks from now to end of time
+        return true;
+    }
+  }
+
+  /*
+        Return true if task not filtered out by either startTime or endTime
+  */
+  function filterOverTimeWindow(task,filterContext){
+    var passStartFilter = filterByStartTime(task,filterContext);
+    var passEndFilter = filterByEndTime(task,filterContext);
+    return (passStartFilter && passEndFilter);
+  }
+
+  function convertTimestampToDate(timestamp){
+    var match = timestamp.match(/^(\d+)\/(\d+)\/(\d+) (\d+)\:(\d+)\:(\d+)$/)
+    var date = new Date(match[3], match[1] - 1, match[2], match[4], match[5], match[6])
+    return date;
+  }
+
   function recompileArray(taskArray){
     //first, get list of component names
     var compNames = getComponentList(taskArray);
@@ -239,7 +378,7 @@ var render = function(element) {
 
 
 
-       $(element).highcharts({
+       $(renderContext.renderElement).highcharts({
 			series: [{
 				type: "treemap",
                 layoutAlgorithm: 'squarified',
@@ -287,7 +426,7 @@ var render = function(element) {
                         + '<b>' + this.point.status + '</b>';
                         
                     //return '<b>Actor(s): </b>' + this.point.actor + '</br>' ;
-               }
+               },
             },
             subtitle:{
                 text: 'Tasks grouped by features and components, colored by actor. Click components to drill down'
@@ -301,10 +440,12 @@ var render = function(element) {
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
 };
 
-
+var testRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
+var testFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':'', 'startTime':'','endTime':''});
 
 var configuration = { name:"Taskload", renderer:render };
 
 var vis = new Visualization(configuration);
 
-vis.render("#vis1-body");
+vis.render(testRenderContext,testFilterContext);

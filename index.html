@@ -18,6 +18,9 @@
   <script src="scripts/taskmanager.js"></script>
   <script src="scripts/activitymanager.js"></script>
   <script src="scripts/visualization.js"></script>
+  <script src="scripts/filtercontext.js"></script>
+  <script src="scripts/rendercontext.js"></script>
+
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 <script src="scripts/client/dateslider/jQRangeSliderMouseTouch.js"></script>
 <script src="scripts/client/dateslider/jQRangeSliderDraggable.js"></script>
@@ -74,7 +77,12 @@
             <tr width="100%">
               <td width="50%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
-              <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;"></select></label>
+              <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;">
+                <option>Initial Setup</option>
+                <option>Lightweight Prototype</option>
+                <option>Functional Prototype</option>
+                <option>User Study 2</option>
+              </select></label>
               <button id="show_viz" class="btn btn-primary">Show viz</button></td>
                <td width="50%">  <div id="slider">
                 
@@ -137,6 +145,7 @@
  <!--  Copyright 2016 Team Drowning Man <img src="resources/drowning-man.png" alt="Drowning Man Icon" width=24 height=24>. Data is sourced from Slack, Google Drive, and GitHub. -->
 
 <footer>
+ <script src="scripts/filtercontext.js"></script>
 <script>
   var height = $( window ).height();
 //alert(height);
@@ -156,19 +165,25 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
 
+$( "#show_viz" ).click(function() {
+  var dates = $("#slider").dateRangeSlider("values");
+  var milestone = $( "#milestones_selector option:selected" ).text();
+  updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
+  
+});
 
 $('html, body').css({
   'overflow': 'hidden',
   'height': '100%'
 });
 
-
 $("#slider").dateRangeSlider({
     bounds:{
-        min: new Date(1421841600000),
-        max: new Date(1431841600000)
+        min: new Date(1460246400000), //April 10, 2016
+        max: new Date(1462838400000) //May 10, 2016
     }
 });
+
 
 
 </script>
@@ -185,31 +200,32 @@ $("#slider").dateRangeSlider({
 
 
 
-<script>
+// <script>
 
-          var milestones_selector = $("#milestones_selector");
-$.get("./twfapi/index.php?method=tasks", function(data, status){
-    var json_data = JSON.parse(data);
-    //console.log("Fund data! \n%s\n", data);
-    localStorage.setItem("task_array",JSON.stringify(json_data['data']));
-    if(json_data['status']==200){
+
+// //alert();
+
+//       //    var milestones_selector = $("#milestones_selector");
+// $.get("./twfapi/index.php?method=tasks", function(data, status){
+//     var json_data = JSON.parse(data);
+//     //console.log("Fund data! \n%s\n", data);
+//     localStorage.setItem("task_array",JSON.stringify(json_data['data']));
+//     if(json_data['status']==200){
          
-          var milestones = getMilestones(json_data['data']);
-          for(i = 0; i < milestones.length; i++) {
-           $('#milestones_selector').append('<option value='+milestones[i]+'>'+milestones[i]+'</option>');
-         }
-        }else{
-          alert("Error "+ json_data['status']);
-        }
-      });
+//           var milestones = getMilestones(json_data['data']);
+//           for(i = 0; i < milestones.length; i++) {
+//            $('#milestones_selector').append('<option value='+milestones[i]+'>'+milestones[i]+'</option>');
+//          }
+//         }else{
+//           alert("Error "+ json_data['status']);
+//         }
+//       });
 
 
 
   
-</script>
+// </script>
 
-
-</script>
 
 
 
