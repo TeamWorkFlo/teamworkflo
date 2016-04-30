@@ -173,9 +173,11 @@ var results = function (tasks) {
         $(element).highcharts({
             chart: {
                 zoomType: 'y',                  
-                panning: true
+                panning: true,
+                
 
             },
+            colors: ['#7cb5ec'],
 
             title: {
                 text: ''
