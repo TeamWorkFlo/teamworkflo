@@ -3,15 +3,15 @@
 
 
 
-function setPaginationEvents(){
-$( "#next" ).click(function() {
-  alert( "Show next" );
-});
+// function setPaginationEvents(){
+// $( "#next" ).click(function() {
+//   alert( "Show next" );
+// });
 
-$( "#prev" ).click(function() {
-  alert( "Show prev" );
-});
-}
+// $( "#prev" ).click(function() {
+//   alert( "Show prev" );
+// });
+// }
 
 
 function getUnixTimestamp(date_string){
@@ -268,7 +268,7 @@ taskManager.getTasks({filter:vwFilter,results:results});
 }
 
 var configuration = { name:"Gantt", renderer:render };
-setPaginationEvents();
+//setPaginationEvents();
 var vis = new Visualization(configuration);
 
 vis.render("#vis3-body");
