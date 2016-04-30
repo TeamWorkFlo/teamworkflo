@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="./css/date_slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
-  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
-
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="scripts/buckets.min.js"></script>
   <script src="scripts/taskmanager.js"></script>
   <script src="scripts/activitymanager.js"></script>
@@ -210,7 +209,6 @@ $("#slider").dateRangeSlider({
 });
 
 
-
 </script>
 
 
@@ -232,30 +230,22 @@ var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
 var taskloadVis = new Visualization(taskloadConfiguration);
 
-taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
-</script>
-
- <script>
-
-
-// //alert();
-
-//       //    var milestones_selector = $("#milestones_selector");
-// $.get("./twfapi/index.php?method=tasks", function(data, status){
-//     var json_data = JSON.parse(data);
-//     //console.log("Fund data! \n%s\n", data);
-//     localStorage.setItem("task_array",JSON.stringify(json_data['data']));
-//     if(json_data['status']==200){
+/*          var milestones_selector = $("#milestones_selector");
+$.get("./twfapi/index.php?method=tasks", function(data, status){
+    var json_data = JSON.parse(data);
+    //console.log("Fund data! \n%s\n", data);
+    localStorage.setItem("task_array",JSON.stringify(json_data['data']));
+    if(json_data['status']==200){
          
-//           var milestones = getMilestones(json_data['data']);
-//           for(i = 0; i < milestones.length; i++) {
-//            $('#milestones_selector').append('<option value='+milestones[i]+'>'+milestones[i]+'</option>');
-//          }
-//         }else{
-//           alert("Error "+ json_data['status']);
-//         }
-//       });
-
+          var milestones = getMilestones(json_data['data']);
+          for(i = 0; i < milestones.length; i++) {
+           $('#milestones_selector').append('<option value='+milestones[i]+'>'+milestones[i]+'</option>');
+         }
+        }else{
+          alert("Error "+ json_data['status']);
+        }
+      });
+*/
 
 
   

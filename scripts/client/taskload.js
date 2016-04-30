@@ -259,4 +259,4 @@ var configuration = { name:"Taskload", renderer:render };
 var vis = new Visualization(configuration);
 
 
-vis.render("#vis1-body");
+//vis.render("#vis1-body");
