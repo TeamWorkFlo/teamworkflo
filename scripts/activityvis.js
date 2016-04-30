@@ -114,9 +114,11 @@ function translateData(bins, translator) {
   
   for (var binKey in bins) {
     var bin = bins[binKey];
-    data.push(translator(bin));
+    var translation = translator(bin);
+    data.push(translation);
   }
   data.sort(activityCompare);
+  return data;
 }
 
 function getActorSeries(actor) {
@@ -124,18 +126,23 @@ function getActorSeries(actor) {
   var name = actor.name;
   var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'googledrive',data:[]}];
   
-  series[0].data = translateData(actor.Slack.bins, function(bin) {
+  var sData = translateData(actor.Slack.bins, function(bin) {
     return bin;
   });
-  series[1].data = translateData(actor.github.bins, function(bin) {
+  series[0].data = sData;
+  
+  var uData = translateData(actor.github.bins, function(bin) {
     bin.n = bin.y;
     bin.y = 0;
     return bin;
   });
-  series[2].data = translateData(actor.googledrive.actorActivitybins, function(bin) {
+  series[1].data = uData;
+  
+  var vData = translateData(actor.googledrive.actorActivitybins, function(bin) {
     bin.y *= -1;
     return bin;
   });
+  series[2].data = vData;
       
   return series;
 }
