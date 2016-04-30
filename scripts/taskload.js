@@ -1,5 +1,5 @@
 
-var render = function(renderContext,filterContext) {
+var taskloadRender = function(renderContext,filterContext) {
   var vwFilter = function(task) { 
     //filter out blank tasks (unassigned tasks)
     if (task.actor == ""){
@@ -439,7 +439,7 @@ var render = function(renderContext,filterContext) {
   };
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
 };
-
+/*
 var testRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
 var testFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':'', 'startTime':'','endTime':''});
@@ -449,3 +449,4 @@ var configuration = { name:"Taskload", renderer:render };
 var vis = new Visualization(configuration);
 
 vis.render(testRenderContext,testFilterContext);
+*/

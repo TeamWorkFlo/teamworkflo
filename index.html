@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="./css/date_slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
-  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+
   <script src="scripts/buckets.min.js"></script>
   <script src="scripts/taskmanager.js"></script>
   <script src="scripts/activitymanager.js"></script>
@@ -174,11 +175,18 @@ $("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
 
+
+
 $( "#show_viz" ).click(function() {
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
-  var actor = $( "#actor_selector option:selected" ).text();
-  updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
+  var minDate = getUnixTimestamp(dates.min)/1000;
+  var maxDate = getUnixTimestamp(dates.max)/1000;
+  taskloadFilterContext.milestone = milestone;
+  taskloadFilterContext.startTime = minDate;
+  taskloadFilterContext.endTime = maxDate;
+  taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+  //updateVisualizations(milestone, getUnixTimestamp(dates.min), getUnixTimestamp(dates.max));
   
 });
 
@@ -213,9 +221,19 @@ $("#slider").dateRangeSlider({
 </footer>
 
 
+<script>
+var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
+var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':'', 'startTime':'','endTime':''});
 
+var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
-// <script>
+var taskloadVis = new Visualization(taskloadConfiguration);
+
+taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+</script>
+
+ <script>
 
 
 // //alert();
@@ -239,7 +257,7 @@ $("#slider").dateRangeSlider({
 
 
   
-// </script>
+ </script>
 
 
 
