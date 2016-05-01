@@ -99,7 +99,7 @@ var activityRender = function(renderContext, filterContext) {
      
      $(renderContext.renderElement).html('');
      var condensed = renderContext.condensed;
-     var height = condensed ? 115 : 375;
+     var height = condensed ? 115 : 175;
      
     sources.forEach(function(source) {
       var sourceId = source.source;
@@ -130,12 +130,12 @@ var activityRender = function(renderContext, filterContext) {
         plotOptions: {
           line: {
             marker: {
-              enabled: !condensed
+              enabled: false
             }
           }
         },
         legend: {
-          enabled: !condensed
+          enabled: false
         },
         series: series
       });
