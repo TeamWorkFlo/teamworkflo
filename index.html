@@ -4,13 +4,13 @@
   <title>TeamWorkFlo</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./css/date_slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
-  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
   <script src="https://code.highcharts.com/modules/treemap.js"></script>
   <script src="scripts/activity.js"></script>
   <script src="scripts/person.js"></script>
@@ -22,7 +22,7 @@
   <script src="scripts/filtercontext.js"></script>
   <script src="scripts/rendercontext.js"></script>
 
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 <script src="scripts/client/dateslider/jQRangeSliderMouseTouch.js"></script>
 <script src="scripts/client/dateslider/jQRangeSliderDraggable.js"></script>
 <script src="scripts/client/dateslider/jQRangeSliderBar.js"></script>
@@ -51,7 +51,7 @@
 </head>
 <body style="height:100%">
 
-  <div class="container-full">
+  <div class="container-full" style="margin-right: 1%; margin-left: 2%;">
     <div class="row content container-full" style="height:100%;" > 
 
       <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
@@ -205,19 +205,28 @@ $("#slider").dateRangeSlider({
 
 
 <script>
+//taskload vis load information
 var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
-//$("#mainViz").html("Group Taskload");
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':''});
-
 var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
 var taskloadVis = new Visualization(taskloadConfiguration);
 
 taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+$(taskloadRenderContext.labelElement).html(taskloadVis.name);
+  
+//activity visualization load information
+var activityRenderContext = new RenderContext({'renderElement':'#vis2-body', 'labelElement':'#secondaryViz', 'condensed':'0'});
+var activityFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':''});
+var activityConfiguration = { name:"Activity", renderer:activityRender };
 
+var activityVis = new Visualization(activityConfiguration);
 
-
+activityVis.render(activityRenderContext,activityFilterContext);
+$(activityRenderContext.labelElement).html(activityVis.name);
+  
 
 //Gantt visualization load configuration
 var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'labelElement':'#tertiaryViz','condensed':'0'});
@@ -228,6 +237,7 @@ var ganttConfiguration = { name:"Gantt", renderer:ganttRender };
 var ganttVis = new Visualization(ganttConfiguration);
 ganttVis.render(ganttRenderContext,ganttFilterContext);
 
+$(ganttRenderContext.labelElement).html(ganttVis.name);
 </script>
 
 <script>
@@ -235,9 +245,9 @@ var primaryRenderContext = taskloadRenderContext;
 var primaryFilterContext = taskloadFilterContext;
 var primaryVis = taskloadVis;
 
-var secondaryRenderContext;// = ganttRenderContext;
-var secondaryFilterContext;// = ganttFilterContext;
-var secondaryVis;// = ganttVis;
+var secondaryRenderContext = activityRenderContext;
+var secondaryFilterContext = activityFilterContext;
+var secondaryVis = activityVis;
 
 var tertiaryRenderContext = ganttRenderContext;
 var tertiaryFilterContext = ganttFilterContext;
@@ -273,6 +283,9 @@ $( "#secondary_switch_button" ).click(function() {
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
+
+  $(primaryRenderContext.labelElement).html(primaryVis.name);
+  $(secondaryRenderContext.labelElement).html(secondaryVis.name);
 });
 
 $( "#tertiary_switch_button" ).click(function() {
@@ -298,6 +311,11 @@ $( "#tertiary_switch_button" ).click(function() {
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
+
+  $(primaryRenderContext.labelElement).html(primaryVis.name);
+  $(tertiaryRenderContext.labelElement).html(tertiaryVis.name);
+
+
 });
 
 // //alert();
