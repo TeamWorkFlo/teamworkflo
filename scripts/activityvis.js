@@ -26,6 +26,9 @@ var activityRender = function(renderContext, filterContext) {
     if (!(activity.hasOwnProperty('actor') && activity.actor !== null))
       return false;
     
+    if (filterContext.actor != "" && filterContext.actor != 'All' && !filterContext.actor.match(activity.actor))
+      return false;
+    
     var passesTime = true;
     if (filterContext.hasOwnProperty('startTime') && activity.timestamp < filterContext.startTime)
       passesTime = false;
@@ -94,7 +97,7 @@ var activityRender = function(renderContext, filterContext) {
      {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
-     $(renderContext.renderElement).innerHtml = null;
+     $(renderContext.renderElement).html('');
      
     sources.forEach(function(source) {
       var sourceId = source.source;
@@ -103,7 +106,10 @@ var activityRender = function(renderContext, filterContext) {
       $(renderContext.renderElement).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
         title: {
-          text: source.name
+          text: source.name,
+          style: {
+            'fontSize': renderContext.condensed ? 12 : 16
+          }
         },
         xAxis: {
           type: 'datetime'
@@ -116,7 +122,7 @@ var activityRender = function(renderContext, filterContext) {
         plotOptions: {
           line: {
             marker: {
-              enabled: false
+              enabled: !renderContext.condensed
             }
           }
         },
@@ -156,13 +162,3 @@ function getSourceSeries(actorArr, source) {
   
   return series;
 }
-/*
-var configuration = { name:"Activity", renderer:render };
-
-var vis = new Visualization(configuration);
-
-var activityRenderContext = new RenderContext({renderElement:'#vis2-body', labelElement:'#secondaryViz', condensed:'0'});
-var taskloadFilterContext = new FilterContext({actor:'',component:'',feature:'',
-    milestone:''});
-vis.render(activityRenderContext, taskloadFilterContext);
-*/

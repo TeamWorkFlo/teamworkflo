@@ -118,7 +118,7 @@
             <button id="secondary_switch_button" class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
             <div class="panel-body fill" style="padding:0px;">
 
-              <div id="vis2-body" class="fill" style="overflow-y:auto;">
+              <div id="vis2-body" class="fill">
 
               </div>
             </div>
@@ -217,7 +217,7 @@ taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
 $(taskloadRenderContext.labelElement).html(taskloadVis.name);
   
 //activity visualization load information
-var activityRenderContext = new RenderContext({'renderElement':'#vis2-body', 'labelElement':'#secondaryViz', 'condensed':'0'});
+var activityRenderContext = new RenderContext({'renderElement':'#vis2-body', 'labelElement':'#secondaryViz', 'condensed':true});
 var activityFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':''});
 var activityConfiguration = { name:"Activity", renderer:activityRender };
@@ -229,7 +229,7 @@ $(activityRenderContext.labelElement).html(activityVis.name);
   
 
 //Gantt visualization load configuration
-var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'labelElement':'#tertiaryViz','condensed':'0'});
+var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'labelElement':'#tertiaryViz','condensed':true});
 var ganttFilterContext = new FilterContext({'actor':'All','component':'','feature':'',
     'milestone':'All', 'startTime':'1460246400','endTime':'1462838400'});
 

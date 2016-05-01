@@ -93,7 +93,7 @@ var taskloadRender = function(renderContext,filterContext) {
   function filterByStartTime(task,filterContext){
     if (filterContext.startTime !== null){
         //task has been completed
-        if (task.completionDate !== null){
+        if (task.completionDate != "" && task.completionDate !== null){
             var completeDate = convertTimestampToDate(task.completionDate);
             var completeTime = completeDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
@@ -116,7 +116,7 @@ var taskloadRender = function(renderContext,filterContext) {
   function filterByEndTime(task,filterContext){
     if (filterContext.endTime !== null){
         //task has been started
-        if (task.startDate !== null){
+        if (task.startDate != "" && task.startDate !== null){
             var startingDate = convertTimestampToDate(task.startDate);
             var startTime = startingDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
@@ -151,9 +151,7 @@ var taskloadRender = function(renderContext,filterContext) {
   function recompileArray(taskArray){
     //first, get list of component names
     var compNames = getComponentList(taskArray);
-    //console.log(compNames.length);
     var compLayerTasks = createComponentLayer(taskArray, compNames);
-    //console.log(compLayerTasks.length);
     return compLayerTasks;
   }
 
@@ -194,7 +192,6 @@ var taskloadRender = function(renderContext,filterContext) {
                 temp.push(taskArray[j]);
             }
         }
-        console.log("Number of items in feature " + featureNames[i] + ": " + temp.length);
         results[featureNames[i]] = temp;
     }
 
@@ -212,7 +209,6 @@ var taskloadRender = function(renderContext,filterContext) {
             }
         }
         var tempFeatureNames = getFeatureList(temp);
-        console.log(tempFeatureNames.length);
         var tempFeatureLayer = createFeatureLayer(temp, tempFeatureNames);
 
         results[componentNames[i]] = tempFeatureLayer;
@@ -403,7 +399,6 @@ var taskloadRender = function(renderContext,filterContext) {
 
                     updatedTasks.push(taskP);
                     featS += taskP.value;
-                    //console.log(taskID);
                     taskI++;
                 }
                 featP.actor = flattenActorList(taskActors);
@@ -412,13 +407,11 @@ var taskloadRender = function(renderContext,filterContext) {
                         featActors.push(taskActors[i]);
                     }
                 }
-                //console.log(featureID);
                 featP.value = featS;
                 updatedTasks.push(featP);
                 compS += featS;
                 featI++;
             }
-            //console.log(componentID);
             compP.actor = flattenActorList(featActors);
             compP.value = compS;
             updatedTasks.push(compP);
@@ -491,15 +484,3 @@ var taskloadRender = function(renderContext,filterContext) {
   };
   taskManager.getTasks({filter:vwFilter,results:callResults}); 
 };
-
-/*
-var testRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
-var testFilterContext = new FilterContext({'actor':'','component':'','feature':'',
-    'milestone':'', 'startTime':'','endTime':''});
-
-var configuration = { name:"Taskload", renderer:render };
-
-var vis = new Visualization(configuration);
-
-vis.render(testRenderContext,testFilterContext);
-*/
