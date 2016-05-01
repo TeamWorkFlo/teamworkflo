@@ -195,6 +195,8 @@ var results = function (tasks) {
             $(renderContext.renderElement).css({ 'height': tasks.length*20 + "px" });
             $(renderContext.renderElement).parent().css({ 'height': tasks.length*20 + "px" });
              
+                  $(renderContext.renderElement).html('');
+
         $(renderContext.renderElement).highcharts({
             chart: {
                 zoomType: 'y',                  

@@ -418,6 +418,7 @@ var taskloadRender = function(renderContext,filterContext) {
             compI++;
         }
 
+     $(renderContext.renderElement).html('');
 
 
        $(renderContext.renderElement).highcharts({
