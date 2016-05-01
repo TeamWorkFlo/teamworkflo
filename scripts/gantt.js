@@ -13,6 +13,7 @@
 // });
 // }
 
+var task_names = [];
 
 function getUnixTimestamp(date_string){
 var newdate = new Date(date_string);
@@ -24,16 +25,16 @@ function getDateFromUnixTimestamp(unix_timestamp){
 }
 
 
-function getGanttTasks(json_tasks,milestone){
+function getGanttTasks(json_tasks,milestone,actor){
   var gantt_tasks = [];
-
+  task_names = [];
   for(var i=0;i<json_tasks.length;i++){
 
     var obj = json_tasks[i];
         //var task_name = obj['id'] + " - "+obj['name'];
         var task_id = obj['id'];
          var task_name = obj['name'];
-        if(obj['milestone']==milestone){
+        if((obj['milestone']==milestone || milestone=='All') && (obj['actor']==actor || actor=='All')){
 //alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
 
 var intervals = [{
@@ -52,7 +53,7 @@ var task = {
     intervals:intervals
     
 };
-
+task_names.push(obj['name']);
 gantt_tasks.push(task);
 }
 
@@ -66,17 +67,6 @@ return gantt_tasks;
 
 
 function getTaskNames(json_tasks){
-  var task_names = [];
-
-
-  for(var i=0;i<json_tasks.length;i++){
-
-    var obj = json_tasks[i];
-        //var task_name = obj['id'] + " - "+obj['name'];
-        var task_name = obj['name'];
-        task_names.splice(0,0,task_name);
-    }
-
     return task_names;
 }
 
@@ -108,7 +98,7 @@ return task_milestones;
 
 
 
-var render = function(element) {
+var ganttRender = function(renderContext,filterContext) {
 
   var vwFilter = function(task_array) { 
     return true;
@@ -116,7 +106,7 @@ var render = function(element) {
 
 var results = function (tasks) {
 
-    var tasks = getGanttTasks(tasks,"Functional Prototype")
+    var tasks = getGanttTasks(tasks,filterContext.milestone, filterContext.actor)
     var task_names = getTaskNames(tasks);
     //var date = new Date(date);
 
@@ -169,8 +159,12 @@ var results = function (tasks) {
 
         // create the chart
 
-        //alert(task_names.length);
-        $(element).highcharts({
+        alert(new Date(filterContext.startTime*1000));
+
+         alert(new Date(filterContext.endTime*1000));
+
+
+        $(renderContext.renderElement).highcharts({
             chart: {
                 zoomType: 'y',                  
                 panning: true,
@@ -185,8 +179,8 @@ var results = function (tasks) {
 
             xAxis: {
                 type: 'datetime',
-                min: new Date("2016/04/22").getTime(), //This would need to change depending on the time window the user select
-                max: new Date("2016/04/28").getTime(), //This would need to change depending on the time window the user select
+                min: new Date("2016-04-22"), //This would need to change depending on the time window the user select
+                max: new Date("2016-04-29"), //This would need to change depending on the time window the user select
                 
             },
 
@@ -267,8 +261,8 @@ taskManager.getTasks({filter:vwFilter,results:results});
 
 }
 
-var configuration = { name:"Gantt", renderer:render };
-//setPaginationEvents();
-var vis = new Visualization(configuration);
+// var configuration = { name:"Gantt", renderer:render };
+// //setPaginationEvents();
+// var vis = new Visualization(configuration);
 
-vis.render("#vis3-body");
+// vis.render("#vis3-body");

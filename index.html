@@ -215,12 +215,25 @@ var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 var taskloadVis = new Visualization(taskloadConfiguration);
 
 taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
+
+
+
+
+//Gantt visualization load configuration
+var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'condensed':'0'});
+var ganttFilterContext = new FilterContext({'actor':'All','component':'','feature':'',
+    'milestone':'All', 'startTime':'1460246400','endTime':'1462838400'});
+
+var ganttConfiguration = { name:"Gantt", renderer:ganttRender };
+var ganttVis = new Visualization(ganttConfiguration);
+ganttVis.render(ganttRenderContext,ganttFilterContext);
+
 </script>
 
 <script>
-var activeRenderContext = taskloadRenderContext;
-var activeFilterContext = taskloadFilterContext;
-var activeVis = taskloadVis;
+var activeRenderContext = ganttRenderContext;
+var activeFilterContext = ganttFilterContext;
+var activeVis = ganttVis;
 </script>
 
  <script>
