@@ -20,12 +20,18 @@ var newdate = new Date(date_string);
 return newdate.getTime();
 }
 
+
+function getDateFromString(date_string){
+var newdate = new Date(date_string);
+return newdate;
+}
+
 function getDateFromUnixTimestamp(unix_timestamp){
     return new Date(unix_timestamp);
 }
 
 
-function getGanttTasks(json_tasks,milestone,actor){
+function getGanttTasks(json_tasks,milestone,actor,startDate, endDate){
   var gantt_tasks = [];
  // task_names = [];
   for(var i=0;i<json_tasks.length;i++){
@@ -34,7 +40,12 @@ function getGanttTasks(json_tasks,milestone,actor){
         //var task_name = obj['id'] + " - "+obj['name'];
         var task_id = obj['id'];
          var task_name = obj['name'];
-        if((obj['milestone']==milestone || milestone=='All') && (obj['actor']==actor || actor=='All')){
+         var start_date = getDateFromString(obj['startDate']);
+         var end_date = getDateFromString(obj['completionDate']);
+
+       
+
+        if((obj['milestone']==milestone || milestone=='All') && (obj['actor']==actor || actor=='All')&& ( (start_date>startDate && start_date<endDate) || (end_date<endDate &&end_date>startDate) )){
 //alert(obj['startDate']*1000 +""+ obj['endDate']*1000);
 
 var intervals = [{
@@ -54,6 +65,7 @@ var task = {
     
 };
 //task_names.push(obj['name']);
+//alert(task_id+"---"+getDateFromString(obj['startDate']) + getDateFromString(obj['startDate']));
 gantt_tasks.push(task);
 }
 
@@ -123,7 +135,7 @@ var ganttRender = function(renderContext,filterContext) {
 
 var results = function (tasks) {
 
-    var tasks = getGanttTasks(tasks,filterContext.milestone, filterContext.actor)
+    var tasks = getGanttTasks(tasks,filterContext.milestone, filterContext.actor, new Date(filterContext.startTime*1000), new Date(filterContext.endTime*1000));
     var task_names = getTaskNames(tasks);
     //var date = new Date(date);
 
@@ -232,7 +244,7 @@ var results = function (tasks) {
             },
 
             scrollbar: {
-               enabled: true
+               enabled: false
            },
            legend: {
             enabled: false
@@ -240,11 +252,11 @@ var results = function (tasks) {
         tooltip: {
             formatter: function() {
                 return '<b>ID: '+ tasks[this.y].taskid + '</b><br/>' +
-                "Name: "+ tasks[this.y].name +'</b><br/>' +
-                "Actor: "+ tasks[this.y].actor +'</b><br/>' +
-                "Description: "+tasks[this.y].description  +'</b><br/>' +
-                "Start: "+ getDateFromUnixTimestamp(this.point.options.from) +'</b><br/>' +
-                "End: "+ getDateFromUnixTimestamp(this.point.options.to) +'</b><br/>'; 
+                "<b>Name: </b>"+ tasks[this.y].name +'</b><br/>' +
+                "<b>Actor: </b>"+ tasks[this.y].actor +'</b><br/>' +
+                "<b>Description: </b>"+tasks[this.y].description  +'</b><br/>' +
+                "<b>Start: </b>"+ getDateFromUnixTimestamp(this.point.options.from) +'</b><br/>' +
+                "<b>End: </b>"+ getDateFromUnixTimestamp(this.point.options.to) +'</b><br/>'; 
 
                         // Highcharts.dateFormat('%m-%d-%Y', this.point.options.from)  +
                         // ' - ' + Highcharts.dateFormat('%m-%d-%Y', this.point.options.to)
