@@ -179,8 +179,8 @@ var results = function (tasks) {
 
             xAxis: {
                 type: 'datetime',
-                min: new Date("2016-04-22"), //This would need to change depending on the time window the user select
-                max: new Date("2016-04-29"), //This would need to change depending on the time window the user select
+                 min: new Date("2016/04/22").getTime(), //This would need to change depending on the time window the user select
+                max: new Date("2016/04/28").getTime(),//This would need to change depending on the time window the user select
                 
             },
 
