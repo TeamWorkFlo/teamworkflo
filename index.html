@@ -234,9 +234,9 @@ var primaryRenderContext = taskloadRenderContext;
 var primaryFilterContext = taskloadFilterContext;
 var primaryVis = taskloadVis;
 
-var secondaryRenderContext;
-var secondaryFilterContext;;
-var secondaryVis;
+var secondaryRenderContext;// = ganttRenderContext;
+var secondaryFilterContext;// = ganttFilterContext;
+var secondaryVis;// = ganttVis;
 
 var tertiaryRenderContext = ganttRenderContext;
 var tertiaryFilterContext = ganttFilterContext;
@@ -247,6 +247,31 @@ var tertiaryVis = ganttVis;
 
 $( "#show_viz" ).click(function() {
   filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
+});
+
+$( "#secondary_switch_button" ).click(function() {
+  
+  var tempElem1 = primaryRenderContext.renderElement;
+  var tempElem2 = primaryRenderContext.labelElement;
+  var tempVis = primaryVis;
+  var tempRender = primaryRenderContext;
+  var tempFilter = primaryFilterContext;
+
+  primaryRenderContext.renderElement = secondaryRenderContext.renderElement;
+  primaryRenderContext.labelElement = secondaryRenderContext.labelElement;
+  secondaryRenderContext.renderElement = tempElem1;
+  secondaryRenderContext.labelElement = tempElem2;
+
+  primaryVis = secondaryVis;
+  primaryRenderContext = secondaryRenderContext;
+  primaryFilterContext = secondaryFilterContext;
+
+  secondaryVis = tempVis;
+  secondaryRenderContext = tempRender;
+  secondaryFilterContext = tempFilter;
+
+  primaryVis.render(primaryRenderContext, primaryFilterContext);
+  secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
 });
 
 $( "#tertiary_switch_button" ).click(function() {
