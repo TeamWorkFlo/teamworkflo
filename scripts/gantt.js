@@ -192,11 +192,14 @@ var results = function (tasks) {
 
         // alert(new Date(filterContext.endTime*1000));
 
-
+            $(renderContext.renderElement).css({ 'height': tasks.length*20 + "px" });
+            $(renderContext.renderElement).parent().css({ 'height': tasks.length*20 + "px" });
+             
         $(renderContext.renderElement).highcharts({
             chart: {
                 zoomType: 'y',                  
                 panning: true,
+
                 
 
             },
@@ -272,6 +275,7 @@ var results = function (tasks) {
                         dataLabels: {
                             enabled: true,
                             align: 'left',
+                            style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '10px', fontSize: '8px'},
                             formatter: function() {
                                 return this.point.options && this.point.options.label;
                             }
@@ -283,7 +287,11 @@ var results = function (tasks) {
 
         
 
-            });   
+            },function(chart){
+              
+               // alert();
+
+});   
 
 };
 taskManager.getTasks({filter:vwFilter,results:results}); 

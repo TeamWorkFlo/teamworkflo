@@ -117,7 +117,7 @@
             </div>
             <button class="top-right-button">Max</button>
             <div class="panel-body fill" style="padding:0px;">
-              <div id="vis2-body" class="fill" style="overflow-y:auto; min-height: 1500px;">
+              <div id="vis2-body" class="fill" style="overflow-y:auto;">
 
               </div>
             </div>
@@ -134,7 +134,9 @@
             <button class="top-right-button">Max</button>
             <div class="fill" style="padding:0px;">
             
-              <div id="vis3-body" class="fill" style="height:100%; width:100%; position:absolute;">
+              <div id="vis3-body"style="height:100%;
+    width:100%;
+    position:absolute; overflow-y:auto;">
               </div>
             </div>
           </div>
@@ -169,8 +171,8 @@ $("#viz_panel_2").css({ 'height': height/2 + 10 + "px" });
 $("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
 
 $("#vis1-body").css({ 'height': height*.8 -50+ "px" });
-$("#vis2-body").css({ 'height': height/2 - 40 + "px" });
-$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
+//$("#vis2-body").css({ 'height': height/2 - 40 + "px" });
+//$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
