@@ -103,6 +103,13 @@ var render = function(element) {
             text: source.yAxis
           }
         },
+        plotOptions: {
+          line: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
         series: series
       });
     }, this);
