@@ -78,28 +78,26 @@ var render = function(element) {
         dayBin.tasks.add(data.taskid);
     });
     
-    actorArr.forEach(function(actorObject) {
-      var series = getActorSeries(actorObject);
-      var name = actorObject.name  
-      var divId = 'act-' + name.split(" ")[0];
+    var sources = [{source: "Slack", name:"Slack",yAxis:"Messages"},
+     {source: "googledrive", name: "Google Drive", yAxis:"Activity"},
+     {source: "github", name: "GitHub", yAxis: "Commits"}];
+     
+    sources.forEach(function(source) {
+      var sourceId = source.source;
+      var series = getSourceSeries(actorArr, sourceId);
+      var divId = 'act-' + sourceId;
       $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
-        chart: {
-          type: 'area'
-        },
         title: {
-          text: name
+          text: source.name
         },
         xAxis: {
           type: 'datetime'
         },
         yAxis: {
           title: {
-            text: 'Count'
+            text: source.yAxis
           }
-        },
-        legend: {
-          enabled: false
         },
         series: series
       });
@@ -121,29 +119,20 @@ function translateData(bins, translator) {
   return data;
 }
 
-function getActorSeries(actor) {
+function getSourceSeries(actorArr, source) {
+  
+  var series = [];
+  
   // Translate each bin to an entry
-  var name = actor.name;
-  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'googledrive',data:[]}];
+  actorArr.forEach(function(actor) {
+    var name = actor.name;
+    var sData = translateData(actor[source].bins, function(bin) {
+      return bin;
+    });
+    
+    series.push({name: name, data: sData});
+  }, this);
   
-  var sData = translateData(actor.Slack.bins, function(bin) {
-    return bin;
-  });
-  series[0].data = sData;
-  
-  var uData = translateData(actor.github.bins, function(bin) {
-    bin.n = bin.y;
-    bin.y = 0;
-    return bin;
-  });
-  series[1].data = uData;
-  
-  var vData = translateData(actor.googledrive.bins, function(bin) {
-    bin.y *= -1;
-    return bin;
-  });
-  series[2].data = vData;
-      
   return series;
 }
 
