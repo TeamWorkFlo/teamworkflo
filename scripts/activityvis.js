@@ -80,7 +80,7 @@ var render = function(element) {
     
     actorArr.forEach(function(actorObject) {
       var series = getActorSeries(actorObject);
-      
+      var name = actorObject.name  
       var divId = 'act-' + name.split(" ")[0];
       $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
