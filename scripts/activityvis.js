@@ -94,7 +94,7 @@ var activityRender = function(renderContext, filterContext) {
      {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
-     $(renderContext.renderElement).innerHtml = null;
+     $(renderContext.renderElement).html('');
      
     sources.forEach(function(source) {
       var sourceId = source.source;
