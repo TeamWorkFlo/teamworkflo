@@ -13,7 +13,7 @@
 // });
 // }
 
-var task_names = [];
+//var task_names = [];
 
 function getUnixTimestamp(date_string){
 var newdate = new Date(date_string);
@@ -27,7 +27,7 @@ function getDateFromUnixTimestamp(unix_timestamp){
 
 function getGanttTasks(json_tasks,milestone,actor){
   var gantt_tasks = [];
-  task_names = [];
+ // task_names = [];
   for(var i=0;i<json_tasks.length;i++){
 
     var obj = json_tasks[i];
@@ -53,7 +53,7 @@ var task = {
     intervals:intervals
     
 };
-task_names.push(obj['name']);
+//task_names.push(obj['name']);
 gantt_tasks.push(task);
 }
 
@@ -66,9 +66,26 @@ return gantt_tasks;
 }
 
 
+// function getTaskNames(json_tasks){
+//     return task_names;
+// }
+
 function getTaskNames(json_tasks){
+  var task_names = [];
+
+
+  for(var i=0;i<json_tasks.length;i++){
+
+    var obj = json_tasks[i];
+        //var task_name = obj['id'] + " - "+obj['name'];
+        var task_name = obj['name'];
+        task_names.splice(0,0,task_name);
+    }
+
     return task_names;
 }
+
+
 
 
 function getMilestones(json_tasks){
@@ -159,9 +176,9 @@ var results = function (tasks) {
 
         // create the chart
 
-        alert(new Date(filterContext.startTime*1000));
+        //alert(new Date(filterContext.startTime*1000));
 
-         alert(new Date(filterContext.endTime*1000));
+        // alert(new Date(filterContext.endTime*1000));
 
 
         $(renderContext.renderElement).highcharts({
@@ -179,8 +196,8 @@ var results = function (tasks) {
 
             xAxis: {
                 type: 'datetime',
-                 min: new Date("2016/04/22").getTime(), //This would need to change depending on the time window the user select
-                max: new Date("2016/04/28").getTime(),//This would need to change depending on the time window the user select
+                 min: new Date(filterContext.startTime*1000).getTime(), //This would need to change depending on the time window the user select
+                max: new Date(filterContext.endTime*1000).getTime(),//This would need to change depending on the time window the user select
                 
             },
 
