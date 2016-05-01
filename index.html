@@ -51,7 +51,7 @@
 </head>
 <body style="height:100%">
 
-  <div class="container-full">
+  <div class="container-full" style="margin-right: 1%; margin-left: 2%;">
     <div class="row content container-full" style="height:100%;" > 
 
       <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
@@ -210,12 +210,14 @@ var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'la
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':'', 'startTime':'','endTime':''});
 
+
 var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
 var taskloadVis = new Visualization(taskloadConfiguration);
 
 taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
-
+$(taskloadRenderContext.labelElement).html(taskloadVis.name);
+  
 
 
 
@@ -228,6 +230,7 @@ var ganttConfiguration = { name:"Gantt", renderer:ganttRender };
 var ganttVis = new Visualization(ganttConfiguration);
 ganttVis.render(ganttRenderContext,ganttFilterContext);
 
+$(ganttRenderContext.labelElement).html(ganttVis.name);
 </script>
 
 <script>
@@ -273,6 +276,9 @@ $( "#secondary_switch_button" ).click(function() {
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
+
+  $(primaryRenderContext.labelElement).html(primaryVis.name);
+  $(secondaryRenderContext.labelElement).html(secondaryVis.name);
 });
 
 $( "#tertiary_switch_button" ).click(function() {
@@ -298,6 +304,11 @@ $( "#tertiary_switch_button" ).click(function() {
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
+
+  $(primaryRenderContext.labelElement).html(primaryVis.name);
+  $(tertiaryRenderContext.labelElement).html(tertiaryVis.name);
+
+
 });
 
 // //alert();
