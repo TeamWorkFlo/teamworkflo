@@ -8,7 +8,7 @@
 
 .vis .panel-heading {
     padding-left: 10px;
-    background-color: #668cff;
+    background-color: #66368E;
     color: #FCF9FF;
 }
 
