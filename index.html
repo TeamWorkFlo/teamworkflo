@@ -138,7 +138,7 @@
             <div class="panel-heading" style="width:220px;">
               <h5 id="secondaryViz" class="panel-title">[Secondary visualization]</h5>
             </div>
-            <button id="secondary_switch_button" class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
+           
             <div class="panel-body fill" style="padding:0px;">
 
               <div id="vis2-body" class="fill">
@@ -149,13 +149,13 @@
         </div>
 
 
-        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px; overflow-y:auto;">
+        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px; overflow-y:auto; border-top: solid 1px; border-color:#dddddd">
           <div class="panel" id="viz_panel_3"  style="margin-bottom:0px;">
             <div class="panel-heading" style="width:220px;">
               <h5 id="tertiaryViz" class="panel-title">[Tertiary visualization]</h5>
             </div>
             <!-- <div stlye="float:right;" ><button class="btn btn-primary" id="prev">Prev</button> <label>Showing 1-15 tasks of 48</label><button class="btn btn-primary" id="next" >Next</button> <button class="btn btn-secondary" style="margin-left:50px;" id="max" >MAX</button></div> -->
-            <button id="tertiary_switch_button" class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
+            
             <div class="panel-body fill" style="padding:0px;"> 
               <div id="vis3-body" class="fill" style="overflow-y:scroll;">
             </div>
@@ -183,14 +183,14 @@
 //alert(height);
 
 
-$("#viz_panel_1").css({ 'height': height*.8 + "px" });
+$("#viz_panel_1").css({ 'height': height*.77 + "px" });
 
 
-$("#viz_control_panel").css({ 'height': height*.23 + "px" });
-$("#filters_control_panel").css({ 'height': height*.23 + "px" });
+$("#viz_control_panel").css({ 'height': height*.22 + "px" });
+$("#filters_control_panel").css({ 'height': height*.22 + "px" });
 
-$("#viz_panel_2").css({ 'height': height/2 + 10 + "px" });
-$("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
+$("#viz_panel_2").css({ 'height': height/2 - 5 + "px" });
+$("#viz_panel_3").css({ 'height': height/2 - 5 + "px" });
 
 $("#vis1-body").css({ 'height': height*.8 -50+ "px" });
 //$("#vis2-body").css({ 'height': height/2 - 40 + "px" });
@@ -231,7 +231,7 @@ $("#slider").dateRangeSlider({
 
 <script>
 //taskload vis load information
-var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':false});
+var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':''});
 var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
@@ -288,11 +288,24 @@ $( "#show_viz" ).click(function() {
 
 $( "#secondary_switch_button" ).click(function() {
   
+  var tempElem1 = primaryRenderContext.renderElement;
+  var tempElem2 = primaryRenderContext.labelElement;
   var tempVis = primaryVis;
+  var tempRender = primaryRenderContext;
+  var tempFilter = primaryFilterContext;
+
+  primaryRenderContext.renderElement = secondaryRenderContext.renderElement;
+  primaryRenderContext.labelElement = secondaryRenderContext.labelElement;
+  secondaryRenderContext.renderElement = tempElem1;
+  secondaryRenderContext.labelElement = tempElem2;
 
   primaryVis = secondaryVis;
+  primaryRenderContext = secondaryRenderContext;
+  primaryFilterContext = secondaryFilterContext;
 
   secondaryVis = tempVis;
+  secondaryRenderContext = tempRender;
+  secondaryFilterContext = tempFilter;
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
@@ -303,17 +316,32 @@ $( "#secondary_switch_button" ).click(function() {
 
 $( "#tertiary_switch_button" ).click(function() {
   
+  var tempElem1 = primaryRenderContext.renderElement;
+  var tempElem2 = primaryRenderContext.labelElement;
   var tempVis = primaryVis;
-  
+  var tempRender = primaryRenderContext;
+  var tempFilter = primaryFilterContext;
+
+  primaryRenderContext.renderElement = tertiaryRenderContext.renderElement;
+  primaryRenderContext.labelElement = tertiaryRenderContext.labelElement;
+  tertiaryRenderContext.renderElement = tempElem1;
+  tertiaryRenderContext.labelElement = tempElem2;
+
   primaryVis = tertiaryVis;
-  
+  primaryRenderContext = tertiaryRenderContext;
+  primaryFilterContext = tertiaryFilterContext;
+
   tertiaryVis = tempVis;
-  
+  tertiaryRenderContext = tempRender;
+  tertiaryFilterContext = tempFilter;
+
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
 
   $(primaryRenderContext.labelElement).html(primaryVis.name);
   $(tertiaryRenderContext.labelElement).html(tertiaryVis.name);
+
+
 });
 
 // //alert();

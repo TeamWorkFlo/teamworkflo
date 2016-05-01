@@ -78,6 +78,29 @@ return gantt_tasks;
 }
 
 
+function determineColor(task){
+   //ar taskStatus = determineStatus(task);
+   if (task.actor == "Cullen Brown"){
+
+       return "#ED2A2A ";
+   }
+   else if (task.actor == "Eric Gonzalez"){
+      
+       return "#EDBC2A ";
+   }
+   else if (task.actor == "Aqib Bhat"){
+       
+       return "#22BE22 ";
+   }
+   else if (task.actor == "Jorge Herrera"){
+       
+       return "#3232A6 ";
+   }
+   else{
+      
+       return '#999999 ';
+   }
+ }
 // function getTaskNames(json_tasks){
 //     return task_names;
 // }
@@ -145,6 +168,7 @@ var results = function (tasks) {
         $.each(tasks.reverse(), function(i, task) {
             var item = {
                 name: task.name,
+                color: determineColor(task),
                 data: []
             };
             $.each(task.intervals, function(j, interval) {
