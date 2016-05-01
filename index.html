@@ -250,8 +250,28 @@ $( "#show_viz" ).click(function() {
 });
 
 $( "#tertiary_switch_button" ).click(function() {
-  switchVisualizations(primaryVis, primaryRenderContext, primaryFilterContext, tertiaryVis, tertiaryRenderContext, tertiaryFilterContext)
-  //filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
+  
+  var tempElem1 = primaryRenderContext.renderElement;
+  var tempElem2 = primaryRenderContext.labelElement;
+  var tempVis = primaryVis;
+  var tempRender = primaryRenderContext;
+  var tempFilter = primaryFilterContext;
+
+  primaryRenderContext.renderElement = tertiaryRenderContext.renderElement;
+  primaryRenderContext.labelElement = tertiaryRenderContext.labelElement;
+  tertiaryRenderContext.renderElement = tempElem1;
+  tertiaryRenderContext.labelElement = tempElem2;
+
+  primaryVis = tertiaryVis;
+  primaryRenderContext = tertiaryRenderContext;
+  primaryFilterContext = tertiaryFilterContext;
+
+  tertiaryVis = tempVis;
+  tertiaryRenderContext = tempRender;
+  tertiaryFilterContext = tempFilter;
+
+  primaryVis.render(primaryRenderContext, primaryFilterContext);
+  tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
 });
 
 // //alert();

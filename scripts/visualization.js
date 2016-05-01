@@ -10,32 +10,3 @@ function Visualization(configuration) {
   this.render = configuration.renderer;
 }
 
-function switchActiveVisualization(activeVis, activeRender, activeFilter, switchingVis, switchingRender, switchingFilter){
-	tempVis = activeVis;
-	tempRender = activeRender;
-	tempFilter = activeFilter;
-
-	activeVis = switchingVis;
-	activeRender = switchingRender;
-	activeFilter = switchingFilter;
-
-	switchingVis = tempVis;
-	switchingRender = tempRender;
-	switchingFilter = tempFilter;
-
-}
-
-function switchVisualizations(activeVis, activeRender, activeFilter, switchingVis, switchingRender, switchingFilter){
-	var tempElem1 = activeRender.renderElement;
-	var tempElem2 = activeRender.labelElement;
-
-	activeRender.renderElement = switchingRender.renderElement;
-	activeRender.labelElement = switchingRender.labelElement;
-	switchingRender.renderElement = tempElem1;
-	switchingRender.labelElement = tempElem2;
-
-	activeVis.render(activeRender,activeFilter);
-	switchingVis.render(switchingRender, switchingFilter);
-
-	switchActiveVisualization(activeVis, activeRender, activeFilter, switchingVis, switchingRender, switchingFilter);
-}
