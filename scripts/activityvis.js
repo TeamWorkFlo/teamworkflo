@@ -26,6 +26,9 @@ var activityRender = function(renderContext, filterContext) {
     if (!(activity.hasOwnProperty('actor') && activity.actor !== null))
       return false;
     
+    if (filterContext.actor != "" && filterContext.actor != 'All' && !filterContext.actor.match(activity.actor))
+      return false;
+    
     var passesTime = true;
     if (filterContext.hasOwnProperty('startTime') && activity.timestamp < filterContext.startTime)
       passesTime = false;
@@ -159,13 +162,3 @@ function getSourceSeries(actorArr, source) {
   
   return series;
 }
-/*
-var configuration = { name:"Activity", renderer:render };
-
-var vis = new Visualization(configuration);
-
-var activityRenderContext = new RenderContext({renderElement:'#vis2-body', labelElement:'#secondaryViz', condensed:true});
-var taskloadFilterContext = new FilterContext({actor:'',component:'',feature:'',
-    milestone:''});
-vis.render(activityRenderContext, taskloadFilterContext);
-*/
