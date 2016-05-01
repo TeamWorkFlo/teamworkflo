@@ -57,7 +57,7 @@
       <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
         <div class="panel" id="viz_panel_1" style="margin-bottom: 0px;">
           <div class="panel-heading" style="width:200px;">
-            <h5 class="panel-title"  >[Main visualization]</h5>
+            <h5 id="mainViz" class="panel-title">[Main visualization]</h5>
           </div>
           <div class="fill" style="padding:0px;">
             <div id="vis1-body" >
@@ -67,7 +67,7 @@
           </div>
         </div>
 
-        <div class="panel" style="background-color:#66368E; padding-left:15px;" id="viz_control_panel">
+        <div class="panel" style="background-color:#668cff; padding-left:15px;" id="viz_control_panel">
           
           <div class="panel-body" style="padding-left:5px;padding-top:0px">
 
@@ -110,13 +110,14 @@
 
       <div class="vis col-sm-5 left-border" style="padding-bottom: 0px; padding-left: 2px;">
 
-        <div id="vis2" class="vis col-sm-12" style="padding-bottom: 2px; padding-right: 0px; padding-left: 0px; padding-right: 0px;">
+        <div id="vis2" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
           <div class="panel" id="viz_panel_2" style="margin-bottom:0px;">
             <div class="panel-heading" style="width:220px;">
               <h5 class="panel-title">[Secondary visualization]</h5>
             </div>
-            <button class="top-right-button">Max</button>
+            <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
             <div class="panel-body fill" style="padding:0px;">
+
               <div id="vis2-body" class="fill" style="overflow-y:auto;">
 
               </div>
@@ -125,19 +126,16 @@
         </div>
 
 
-        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px; overflow-y:auto">
+        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px; overflow-y:auto;">
           <div class="panel" id="viz_panel_3"  style="margin-bottom:0px;">
-            <div class="panel-heading" style="width:200px; padding-right: 0px; padding-left: 0px;">
+            <div class="panel-heading" style="width:220px;">
               <h5 class="panel-title">[Tertiary visualization]</h5>
             </div>
-            <!-- <div stlye="float:right;" ><button class="btn btn-primary" id="prev">Prev</button> <label>Showing 1-15 tasks of 48</label><button class="btn btn-primary" id="next" >Next</button> <button class="btn btn-secondary" style="margin-left:50px;" id="max" >MAX</button></div> -->
-            <button class="top-right-button">Max</button>
-            <div class="fill" style="padding:0px;">
-            
-              <div id="vis3-body"style="height:100%;
-    width:100%;
-    position:absolute; overflow-y:auto;">
-              </div>
+           
+
+            <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
+            <div class="panel-body fill" style="padding:0px;"> 
+              <div id="vis3-body" class="fill" style="overflow-y:scroll;">
             </div>
           </div>
         </div>
@@ -209,6 +207,7 @@ $("#slider").dateRangeSlider({
 
 <script>
 var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
+$("#mainViz").html("Group Taskload");
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':'', 'startTime':'','endTime':''});
 
