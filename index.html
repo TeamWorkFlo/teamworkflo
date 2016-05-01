@@ -78,20 +78,20 @@
             <tr width="100%">
               <td width="30%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
-<!--
-               <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:10px;">
+
+              <!--  <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:10px;">
                 <option>All</option>
                 <option>Taskload</option>
                 <option>Activity</option>
                 <option>Gantt</option>
-              </select></label>
-              -->
+              </select></label> -->
+              
 
              
-              <button id="show_viz" class="btn btn-primary">Update Visualizations</button></td>
-               <td width="70%"> 
-            <table width="100%" height="100%">
-             <tr width="100%">
+              <button id="show_viz" class="btn btn-default">Update Visualizations</button></td>
+               <td id="filter_control" width="70%" style="background-color:#5272d2; padding-left:18px; padding-right:18px; padding-top:15px;  "> 
+            <table width="100%" height="100% " >
+             <tr width="100%"
               <td>
 
  <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;">
@@ -188,12 +188,12 @@ $("#viz_panel_1").css({ 'height': height*.77 + "px" });
 
 
 $("#viz_control_panel").css({ 'height': height*.22 + "px" });
-$("#filters_control_panel").css({ 'height': height*.22 + "px" });
+//$("#filter_control").css({ 'height': height*.17 + "px" });
 
 $("#viz_panel_2").css({ 'height': height/2 - 5 + "px" });
 $("#viz_panel_3").css({ 'height': height/2 - 5 + "px" });
 
-$("#vis1-body").css({ 'height': height*.8 -50+ "px" });
+$("#vis1-body").css({ 'height': height*.77 -50+ "px" });
 //$("#vis2-body").css({ 'height': height/2 - 40 + "px" });
 //$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 
