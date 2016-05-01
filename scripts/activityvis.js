@@ -138,7 +138,7 @@ function getActorSeries(actor) {
   });
   series[1].data = uData;
   
-  var vData = translateData(actor.googledrive.actorActivitybins, function(bin) {
+  var vData = translateData(actor.googledrive.bins, function(bin) {
     bin.y *= -1;
     return bin;
   });
