@@ -83,7 +83,7 @@ var render = function(element) {
     });
     
     var sources = [{source: "Slack", name:"Slack",yAxis:"Messages"},
-     {source: "googledrive", name: "Google Drive", yAxis:"Activity"},
+     {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
     sources.forEach(function(source) {
