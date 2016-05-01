@@ -21,9 +21,20 @@ var nameToIndex = function(name) {
   }
 }
 
-var render = function(element) {
+var activityRender = function(renderContext, filterContext) {
   var vwFilter = function(activity) { 
-    return activity.hasOwnProperty('actor') && activity.actor !== null;
+    if (!(activity.hasOwnProperty('actor') && activity.actor !== null))
+      return false;
+    
+    if (filterContext.actor != "" && filterContext.actor != 'All' && !filterContext.actor.match(activity.actor))
+      return false;
+    
+    var passesTime = true;
+    if (filterContext.hasOwnProperty('startTime') && activity.timestamp < filterContext.startTime)
+      passesTime = false;
+    passesTime = passesTime || (filterContext.hasOwnProperty('endTime') && activity.timestamp < filterContext.endTime);
+  
+    return passesTime;
   }
   var activityCallback = function (activities) {
    
@@ -86,14 +97,19 @@ var render = function(element) {
      {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
+     $(renderContext.renderElement).html('');
+     
     sources.forEach(function(source) {
       var sourceId = source.source;
       var series = getSourceSeries(actorArr, sourceId);
       var divId = 'act-' + sourceId;
-      $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
+      $(renderContext.renderElement).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
         title: {
-          text: source.name
+          text: source.name,
+          style: {
+            'fontSize': renderContext.condensed ? 12 : 16
+          }
         },
         xAxis: {
           type: 'datetime'
@@ -101,6 +117,13 @@ var render = function(element) {
         yAxis: {
           title: {
             text: source.yAxis
+          }
+        },
+        plotOptions: {
+          line: {
+            marker: {
+              enabled: !renderContext.condensed
+            }
           }
         },
         series: series
@@ -139,9 +162,3 @@ function getSourceSeries(actorArr, source) {
   
   return series;
 }
-
-var configuration = { name:"Activity", renderer:render };
-
-var vis = new Visualization(configuration);
-
-vis.render("#vis2-body");

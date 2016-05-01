@@ -7,8 +7,8 @@ var FilterContext = function(object) {
 	this.component = "";
 	this.feature = "";
 	this.milestone = "";
-	this.startTime = "";
-	this.endTime = "";
+	this.startTime;
+	this.endTime;
 
 	if (object.hasOwnProperty('actor'))
 		this.actor = object.actor;
