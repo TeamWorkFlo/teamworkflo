@@ -36,6 +36,11 @@
 
 
 	function getGithubActivity(){
+		
+		// HACK: Use last-grabbed data. Comment out to retrieve from github
+		$json = file_get_contents(__DIR__ . '/github/4-30-2238-github.json');
+		return json_decode($json, true);
+		
 		$branches = getBranches();
 		$activities_array = array();
 
