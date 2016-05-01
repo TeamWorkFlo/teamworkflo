@@ -29,21 +29,25 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
+      color: "#22BE22",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Cullen Brown",
+      color: "#ED2A2A",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Eric Gonzalez",
+      color: "#EDBC2A",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Jorge Herrera",
+      color: "#3232A6",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
@@ -78,28 +82,26 @@ var render = function(element) {
         dayBin.tasks.add(data.taskid);
     });
     
-    actorArr.forEach(function(actorObject) {
-      var series = getActorSeries(actorObject);
-      
-      var divId = 'act-' + name.split(" ")[0];
+    var sources = [{source: "Slack", name:"Slack",yAxis:"Messages"},
+     {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
+     {source: "github", name: "GitHub", yAxis: "Commits"}];
+     
+    sources.forEach(function(source) {
+      var sourceId = source.source;
+      var series = getSourceSeries(actorArr, sourceId);
+      var divId = 'act-' + sourceId;
       $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
-        chart: {
-          type: 'area'
-        },
         title: {
-          text: name
+          text: source.name
         },
         xAxis: {
           type: 'datetime'
         },
         yAxis: {
           title: {
-            text: 'Count'
+            text: source.yAxis
           }
-        },
-        legend: {
-          enabled: false
         },
         series: series
       });
@@ -109,41 +111,32 @@ var render = function(element) {
   activityManager.getActivity({filter:vwFilter,results:activityCallback}); 
 };
 
-function translateData(bins, translator) {
+function translateData(bins) {
   var data = [];    
   
   for (var binKey in bins) {
     var bin = bins[binKey];
-    var translation = translator(bin);
-    data.push(translation);
+    if (bin.hasOwnProperty('tasks'))
+      bin.tasks = bin.tasks.toArray();
+    data.push(bin);
   }
   data.sort(activityCompare);
   return data;
 }
 
-function getActorSeries(actor) {
+function getSourceSeries(actorArr, source) {
+  
+  var series = [];
+  
   // Translate each bin to an entry
-  var name = actor.name;
-  var series = [{name:'Slack',data:[]},{name:'github',data:[]},{name:'googledrive',data:[]}];
+  actorArr.forEach(function(actor) {
+    var name = actor.name;
+    var sData = translateData(actor[source].bins);
+    var color = actor.color;
+    
+    series.push({name: name, data: sData, color: color});
+  }, this);
   
-  var sData = translateData(actor.Slack.bins, function(bin) {
-    return bin;
-  });
-  series[0].data = sData;
-  
-  var uData = translateData(actor.github.bins, function(bin) {
-    bin.n = bin.y;
-    bin.y = 0;
-    return bin;
-  });
-  series[1].data = uData;
-  
-  var vData = translateData(actor.googledrive.actorActivitybins, function(bin) {
-    bin.y *= -1;
-    return bin;
-  });
-  series[2].data = vData;
-      
   return series;
 }
 
