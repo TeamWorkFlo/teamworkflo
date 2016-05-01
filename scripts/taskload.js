@@ -433,6 +433,7 @@ var taskloadRender = function(renderContext,filterContext) {
                 layoutAlgorithm: 'squarified',
                 allowDrillToNode: true,
                 animationLimit: 1000,
+                reflow: false,
                 dataLabels: {
                 enabled: false
                 },
