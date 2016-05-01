@@ -229,7 +229,7 @@ $("#slider").dateRangeSlider({
 
 <script>
 //taskload vis load information
-var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
+var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':false});
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':''});
 var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
@@ -286,24 +286,11 @@ $( "#show_viz" ).click(function() {
 
 $( "#secondary_switch_button" ).click(function() {
   
-  var tempElem1 = primaryRenderContext.renderElement;
-  var tempElem2 = primaryRenderContext.labelElement;
   var tempVis = primaryVis;
-  var tempRender = primaryRenderContext;
-  var tempFilter = primaryFilterContext;
-
-  primaryRenderContext.renderElement = secondaryRenderContext.renderElement;
-  primaryRenderContext.labelElement = secondaryRenderContext.labelElement;
-  secondaryRenderContext.renderElement = tempElem1;
-  secondaryRenderContext.labelElement = tempElem2;
 
   primaryVis = secondaryVis;
-  primaryRenderContext = secondaryRenderContext;
-  primaryFilterContext = secondaryFilterContext;
 
   secondaryVis = tempVis;
-  secondaryRenderContext = tempRender;
-  secondaryFilterContext = tempFilter;
 
   primaryVis.render(primaryRenderContext, primaryFilterContext);
   secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
