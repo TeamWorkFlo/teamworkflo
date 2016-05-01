@@ -76,9 +76,24 @@
 
             <table width="100%" height="100%">
             <tr width="100%">
-              <td width="50%">
+              <td width="30%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
-              <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;">
+
+               <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:10px;">
+                <option>All</option>
+                <option>Taskload</option>
+                <option>Activity</option>
+                <option>Gantt</option>
+              </select></label>
+
+             
+              <button id="show_viz" class="btn btn-primary">Show viz</button></td>
+               <td width="70%"> 
+            <table width="100%" height="100%">
+             <tr width="100%">
+              <td>
+
+ <label style="display:inline; color:white; padding-right:10px;">Milestone:<select class="form-control" id="milestones_selector" style="display:inline; width:150px; margin-left:10px;">
                 <option>All</option>
                 <option>Initial Setup</option>
                 <option>Lightweight Prototype</option>
@@ -93,10 +108,18 @@
                 <option>Eric Gonzalez</option>
                 <option>Jorge Herrera</option>
               </select></label>
-              <button id="show_viz" class="btn btn-primary">Show viz</button></td>
-               <td width="50%">  <div id="slider">
+                </td>
+                </tr>
+                <tr>
+                <td>
+                  <div id="slider">
                 
-              </div></td>
+              </div>
+              </td>
+                </tr>
+               </table>
+
+              </td>
             </tr>
             </table>
            
@@ -252,6 +275,7 @@ var tertiaryVis = ganttVis;
 $( "#show_viz" ).click(function() {
   filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
 });
+
 
 $( "#secondary_switch_button" ).click(function() {
   
