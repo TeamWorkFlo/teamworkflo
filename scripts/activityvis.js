@@ -21,9 +21,17 @@ var nameToIndex = function(name) {
   }
 }
 
-var render = function(element) {
+var render = function(renderContext, filterContext) {
   var vwFilter = function(activity) { 
-    return activity.hasOwnProperty('actor') && activity.actor !== null;
+    if (!(activity.hasOwnProperty('actor') && activity.actor !== null))
+      return false;
+    
+    var passesTime = true;
+    if (filterContext.hasOwnProperty('startTime') && activity.timestamp < filterContext.startTime)
+      passesTime = false;
+    passesTime = passesTime || (filterContext.hasOwnProperty('endTime') && activity.timestamp < filterContext.endTime);
+  
+    return passesTime;
   }
   var activityCallback = function (activities) {
    
@@ -86,11 +94,13 @@ var render = function(element) {
      {source: "googledrive", name: "Google Drive", yAxis:"Edits"},
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
+     $(renderContext.renderElement).innerHtml = null;
+     
     sources.forEach(function(source) {
       var sourceId = source.source;
       var series = getSourceSeries(actorArr, sourceId);
       var divId = 'act-' + sourceId;
-      $(element).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
+      $(renderContext.renderElement).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
         title: {
           text: source.name
@@ -101,6 +111,13 @@ var render = function(element) {
         yAxis: {
           title: {
             text: source.yAxis
+          }
+        },
+        plotOptions: {
+          line: {
+            marker: {
+              enabled: false
+            }
           }
         },
         series: series
@@ -144,4 +161,7 @@ var configuration = { name:"Activity", renderer:render };
 
 var vis = new Visualization(configuration);
 
-vis.render("#vis2-body");
+var activityRenderContext = new RenderContext({renderElement:'#vis2-body', labelElement:'#secondaryViz', condensed:'0'});
+var taskloadFilterContext = new FilterContext({actor:'',component:'',feature:'',
+    milestone:''});
+vis.render(activityRenderContext, taskloadFilterContext);

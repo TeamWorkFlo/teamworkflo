@@ -91,9 +91,9 @@ var taskloadRender = function(renderContext,filterContext) {
         Return false if a task is completed before startTime; else, return true
   */
   function filterByStartTime(task,filterContext){
-    if (filterContext.startTime != ""){
+    if (filterContext.startTime !== null){
         //task has been completed
-        if (task.completionDate != ""){
+        if (task.completionDate !== null){
             var completeDate = convertTimestampToDate(task.completionDate);
             var completeTime = completeDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
@@ -114,9 +114,9 @@ var taskloadRender = function(renderContext,filterContext) {
         Return false if a task is started after the endTime; else, return true
   */
   function filterByEndTime(task,filterContext){
-    if (filterContext.endTime != ""){
+    if (filterContext.endTime !== null){
         //task has been started
-        if (task.startDate != ""){
+        if (task.startDate !== null){
             var startingDate = convertTimestampToDate(task.startDate);
             var startTime = startingDate.getTime()/1000;
             //var startDate = convertTimestampToDate(startTime);
@@ -137,8 +137,8 @@ var taskloadRender = function(renderContext,filterContext) {
         Return true if task not filtered out by either startTime or endTime
   */
   function filterOverTimeWindow(task,filterContext){
-    var passStartFilter = filterByStartTime(task,filterContext);
-    var passEndFilter = filterByEndTime(task,filterContext);
+    var passStartFilter = !filterContext.hasOwnProperty('startTime') || filterByStartTime(task,filterContext);
+    var passEndFilter = !filterContext.hasOwnProperty('endTime') || filterByEndTime(task,filterContext);
     return (passStartFilter && passEndFilter);
   }
 
