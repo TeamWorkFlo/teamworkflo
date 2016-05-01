@@ -1,9 +1,10 @@
 /*
- *	Filter context object for use in filters
+ *	Render context object for use in rendering
  */
 
 var RenderContext = function(object) {
 	this.renderElement = "";
+	this.labelElement = "";
 	this.width = "";
 	this.height = "";
 	this.condensed = "";
@@ -11,6 +12,8 @@ var RenderContext = function(object) {
 
 	if (object.hasOwnProperty('renderElement'))
 		this.renderElement = object.renderElement;
+	if (object.hasOwnProperty('labelElement'))
+		this.labelElement = object.labelElement;
 	if (object.hasOwnProperty('width'))
 		this.width = object.width;
 	if (object.hasOwnProperty('height'))
@@ -19,3 +22,4 @@ var RenderContext = function(object) {
 		this.condensed = object.condensed;
 
 }
+

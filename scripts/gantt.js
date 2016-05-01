@@ -141,7 +141,7 @@ var results = function (tasks) {
 
 
         // re-structure the tasks into line seriesvar series = [];
-        var series = [];
+        var series = [ {'reflow': false}];
         $.each(tasks.reverse(), function(i, task) {
             var item = {
                 name: task.name,
@@ -280,6 +280,8 @@ var results = function (tasks) {
                 },
 
                 series: series
+                
+
 
         
 

@@ -57,7 +57,7 @@
       <div id="vis1" class="vis col-sm-7 fill container-full" style="padding-right: 0px; padding-left: 0px; padding-bottom: 0px; height:100vh;">
         <div class="panel" id="viz_panel_1" style="margin-bottom: 0px;">
           <div class="panel-heading" style="width:200px;">
-            <h5 id="mainViz" class="panel-title">[Main visualization]</h5>
+            <h5 id="primaryViz" class="panel-title">[Main visualization]</h5>
           </div>
           <div class="fill" style="padding:0px;">
             <div id="vis1-body" >
@@ -113,7 +113,7 @@
         <div id="vis2" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
           <div class="panel" id="viz_panel_2" style="margin-bottom:0px;">
             <div class="panel-heading" style="width:220px;">
-              <h5 class="panel-title">[Secondary visualization]</h5>
+              <h5 id="secondaryViz" class="panel-title">[Secondary visualization]</h5>
             </div>
             <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
             <div class="panel-body fill" style="padding:0px;">
@@ -124,10 +124,10 @@
         </div>
 
 
-        <div id="vis3" class="vis col-sm-12" style="padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
+        <div id="vis3" class="vis col-sm-12" style="overflow:scroll;padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
           <div class="panel" id="viz_panel_3"  style="margin-bottom:0px;">
             <div class="panel-heading" style="width:220px;">
-              <h5 class="panel-title">[Tertiary visualization]</h5>
+              <h5 id="tertiaryViz" class="panel-title">[Tertiary visualization]</h5>
             </div>
             <!-- <div stlye="float:right;" ><button class="btn btn-primary" id="prev">Prev</button> <label>Showing 1-15 tasks of 48</label><button class="btn btn-primary" id="next" >Next</button> <button class="btn btn-secondary" style="margin-left:50px;" id="max" >MAX</button></div> -->
             <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
@@ -168,7 +168,7 @@ $("#viz_panel_3").css({ 'height': height/2 + 10 + "px" });
 
 $("#vis1-body").css({ 'height': height*.8 -50+ "px" });
 $("#vis2-body").css({ 'height': height/2 - 40 + "px" });
-$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
+//$("#vis3-body").css({ 'height': height/2 - 40 + "px" });
 
 //localStorage.setItem("main_viz_height",height*.8 - 50);
 //localStorage.setItem("secondary_viz_height",height/2 + 10);
@@ -204,8 +204,8 @@ $("#slider").dateRangeSlider({
 
 
 <script>
-var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'condensed':'0'});
-$("#mainViz").html("Group Taskload");
+var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
+//$("#mainViz").html("Group Taskload");
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':'', 'startTime':'','endTime':''});
 
@@ -219,7 +219,7 @@ taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
 
 
 //Gantt visualization load configuration
-var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'condensed':'0'});
+var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'labelElement':'#tertiaryViz','condensed':'0'});
 var ganttFilterContext = new FilterContext({'actor':'All','component':'','feature':'',
     'milestone':'All', 'startTime':'1460246400','endTime':'1462838400'});
 
@@ -230,9 +230,15 @@ ganttVis.render(ganttRenderContext,ganttFilterContext);
 </script>
 
 <script>
-var activeRenderContext = ganttRenderContext;
-var activeFilterContext = ganttFilterContext;
-var activeVis = ganttVis;
+var primaryRenderContext = taskloadRenderContext;
+var primaryFilterContext = taskloadFilterContext;
+var primaryVis = taskloadVis;
+var secondaryRenderContext;
+var secondaryFilterContext;;
+var secondaryVis;
+var tertiaryRenderContext = ganttRenderContext;
+var tertiaryFilterContext = ganttFilterContext;
+var tertiaryVis = ganttVis;
 </script>
 
  <script>
