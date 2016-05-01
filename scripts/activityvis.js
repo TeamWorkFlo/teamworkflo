@@ -21,7 +21,7 @@ var nameToIndex = function(name) {
   }
 }
 
-var render = function(renderContext, filterContext) {
+var activityRender = function(renderContext, filterContext) {
   var vwFilter = function(activity) { 
     if (!(activity.hasOwnProperty('actor') && activity.actor !== null))
       return false;
@@ -156,7 +156,7 @@ function getSourceSeries(actorArr, source) {
   
   return series;
 }
-
+/*
 var configuration = { name:"Activity", renderer:render };
 
 var vis = new Visualization(configuration);
@@ -165,3 +165,4 @@ var activityRenderContext = new RenderContext({renderElement:'#vis2-body', label
 var taskloadFilterContext = new FilterContext({actor:'',component:'',feature:'',
     milestone:''});
 vis.render(activityRenderContext, taskloadFilterContext);
+*/

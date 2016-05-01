@@ -205,12 +205,10 @@ $("#slider").dateRangeSlider({
 
 
 <script>
+//taskload vis load information
 var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
-//$("#mainViz").html("Group Taskload");
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
     'milestone':''});
-
-
 var taskloadConfiguration = { name:"Taskload", renderer:taskloadRender };
 
 var taskloadVis = new Visualization(taskloadConfiguration);
@@ -218,8 +216,17 @@ var taskloadVis = new Visualization(taskloadConfiguration);
 taskloadVis.render(taskloadRenderContext,taskloadFilterContext);
 $(taskloadRenderContext.labelElement).html(taskloadVis.name);
   
+//activity visualization load information
+var activityRenderContext = new RenderContext({'renderElement':'#vis2-body', 'labelElement':'#secondaryViz', 'condensed':'0'});
+var activityFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':''});
+var activityConfiguration = { name:"Activity", renderer:activityRender };
 
+var activityVis = new Visualization(activityConfiguration);
 
+activityVis.render(activityRenderContext,activityFilterContext);
+$(activityRenderContext.labelElement).html(activityVis.name);
+  
 
 //Gantt visualization load configuration
 var ganttRenderContext = new RenderContext({'renderElement':'#vis3-body', 'labelElement':'#tertiaryViz','condensed':'0'});
@@ -238,9 +245,9 @@ var primaryRenderContext = taskloadRenderContext;
 var primaryFilterContext = taskloadFilterContext;
 var primaryVis = taskloadVis;
 
-var secondaryRenderContext;// = ganttRenderContext;
-var secondaryFilterContext;// = ganttFilterContext;
-var secondaryVis;// = ganttVis;
+var secondaryRenderContext = activityRenderContext;
+var secondaryFilterContext = activityFilterContext;
+var secondaryVis = activityVis;
 
 var tertiaryRenderContext = ganttRenderContext;
 var tertiaryFilterContext = ganttFilterContext;
