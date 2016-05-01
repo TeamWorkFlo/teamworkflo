@@ -107,13 +107,14 @@ var render = function(element) {
   activityManager.getActivity({filter:vwFilter,results:activityCallback}); 
 };
 
-function translateData(bins, translator) {
+function translateData(bins) {
   var data = [];    
   
   for (var binKey in bins) {
     var bin = bins[binKey];
-    var translation = translator(bin);
-    data.push(translation);
+    if (bin.hasOwnProperty('tasks'))
+      bin.tasks = bin.tasks.toArray();
+    data.push(bin);
   }
   data.sort(activityCompare);
   return data;
@@ -126,9 +127,7 @@ function getSourceSeries(actorArr, source) {
   // Translate each bin to an entry
   actorArr.forEach(function(actor) {
     var name = actor.name;
-    var sData = translateData(actor[source].bins, function(bin) {
-      return bin;
-    });
+    var sData = translateData(actor[source].bins);
     
     series.push({name: name, data: sData});
   }, this);
