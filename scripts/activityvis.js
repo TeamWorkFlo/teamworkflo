@@ -106,7 +106,8 @@ var activityRender = function(renderContext, filterContext) {
       var series = getSourceSeries(actorArr, sourceId);
       var divId = 'act-' + sourceId;
       $(renderContext.renderElement).append('<div id=\'' + divId + '\'></div>');
-      $('#'+divId).highcharts({
+      
+      var chartOptions = {
         chart: {
           height: height
         },
@@ -138,7 +139,15 @@ var activityRender = function(renderContext, filterContext) {
           enabled: false
         },
         series: series
-      });
+      };
+      
+      if (filterContext.hasOwnProperty('startTime') && filterContext.startTime !== null && filterContext.startTime != "")
+        chartOptions.xAxis.min = new Date(filterContext.startTime*1000).getTime(); //This would need to change depending on the time window the user select
+      if (filterContext.hasOwnProperty('endTime') && filterContext.endTime !== null && filterContext.endTime != "")
+        chartOptions.xAxis.max = new Date(filterContext.endTime*1000).getTime(); //This would need to change depending on the time window the user select
+
+      
+      $('#'+divId).highcharts(chartOptions);
     }, this);
   };
     
