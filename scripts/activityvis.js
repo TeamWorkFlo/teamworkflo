@@ -98,17 +98,22 @@ var activityRender = function(renderContext, filterContext) {
      {source: "github", name: "GitHub", yAxis: "Commits"}];
      
      $(renderContext.renderElement).html('');
+     var condensed = renderContext.condensed;
+     var height = condensed ? 115 : 375;
      
     sources.forEach(function(source) {
       var sourceId = source.source;
       var series = getSourceSeries(actorArr, sourceId);
       var divId = 'act-' + sourceId;
-      $(renderContext.renderElement).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
+      $(renderContext.renderElement).append('<div id=\'' + divId + '\'></div>');
       $('#'+divId).highcharts({
+        chart: {
+          height: height
+        },
         title: {
           text: source.name,
           style: {
-            'fontSize': renderContext.condensed ? 12 : 16
+            'fontSize': condensed ? 10 : 16
           }
         },
         xAxis: {
@@ -116,15 +121,21 @@ var activityRender = function(renderContext, filterContext) {
         },
         yAxis: {
           title: {
-            text: source.yAxis
+            text: source.yAxis,
+            style: {
+              fontSize: condensed ? 10 : 12
+            }
           }
         },
         plotOptions: {
           line: {
             marker: {
-              enabled: !renderContext.condensed
+              enabled: !condensed
             }
           }
+        },
+        legend: {
+          enabled: !condensed
         },
         series: series
       });
