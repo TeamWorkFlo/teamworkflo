@@ -483,7 +483,8 @@ var taskloadRender = function(renderContext,filterContext) {
                 text: 'Tasks grouped by features and components, colored by actor. Click components to drill down'
             },
 			title: {
-				text: "Group Taskload"
+				//text: "Group Taskload"
+                text:""
 			}
 		});
     
