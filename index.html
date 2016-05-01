@@ -78,18 +78,19 @@
             <tr width="100%">
               <td width="30%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
-
-               <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:0px;">
+<!--
+               <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:10px;">
                 <option>All</option>
                 <option>Taskload</option>
                 <option>Activity</option>
                 <option>Gantt</option>
               </select></label>
+              -->
 
              
-              <button id="show_viz" class="btn btn-default">Show viz</button></td>
-               <td width="70%" height="100%" style="background-color:#5677d9; padding-left:18px; padding-right:18px; "> 
-            <table id="filters_control_panel" width="100%" height="100%" >
+              <button id="show_viz" class="btn btn-primary">Update Visualizations</button></td>
+               <td width="70%"> 
+            <table width="100%" height="100%">
              <tr width="100%">
               <td>
 
@@ -230,6 +231,8 @@ $("#slider").dateRangeSlider({
 
 
 <script>
+var visFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':''});
 //taskload vis load information
 var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':'0'});
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
@@ -282,7 +285,11 @@ var tertiaryVis = ganttVis;
  <script>
 
 $( "#show_viz" ).click(function() {
-  filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
+
+  filterVis(primaryVis, primaryRenderContext, visFilterContext);
+  filterVis(secondaryVis, secondaryRenderContext, visFilterContext);
+  filterVis(tertiaryVis, tertiaryRenderContext, visFilterContext);
+  
 });
 
 
@@ -307,8 +314,8 @@ $( "#secondary_switch_button" ).click(function() {
   secondaryRenderContext = tempRender;
   secondaryFilterContext = tempFilter;
 
-  primaryVis.render(primaryRenderContext, primaryFilterContext);
-  secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
+  primaryVis.render(primaryRenderContext, visFilterContext);
+  secondaryVis.render(secondaryRenderContext, visFilterContext);
 
   $(primaryRenderContext.labelElement).html(primaryVis.name);
   $(secondaryRenderContext.labelElement).html(secondaryVis.name);
@@ -332,11 +339,9 @@ $( "#tertiary_switch_button" ).click(function() {
   primaryFilterContext = tertiaryFilterContext;
 
   tertiaryVis = tempVis;
-  tertiaryRenderContext = tempRender;
-  tertiaryFilterContext = tempFilter;
-
-  primaryVis.render(primaryRenderContext, primaryFilterContext);
-  tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
+  
+  primaryVis.render(primaryRenderContext, visFilterContext);
+  tertiaryVis.render(tertiaryRenderContext, visFilterContext);
 
   $(primaryRenderContext.labelElement).html(primaryVis.name);
   $(tertiaryRenderContext.labelElement).html(tertiaryVis.name);
