@@ -29,8 +29,6 @@ function filterVis(vis, renderContext, filterContext){
   var dates = $("#slider").dateRangeSlider("values");
   var milestone = $( "#milestones_selector option:selected" ).text();
   var actor = $( "#actor_selector option:selected" ).text();
-  var viz = $( "#visualizations_selector option:selected" ).text();
-  alert(viz);
   var minDate = getUnixTimestamp(dates.min)/1000;
   var maxDate = getUnixTimestamp(dates.max)/1000;
 

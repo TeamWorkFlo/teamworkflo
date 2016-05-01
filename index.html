@@ -78,16 +78,17 @@
             <tr width="100%">
               <td width="30%">
                <h5 class="panel-title"  style="color:white; margin-bottom:15px; margin-top:5px;">Control panel</h5>
-
+<!--
                <label style="display:block; color:white; padding-right:10px;">Visualization:<select class="form-control" id="visualization_selector" style="display:block; width:150px; margin-left:10px;">
                 <option>All</option>
                 <option>Taskload</option>
                 <option>Activity</option>
                 <option>Gantt</option>
               </select></label>
+              -->
 
              
-              <button id="show_viz" class="btn btn-primary">Show viz</button></td>
+              <button id="show_viz" class="btn btn-primary">Update Visualizations</button></td>
                <td width="70%"> 
             <table width="100%" height="100%">
              <tr width="100%">
@@ -228,6 +229,8 @@ $("#slider").dateRangeSlider({
 
 
 <script>
+var visFilterContext = new FilterContext({'actor':'','component':'','feature':'',
+    'milestone':''});
 //taskload vis load information
 var taskloadRenderContext = new RenderContext({'renderElement':'#vis1-body', 'labelElement':'#primaryViz', 'condensed':false});
 var taskloadFilterContext = new FilterContext({'actor':'','component':'','feature':'',
@@ -280,7 +283,11 @@ var tertiaryVis = ganttVis;
  <script>
 
 $( "#show_viz" ).click(function() {
-  filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
+
+  filterVis(primaryVis, primaryRenderContext, visFilterContext);
+  filterVis(secondaryVis, secondaryRenderContext, visFilterContext);
+  filterVis(tertiaryVis, tertiaryRenderContext, visFilterContext);
+  
 });
 
 
@@ -292,8 +299,8 @@ $( "#secondary_switch_button" ).click(function() {
 
   secondaryVis = tempVis;
 
-  primaryVis.render(primaryRenderContext, primaryFilterContext);
-  secondaryVis.render(secondaryRenderContext, secondaryFilterContext);
+  primaryVis.render(primaryRenderContext, visFilterContext);
+  secondaryVis.render(secondaryRenderContext, visFilterContext);
 
   $(primaryRenderContext.labelElement).html(primaryVis.name);
   $(secondaryRenderContext.labelElement).html(secondaryVis.name);
@@ -307,8 +314,8 @@ $( "#tertiary_switch_button" ).click(function() {
   
   tertiaryVis = tempVis;
   
-  primaryVis.render(primaryRenderContext, primaryFilterContext);
-  tertiaryVis.render(tertiaryRenderContext, tertiaryFilterContext);
+  primaryVis.render(primaryRenderContext, visFilterContext);
+  tertiaryVis.render(tertiaryRenderContext, visFilterContext);
 
   $(primaryRenderContext.labelElement).html(primaryVis.name);
   $(tertiaryRenderContext.labelElement).html(tertiaryVis.name);
