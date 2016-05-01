@@ -29,21 +29,25 @@ var render = function(element) {
    
     var actorArr = [{
       name: "Aqib Bhat",
+      color: "#22BE22",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Cullen Brown",
+      color: "#ED2A2A",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Eric Gonzalez",
+      color: "#EDBC2A",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
     },{
       name: "Jorge Herrera",
+      color: "#3232A6",
       Slack: {bins:{}},
       github: {bins:{}},
       googledrive: {bins:{}}
@@ -128,8 +132,9 @@ function getSourceSeries(actorArr, source) {
   actorArr.forEach(function(actor) {
     var name = actor.name;
     var sData = translateData(actor[source].bins);
+    var color = actor.color;
     
-    series.push({name: name, data: sData});
+    series.push({name: name, data: sData, color: color});
   }, this);
   
   return series;
