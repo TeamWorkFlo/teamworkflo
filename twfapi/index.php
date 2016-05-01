@@ -1,5 +1,5 @@
 	<?php
-	header("Content-Type; application/json");
+	//header("Content-Type; application/json");
 	//$path = $_SERVER['DOCUMENT_ROOT'];
 	//include($_SERVER['DOCUMENT_ROOT']."teamworkflo/twfapi/functions.php");
 
