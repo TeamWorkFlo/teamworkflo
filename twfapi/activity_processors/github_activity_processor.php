@@ -47,8 +47,6 @@
 		foreach($branches as $branch){
 			$committs = getCommitsFromBranch($branch['name']);
 
-			$committs = getCommitsFromBranch('master');
-
 			foreach($committs as $commit){
 				$commit = $commit['commit'];
 				$message = $commit['message'];
