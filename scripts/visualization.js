@@ -11,9 +11,18 @@ function Visualization(configuration) {
 }
 
 function switchActiveVisualization(activeVis, activeRender, activeFilter, switchingVis, switchingRender, switchingFilter){
+	tempVis = activeVis;
+	tempRender = activeRender;
+	tempFilter = activeFilter;
+
 	activeVis = switchingVis;
 	activeRender = switchingRender;
 	activeFilter = switchingFilter;
+
+	switchingVis = tempVis;
+	switchingRender = tempRender;
+	switchingFilter = tempFilter;
+
 }
 
 function switchVisualizations(activeVis, activeRender, activeFilter, switchingVis, switchingRender, switchingFilter){

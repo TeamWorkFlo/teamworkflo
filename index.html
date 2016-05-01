@@ -115,7 +115,7 @@
             <div class="panel-heading" style="width:220px;">
               <h5 id="secondaryViz" class="panel-title">[Secondary visualization]</h5>
             </div>
-            <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
+            <button id="secondary_switch_button" class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
             <div class="panel-body fill" style="padding:0px;">
               <div id="vis2-body" class="fill" style="overflow:scroll; min-height: 300px;">
               </div>
@@ -130,7 +130,7 @@
               <h5 id="tertiaryViz" class="panel-title">[Tertiary visualization]</h5>
             </div>
             <!-- <div stlye="float:right;" ><button class="btn btn-primary" id="prev">Prev</button> <label>Showing 1-15 tasks of 48</label><button class="btn btn-primary" id="next" >Next</button> <button class="btn btn-secondary" style="margin-left:50px;" id="max" >MAX</button></div> -->
-            <button class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
+            <button id="tertiary_switch_button" class="top-right-button"><span class="glyphicon glyphicon-resize-full"></span></button>
             <div class="panel-body fill" style="padding:0px;"> 
               <div id="vis3-body" class="fill" style="min-height: 300px;">
               </div>
@@ -233,9 +233,11 @@ ganttVis.render(ganttRenderContext,ganttFilterContext);
 var primaryRenderContext = taskloadRenderContext;
 var primaryFilterContext = taskloadFilterContext;
 var primaryVis = taskloadVis;
+
 var secondaryRenderContext;
 var secondaryFilterContext;;
 var secondaryVis;
+
 var tertiaryRenderContext = ganttRenderContext;
 var tertiaryFilterContext = ganttFilterContext;
 var tertiaryVis = ganttVis;
@@ -244,7 +246,12 @@ var tertiaryVis = ganttVis;
  <script>
 
 $( "#show_viz" ).click(function() {
-  filterVis(activeVis, activeRenderContext, activeFilterContext);
+  filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
+});
+
+$( "#tertiary_switch_button" ).click(function() {
+  switchVisualizations(primaryVis, primaryRenderContext, primaryFilterContext, tertiaryVis, tertiaryRenderContext, tertiaryFilterContext)
+  //filterVis(primaryVis, primaryRenderContext, primaryFilterContext);
 });
 
 // //alert();
