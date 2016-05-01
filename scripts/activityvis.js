@@ -103,7 +103,10 @@ var render = function(renderContext, filterContext) {
       $(renderContext.renderElement).append('<div id=\'' + divId + '\' class=\'fill\'></div>');
       $('#'+divId).highcharts({
         title: {
-          text: source.name
+          text: source.name,
+          style: {
+            'fontSize': renderContext.condensed ? 12 : 16
+          }
         },
         xAxis: {
           type: 'datetime'
@@ -116,7 +119,7 @@ var render = function(renderContext, filterContext) {
         plotOptions: {
           line: {
             marker: {
-              enabled: false
+              enabled: !renderContext.condensed
             }
           }
         },
@@ -161,7 +164,7 @@ var configuration = { name:"Activity", renderer:render };
 
 var vis = new Visualization(configuration);
 
-var activityRenderContext = new RenderContext({renderElement:'#vis2-body', labelElement:'#secondaryViz', condensed:'0'});
+var activityRenderContext = new RenderContext({renderElement:'#vis2-body', labelElement:'#secondaryViz', condensed:true});
 var taskloadFilterContext = new FilterContext({actor:'',component:'',feature:'',
     milestone:''});
 vis.render(activityRenderContext, taskloadFilterContext);
