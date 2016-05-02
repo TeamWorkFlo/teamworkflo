@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
 define('APPLICATION_NAME', 'Drive API Quickstart');
 define('CREDENTIALS_PATH', '~/.credentials/drive-php-quickstart.json');
@@ -91,11 +91,24 @@ foreach ($allFiles as $file) {
   try {
     $Allrevisions = $service->revisions->listRevisions($file->id, $optParamsForRevisionsList);
     foreach ($Allrevisions as $revision) {
-        $activity_array = array();
-        $activity_array['actor'] = $revision->lastModifyingUser->displayName;
-        $activity_array['timestamp'] = strtotime($revision->modifiedTime);
-        $activity_array['source'] = 'googledrive';
-        array_push($activities_array, $activity_array);
+      $actor = $revision->lastModifyingUser->displayName;
+      switch ($actor) {
+        case "HCC Outfitters":
+          # Skip
+          break;
+        
+        default:
+          $activity_array = array();
+          if (strpos($actor, 'JorgeIv') !== false) {
+            $activity_array['actor'] = "Jorge Herrera";
+          } else {
+            $activity_array['actor'] = $actor;
+          }
+            $activity_array['timestamp'] = strtotime($revision->modifiedTime);
+            $activity_array['source'] = 'googledrive';
+            array_push($activities_array, $activity_array);
+          break;
+      }
     }
   } catch (Google_Exception $e) {
     print "An error occurred: (" . $e->getCode() . ") " . $e->getMessage() . "\n";
@@ -103,3 +116,4 @@ foreach ($allFiles as $file) {
 }
 printf("\n");
 printf("Result: %s", json_encode($activities_array));
+printf("\n");
